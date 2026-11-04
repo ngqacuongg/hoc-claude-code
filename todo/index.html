@@ -9,8 +9,13 @@
     --bg: #f6f5f1; --card: #ffffff; --text: #1f1f1c; --muted: #77756d;
     --line: #e4e2db; --accent: #2f6f5e; --accent-soft: #e2efe9; --danger: #b54a3c;
   }
+  /* Tối: theo hệ thống, trừ khi người dùng chọn tay (data-theme trên <html>) */
+  :root[data-theme=dark] {
+    --bg: #161614; --card: #201f1c; --text: #ecebe6; --muted: #9a988f;
+    --line: #33322d; --accent: #6fbfa6; --accent-soft: #24352f; --danger: #e07a6a;
+  }
   @media (prefers-color-scheme: dark) {
-    :root {
+    :root:not([data-theme=light]) {
       --bg: #161614; --card: #201f1c; --text: #ecebe6; --muted: #9a988f;
       --line: #33322d; --accent: #6fbfa6; --accent-soft: #24352f; --danger: #e07a6a;
     }
@@ -56,10 +61,14 @@
   li input { width: 18px; height: 18px; accent-color: var(--accent); flex: none; }
   li span { flex: 1; overflow-wrap: anywhere; }
   li.done span { color: var(--muted); text-decoration: line-through; }
-  li .del { border: none; background: none; color: var(--muted); padding: 2px 6px; opacity: 0; }
-  li:hover .del, li .del:focus { opacity: 1; }
+  li .del, li .edit { border: none; background: none; color: var(--muted); padding: 2px 6px; opacity: 0; }
+  li:hover .del, li .del:focus, li:hover .edit, li .edit:focus { opacity: 1; }
   li .del:hover { color: var(--danger); }
-  @media (hover: none) { li .del { opacity: 1; } }
+  li .edit:hover { color: var(--accent); }
+  @media (hover: none) { li .del, li .edit { opacity: 1; } }
+  li input.editing { flex: 1; width: auto; height: auto; padding: 4px 8px; }
+  footer { display: flex; gap: 8px; justify-content: center; margin-top: 24px; font-size: 14px; }
+  footer button { color: var(--muted); }
   .empty { padding: 24px; text-align: center; color: var(--muted); }
 </style>
 </head>
@@ -74,6 +83,7 @@
       <button id="prev" aria-label="Ngày trước">‹</button>
       <button id="today">Hôm nay</button>
       <button id="next" aria-label="Ngày sau">›</button>
+      <button id="theme" aria-label="Đổi giao diện"></button>
     </div>
   </header>
 
@@ -91,6 +101,12 @@
   </div>
 
   <ul id="list"></ul>
+
+  <footer>
+    <button id="export">Xuất dữ liệu (JSON)</button>
+    <button id="import">Nhập dữ liệu</button>
+    <input type="file" id="file" accept="application/json,.json" hidden>
+  </footer>
 </main>
 
 <script>
@@ -147,8 +163,11 @@ function render() {
     const li = document.createElement('li');
     li.className = t.done ? 'done' : '';
     li.innerHTML = `<input type="checkbox" ${t.done ? 'checked' : ''} aria-label="Đánh dấu xong"><span></span>
+                    <button class="edit" aria-label="Sửa">✎</button>
                     <button class="del" aria-label="Xoá">✕</button>`;
-    li.querySelector('span').textContent = t.text;
+    const span = li.querySelector('span');
+    span.textContent = t.text;
+    span.ondblclick = li.querySelector('.edit').onclick = () => startEdit(li, span, t);
     li.querySelector('input').onchange = () => { t.done = !t.done; save(); render(); };
     li.querySelector('.del').onclick = () => {
       data[current] = list.filter(x => x.id !== t.id); save(); render();
@@ -174,6 +193,83 @@ function render() {
     carry.classList.remove('show');
   }
 }
+
+// Sửa việc: thay <span> bằng ô nhập. Enter hoặc bấm ra ngoài thì lưu, Esc thì huỷ.
+function startEdit(li, span, t) {
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'editing';
+  input.value = t.text;
+  span.replaceWith(input);
+  input.focus();
+  input.select();
+  let finished = false;
+  const finish = keep => {
+    if (finished) return;
+    finished = true;
+    const text = input.value.trim();
+    if (keep && text) { t.text = text; save(); }
+    render();
+  };
+  input.onkeydown = e => {
+    if (e.key === 'Enter') finish(true);
+    if (e.key === 'Escape') finish(false);
+  };
+  input.onblur = () => finish(true);
+}
+
+// Giao diện: auto (theo hệ thống) → sáng → tối → auto. Lưu ở khoá riêng.
+const THEME_KEY = 'daily-todo-theme';
+const THEMES = { auto: '◐ Tự động', light: '☀ Sáng', dark: '☾ Tối' };
+let theme = 'auto';
+try { theme = localStorage.getItem(THEME_KEY) || 'auto'; } catch {}
+function applyTheme() {
+  if (theme === 'auto') document.documentElement.removeAttribute('data-theme');
+  else document.documentElement.dataset.theme = theme;
+  document.getElementById('theme').textContent = THEMES[theme] || THEMES.auto;
+}
+document.getElementById('theme').onclick = () => {
+  const order = Object.keys(THEMES);
+  theme = order[(order.indexOf(theme) + 1) % order.length];
+  try { localStorage.setItem(THEME_KEY, theme); } catch {}
+  applyTheme();
+};
+applyTheme();
+
+// Xuất: tải toàn bộ dữ liệu về một file JSON để sao lưu.
+document.getElementById('export').onclick = () => {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `todo-${todayKey()}.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+};
+// Nhập: gộp vào dữ liệu hiện có, bỏ qua việc trùng id, nên nhập lại cùng file không bị nhân đôi.
+document.getElementById('import').onclick = () => document.getElementById('file').click();
+document.getElementById('file').onchange = async e => {
+  const file = e.target.files[0];
+  e.target.value = '';
+  if (!file) return;
+  try {
+    const incoming = JSON.parse(await file.text());
+    if (!incoming || typeof incoming !== 'object' || Array.isArray(incoming)) throw 0;
+    let added = 0;
+    for (const [day, list] of Object.entries(incoming)) {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(day) || !Array.isArray(list)) continue;
+      const ids = new Set(tasks(day).map(t => t.id));
+      for (const t of list) {
+        if (!t || typeof t.text !== 'string' || ids.has(t.id)) continue;
+        tasks(day).push({ id: t.id ?? Date.now() + Math.random(), text: t.text, done: !!t.done });
+        added++;
+      }
+    }
+    save(); render();
+    alert(`Đã nhập ${added} việc.`);
+  } catch {
+    alert('File không đúng định dạng dữ liệu todo.');
+  }
+};
 
 document.getElementById('form').onsubmit = e => {
   e.preventDefault();

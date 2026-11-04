@@ -16,6 +16,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Một file `index.html` duy nhất (HTML + CSS + JS thuần), không có build hay thư viện ngoài.
 - Chạy bằng lệnh `open todo/index.html` (mở bằng trình duyệt mặc định). Bản trên web: https://ngqacuongg.github.io/hoc-claude-code/todo/
 - Dữ liệu lưu trong `localStorage`, khoá `daily-todo-v1`, dạng `{ "YYYY-MM-DD": [{id, text, done}] }`. Khoá ngày theo giờ địa phương (hàm `keyOf`), không dùng UTC.
+- Giao diện sáng/tối/tự động lưu ở khoá riêng `daily-todo-theme`, áp dụng qua thuộc tính `data-theme` trên `<html>`.
+- Nút Xuất/Nhập ở cuối trang: xuất ra file JSON cùng định dạng trên; nhập thì gộp vào dữ liệu hiện có và bỏ qua việc trùng `id`.
 - Khi xem ngày hôm nay, `lastUnfinished()` tìm ngày gần nhất còn việc chưa xong để gợi ý chuyển sang hôm nay.
 - Trong Browser pane của app, trang chạy dưới dạng `data:` URL nên `localStorage` bị chặn và dữ liệu không được lưu. Muốn kiểm tra tính năng lưu thì phải mở bằng trình duyệt thật.
 
