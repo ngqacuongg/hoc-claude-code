@@ -2,3 +2,5 @@
 # File cài skill tải về, không đăng công khai
 *.zip
 *.skill
+# Bản tóm tắt việc buổi sáng (riêng tư, không đăng công khai)
+briefs/
