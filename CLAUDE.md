@@ -19,6 +19,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Khi xem ngày hôm nay, `lastUnfinished()` tìm ngày gần nhất còn việc chưa xong để gợi ý chuyển sang hôm nay.
 - Trong Browser pane của app, trang chạy dưới dạng `data:` URL nên `localStorage` bị chặn và dữ liệu không được lưu. Muốn kiểm tra tính năng lưu thì phải mở bằng trình duyệt thật.
 
+### `hoc-plugin/`: plugin Claude Code tự làm
+- Plugin để học cấu trúc plugin, gồm skill `new-project` (`/hoc-plugin:new-project <tên> <mô tả>`) và hook `SessionStart` (`hooks/session-start.sh`) in tóm tắt repo. Hook chỉ chạy khi remote `origin` chứa `hoc-claude-code`.
+- Marketplace nằm ở `.claude-plugin/marketplace.json` ở gốc repo (tên `hoc-claude-code`). Cài bằng `claude plugin marketplace add ./` rồi `claude plugin install hoc-plugin@hoc-claude-code`.
+- Kiểm tra sau khi sửa: `claude plugin validate .` (marketplace), `claude plugin validate hoc-plugin`, và `claude --plugin-dir ./hoc-plugin plugin details hoc-plugin`.
+- Khi sửa plugin thì tăng `version` ở cả `plugin.json` lẫn `marketplace.json`, vì người đã cài chỉ nhận bản cập nhật khi số phiên bản đổi.
+
 ## Cách làm việc với người dùng
 
 - Trả lời bằng **tiếng Việt**. Code, tên file và commit message có thể dùng tiếng Anh.

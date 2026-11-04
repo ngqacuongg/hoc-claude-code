@@ -1,1 +1,4 @@
 .DS_Store
+# File cài skill tải về, không đăng công khai
+*.zip
+*.skill

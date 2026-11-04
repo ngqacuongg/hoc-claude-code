@@ -1,0 +1,10 @@
+{
+  "name": "hoc-plugin",
+  "version": "0.1.0",
+  "description": "Plugin nhỏ để học cấu trúc plugin Claude Code: một skill tạo dự án con mới và một hook chào khi mở phiên.",
+  "author": {
+    "name": "ngqacuongg"
+  },
+  "repository": "https://github.com/ngqacuongg/hoc-claude-code",
+  "license": "MIT"
+}
