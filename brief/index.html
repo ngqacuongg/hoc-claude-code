@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Việc nên làm hôm nay</title>
+<style>
+  :root {
+    --bg: #f6f5f1; --card: #ffffff; --text: #1f1f1c; --muted: #77756d;
+    --line: #e4e2db; --accent: #2f6f5e; --accent-soft: #e2efe9; --danger: #b54a3c;
+    --warn: #9a6a1c; --warn-soft: #f6ecd9;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #161614; --card: #201f1c; --text: #ecebe6; --muted: #9a988f;
+      --line: #33322d; --accent: #6fbfa6; --accent-soft: #24352f; --danger: #e07a6a;
+      --warn: #e0b060; --warn-soft: #3a3020;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  main { max-width: 680px; margin: 0 auto; padding: 32px 16px 64px; }
+  code {
+    font: 13px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+    background: var(--accent-soft); padding: 1px 5px; border-radius: 4px; overflow-wrap: anywhere;
+  }
+
+  header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  h1 { font-size: 24px; margin: 0; line-height: 1.25; }
+  .date { color: var(--muted); font-size: 14px; margin-top: 4px; }
+  .nav { display: flex; gap: 4px; flex: none; }
+  button {
+    font: inherit; color: inherit; background: var(--card); border: 1px solid var(--line);
+    border-radius: 8px; padding: 6px 10px; cursor: pointer;
+  }
+  button:hover:not(:disabled) { border-color: var(--accent); }
+  button:disabled { opacity: .4; cursor: default; }
+
+  .progress { margin: 20px 0 6px; height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; }
+  .progress > div { height: 100%; background: var(--accent); width: 0; transition: width .3s; }
+  .pstat { color: var(--muted); font-size: 14px; }
+
+  .demo {
+    margin-top: 16px; padding: 10px 12px; border-radius: 8px; font-size: 14px;
+    background: var(--warn-soft); color: var(--warn);
+  }
+
+  section { margin-top: 28px; }
+  h2 {
+    font-size: 13px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
+    color: var(--muted); margin: 0 0 10px;
+  }
+
+  .status { display: grid; gap: 6px; }
+  .status div {
+    background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; font-size: 15px;
+  }
+
+  .cards { display: grid; gap: 12px; }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px;
+    display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; transition: opacity .2s, border-color .2s;
+  }
+  .card.done { opacity: .55; }
+  .card.done .ctitle { text-decoration: line-through; }
+  .num {
+    grid-row: span 4; width: 32px; height: 32px; border-radius: 50%;
+    display: grid; place-items: center; font-weight: 600;
+    background: var(--accent-soft); color: var(--accent); border: none; padding: 0;
+  }
+  .card.done .num { background: var(--accent); color: var(--bg); }
+  .ctitle { font-weight: 600; font-size: 17px; }
+  .meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .chip { font-size: 12px; padding: 2px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); }
+  .why { color: var(--muted); font-size: 15px; }
+  .step {
+    display: flex; gap: 8px; align-items: flex-start; margin-top: 6px;
+    background: var(--bg); border: 1px dashed var(--line); border-radius: 8px; padding: 8px 10px; font-size: 14px;
+  }
+  .step span { flex: 1; overflow-wrap: anywhere; }
+  .step button { font-size: 12px; padding: 2px 8px; flex: none; }
+
+  ul.list { list-style: none; margin: 0; padding: 0; background: var(--card); border: 1px solid var(--line); border-radius: 10px; }
+  ul.list li { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-top: 1px solid var(--line); }
+  ul.list li:first-child { border-top: none; }
+  ul.list input { width: 18px; height: 18px; margin-top: 3px; accent-color: var(--accent); flex: none; }
+  ul.list li.done span { color: var(--muted); text-decoration: line-through; }
+  ul.list span { overflow-wrap: anywhere; }
+
+  .you { background: var(--warn-soft); border-radius: 10px; padding: 12px 14px; }
+  .you h2 { color: var(--warn); }
+  .you ul { margin: 0; padding-left: 20px; }
+  .you li + li { margin-top: 4px; }
+
+  .copyrow { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .copyrow .main { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+  .toast { color: var(--accent); font-size: 14px; }
+
+  .empty { text-align: center; color: var(--muted); padding: 48px 16px; }
+  footer { margin-top: 40px; text-align: center; color: var(--muted); font-size: 13px; }
+</style>
+</head>
+<body>
+<main id="app"></main>
+
+<script>
+// Dữ liệu do brief/build.py chèn vào chỗ này: { "YYYY-MM-DD": {...}, ... }.
+// Bản trên GitHub Pages không có dữ liệu thật nên hiện bản mẫu.
+const INJECTED = /*__BRIEFS__*/null;
+
+const SAMPLE = {
+  "2026-01-01": {
+    title: "Việc nên làm (bản mẫu)",
+    status: ["Đây là dữ liệu mẫu để xem giao diện.", "Dữ liệu thật nằm trong briefs/ trên máy của bạn và không được đăng công khai."],
+    main: [
+      { title: "Thử nhấn vào số thứ tự", why: "Nhấn để đánh dấu việc đã xong; thanh tiến độ phía trên sẽ chạy.", time: "1 phút", step: "Gõ cho Claude: `mở trang brief`" },
+      { title: "Sao chép bước đầu tiên", why: "Mỗi việc có một câu dán thẳng cho Claude Code.", time: "1 phút", step: "`claude plugin list`" },
+      { title: "Chép danh sách sang todo", why: "Nút ở cuối trang sao chép mọi việc, mỗi việc một dòng.", time: "1 phút", step: "Bấm “Sao chép danh sách”" }
+    ],
+    extra: ["Việc làm thêm nếu còn thời gian"],
+    needYou: ["Việc chỉ bạn tự làm được"],
+    todo: ["Thử nhấn vào số thứ tự", "Sao chép bước đầu tiên", "Chép danh sách sang todo"]
+  }
+};
+
+const DATA = INJECTED && Object.keys(INJECTED).length ? INJECTED : SAMPLE;
+const IS_DEMO = DATA === SAMPLE;
+const DAYS = Object.keys(DATA).sort();
+
+// Trạng thái đã xong: { "YYYY-MM-DD": { "m0": true, "e1": true } }.
+// localStorage có thể bị chặn (ví dụ trong Browser pane), khi đó chỉ nhớ trong phiên.
+const KEY = 'brief-v1';
+let done = {};
+try { done = JSON.parse(localStorage.getItem(KEY)) || {}; } catch {}
+function save() { try { localStorage.setItem(KEY, JSON.stringify(done)); } catch {} }
+
+let current = DAYS[DAYS.length - 1];
+
+function esc(s) {
+  return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+// Hỗ trợ `code` và **đậm**, sau khi đã escape HTML nên không chèn được thẻ lạ.
+function fmt(s) {
+  return esc(s).replace(/`([^`]+)`/g, '<code>$1</code>').replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+}
+function plain(s) { return String(s ?? '').replace(/`/g, ''); }
+
+function dateLabel(key) {
+  const [y, m, d] = key.split('-').map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString('vi-VN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+function copy(text, el) {
+  const ok = () => { const t = el.textContent; el.textContent = 'Đã chép ✓'; setTimeout(() => (el.textContent = t), 1400); };
+  if (navigator.clipboard?.writeText) navigator.clipboard.writeText(text).then(ok, () => fallback());
+  else fallback();
+  function fallback() {
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); ok(); } catch {}
+    ta.remove();
+  }
+}
+
+function render() {
+  const app = document.getElementById('app');
+  if (!current) { app.innerHTML = '<div class="empty">Chưa có bản tóm tắt nào.</div>'; return; }
+  const b = DATA[current];
+  const d = done[current] || (done[current] = {});
+  const main = b.main || [], extra = b.extra || [];
+  const total = main.length + extra.length;
+  const n = Object.keys(d).filter(k => d[k]).length;
+  const i = DAYS.indexOf(current);
+
+  app.innerHTML = `
+    <header>
+      <div>
+        <h1>${esc(b.title || 'Việc nên làm')}</h1>
+        <div class="date">${esc(dateLabel(current))}</div>
+      </div>
+      <div class="nav">
+        <button id="prev" aria-label="Ngày trước" ${i <= 0 ? 'disabled' : ''}>‹</button>
+        <button id="next" aria-label="Ngày sau" ${i >= DAYS.length - 1 ? 'disabled' : ''}>›</button>
+      </div>
+    </header>
+    <div class="progress"><div style="width:${total ? n / total * 100 : 0}%"></div></div>
+    <div class="pstat">${total ? `Đã xong ${n}/${total} việc` + (n === total ? ' 🎉' : '') : ''}</div>
+    ${IS_DEMO ? '<div class="demo">Đang xem bản mẫu. Bản có dữ liệu thật được tạo trên máy bằng <code>brief/build.py</code>.</div>' : ''}
+
+    ${(b.status || []).length ? `<section><h2>Tình hình nhanh</h2><div class="status">
+      ${b.status.map(s => `<div>${fmt(s)}</div>`).join('')}</div></section>` : ''}
+
+    ${main.length ? `<section><h2>Việc chính hôm nay</h2><div class="cards">
+      ${main.map((t, k) => `
+        <div class="card ${d['m' + k] ? 'done' : ''}">
+          <button class="num" data-id="m${k}" aria-label="Đánh dấu xong việc ${k + 1}" aria-pressed="${!!d['m' + k]}">${d['m' + k] ? '✓' : k + 1}</button>
+          <div class="ctitle">${fmt(t.title)}</div>
+          <div class="meta">${t.time ? `<span class="chip">⏱ ${esc(t.time)}</span>` : ''}</div>
+          ${t.why ? `<div class="why">${fmt(t.why)}</div>` : ''}
+          ${t.step ? `<div class="step"><span>→ ${fmt(t.step)}</span><button data-copy="${esc(plain(t.step))}">Chép</button></div>` : ''}
+        </div>`).join('')}
+    </div></section>` : ''}
+
+    ${extra.length ? `<section><h2>Làm thêm nếu còn thời gian</h2><ul class="list">
+      ${extra.map((t, k) => `<li class="${d['e' + k] ? 'done' : ''}">
+        <input type="checkbox" data-id="e${k}" ${d['e' + k] ? 'checked' : ''} aria-label="Đánh dấu xong"><span>${fmt(t)}</span></li>`).join('')}
+    </ul></section>` : ''}
+
+    ${(b.needYou || []).length ? `<section class="you"><h2>Cần bạn quyết định hoặc tự làm</h2><ul>
+      ${b.needYou.map(t => `<li>${fmt(t)}</li>`).join('')}</ul></section>` : ''}
+
+    ${(b.todo || []).length ? `<section><h2>Chép sang trang todo</h2><div class="copyrow">
+      <button class="main" id="copyAll">Sao chép danh sách (${b.todo.length} việc)</button>
+      <a href="../todo/index.html" style="color:var(--accent);font-size:14px">Mở trang todo →</a>
+    </div></section>` : ''}
+
+    <footer>${DAYS.length} bản tóm tắt · tạo tự động lúc 8h sáng</footer>`;
+
+  app.querySelectorAll('[data-id]').forEach(el => {
+    const toggle = () => { d[el.dataset.id] = !d[el.dataset.id]; save(); render(); };
+    if (el.tagName === 'INPUT') el.onchange = toggle; else el.onclick = toggle;
+  });
+  app.querySelectorAll('[data-copy]').forEach(el => (el.onclick = () => copy(el.dataset.copy, el)));
+  const ca = document.getElementById('copyAll');
+  if (ca) ca.onclick = () => copy(b.todo.map(plain).join('\n'), ca);
+  const go = j => { current = DAYS[j]; render(); scrollTo(0, 0); };
+  document.getElementById('prev').onclick = () => i > 0 && go(i - 1);
+  document.getElementById('next').onclick = () => i < DAYS.length - 1 && go(i + 1);
+}
+
+// Phím ← → để chuyển ngày
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT') return;
+  if (e.key === 'ArrowLeft') document.getElementById('prev')?.click();
+  if (e.key === 'ArrowRight') document.getElementById('next')?.click();
+});
+
+render();
+</script>
+</body>
+</html>

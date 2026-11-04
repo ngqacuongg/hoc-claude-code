@@ -26,6 +26,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Dữ liệu lưu trong `localStorage`, khoá `pomodoro-v1`, dạng `{ "YYYY-MM-DD": số phiên tập trung đã xong }`.
 - Thời gian còn lại tính từ mốc kết thúc `endAt`, không trừ dần mỗi giây, vì trình duyệt làm chậm `setInterval` khi tab bị ẩn.
 
+### `brief/`: trang xem todo-list buổi sáng
+- `brief/index.html` là giao diện; `brief/build.py` gộp mọi `briefs/YYYY-MM-DD.json` rồi nhúng thẳng vào HTML, ghi ra `briefs/index.html`. Nhúng thay vì `fetch` để trang mở được bằng `file://` và trong Browser pane.
+- Thư mục `briefs/` (dữ liệu, có nội dung trò chuyện) nằm trong `.gitignore`, không lên Pages. Bản trên web (https://ngqacuongg.github.io/hoc-claude-code/brief/) chỉ hiện dữ liệu mẫu.
+- Dữ liệu do tác vụ định kỳ `morning-todo-brief` (8h sáng, `~/.claude/scheduled-tasks/morning-todo-brief/SKILL.md`) tạo. Đổi cấu trúc JSON thì sửa cả trang lẫn lời nhắn của tác vụ.
+- Mở: `python3 -I brief/build.py && open briefs/index.html`. Trạng thái đã xong lưu ở `localStorage`, khoá `brief-v1`.
+
 ### `hoc-plugin/`: plugin Claude Code tự làm
 - Plugin để học cấu trúc plugin, gồm skill `new-project` (`/hoc-plugin:new-project <tên> <mô tả>`) và hook `SessionStart` (`hooks/session-start.sh`) in tóm tắt repo, cùng hook `Stop` (`hooks/stop-remind-commit.sh`) nhắc khi còn file chưa commit. Cả hai hook chỉ chạy khi remote `origin` chứa `hoc-claude-code`.
 - Marketplace nằm ở `.claude-plugin/marketplace.json` ở gốc repo (tên `hoc-claude-code`). Cài bằng `claude plugin marketplace add ./` rồi `claude plugin install hoc-plugin@hoc-claude-code`.
