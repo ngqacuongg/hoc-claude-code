@@ -10,8 +10,8 @@
     {
       "name": "hoc-plugin",
       "source": "./hoc-plugin",
-      "description": "Skill tạo dự án con mới và hook chào khi mở phiên trong repo hoc-claude-code.",
-      "version": "0.1.0",
+      "description": "Skill tạo dự án con mới , hook chào khi mở phiên và hook nhắc commit.",
+      "version": "0.2.0",
       "category": "learning"
     }
   ]
