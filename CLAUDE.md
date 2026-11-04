@@ -4,13 +4,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Mục đích thư mục
 
-`[hoc-claude-code]` là thư mục **thực hành để học Claude Code**, chưa phải git repo. Mỗi dự án nhỏ nằm trong một thư mục con riêng.
+`[hoc-claude-code]` là thư mục **thực hành để học Claude Code**. Mỗi dự án nhỏ nằm trong một thư mục con riêng.
+
+- Repo công khai: https://github.com/ngqacuongg/hoc-claude-code (remote `origin`, nhánh `main`).
+- GitHub Pages lấy từ thư mục gốc của nhánh `main`: mọi file đẩy lên đều được đăng công khai tại https://ngqacuongg.github.io/hoc-claude-code/
+- `gh` được cài ở `~/.local/bin/gh`. Shell không tương tác của Claude có thể không có thư mục này trong PATH, nên cần gọi bằng đường dẫn đầy đủ.
 
 ## Dự án
 
 ### `todo/`: todo-list hằng ngày
 - Một file `index.html` duy nhất (HTML + CSS + JS thuần), không có build hay thư viện ngoài.
-- Chạy bằng lệnh `open todo/index.html` (mở bằng trình duyệt mặc định).
+- Chạy bằng lệnh `open todo/index.html` (mở bằng trình duyệt mặc định). Bản trên web: https://ngqacuongg.github.io/hoc-claude-code/todo/
 - Dữ liệu lưu trong `localStorage`, khoá `daily-todo-v1`, dạng `{ "YYYY-MM-DD": [{id, text, done}] }`. Khoá ngày theo giờ địa phương (hàm `keyOf`), không dùng UTC.
 - Khi xem ngày hôm nay, `lastUnfinished()` tìm ngày gần nhất còn việc chưa xong để gợi ý chuyển sang hôm nay.
 - Trong Browser pane của app, trang chạy dưới dạng `data:` URL nên `localStorage` bị chặn và dữ liệu không được lưu. Muốn kiểm tra tính năng lưu thì phải mở bằng trình duyệt thật.
