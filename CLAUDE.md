@@ -33,6 +33,13 @@ Các plugin và skill sau đã có sẵn trong phiên (đồng bộ từ tài kh
 - **Anthropic skills**: docx, xlsx, pptx, pdf, docs, deep-research, learn, skill-creator.
 - **Connector Google**: Drive, Docs, Sheets, Slides, Gmail, Calendar.
 
+## Skill cài thêm (cấp người dùng)
+
+- **`anatomy`** (https://github.com/wheresryan22/anatomy, MIT): giải thích một ý tưởng kỹ thuật bằng hình isometric tương tác (SVG, có thể thêm WebGL/3D) và in ra PDF A4. Gọi bằng `/anatomy <yêu cầu>`.
+  - Cài ở `~/.claude/skills/anatomy` (git clone) nên dùng được ở mọi dự án và không nằm trong repo này. Cập nhật bằng `git -C ~/.claude/skills/anatomy pull`.
+  - Cần Node.js ≥ 20.10, và Chrome hoặc Chromium để skill tự kiểm tra hình.
+  - File hình tạo ra trong repo này sẽ được đăng công khai qua GitHub Pages khi push.
+
 ## Hướng dẫn và bộ nhớ từ claude.ai
 
 <!-- Claude Code không đọc được trực tiếp custom instructions hoặc memory của claude.ai chat.
