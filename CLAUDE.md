@@ -21,6 +21,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Khi xem ngày hôm nay, `lastUnfinished()` tìm ngày gần nhất còn việc chưa xong để gợi ý chuyển sang hôm nay.
 - Trong Browser pane của app, trang chạy dưới dạng `data:` URL nên `localStorage` bị chặn và dữ liệu không được lưu. Muốn kiểm tra tính năng lưu thì phải mở bằng trình duyệt thật.
 
+### `pomodoro/`: Đồng hồ Pomodoro 25/5 phút, đếm số phiên trong ngày
+- Một file `index.html` duy nhất, cùng bảng màu với `todo/`. Chạy bằng `open pomodoro/index.html`. Bản trên web: https://ngqacuongg.github.io/hoc-claude-code/pomodoro/
+- Dữ liệu lưu trong `localStorage`, khoá `pomodoro-v1`, dạng `{ "YYYY-MM-DD": số phiên tập trung đã xong }`.
+- Thời gian còn lại tính từ mốc kết thúc `endAt`, không trừ dần mỗi giây, vì trình duyệt làm chậm `setInterval` khi tab bị ẩn.
+
 ### `hoc-plugin/`: plugin Claude Code tự làm
 - Plugin để học cấu trúc plugin, gồm skill `new-project` (`/hoc-plugin:new-project <tên> <mô tả>`) và hook `SessionStart` (`hooks/session-start.sh`) in tóm tắt repo. Hook chỉ chạy khi remote `origin` chứa `hoc-claude-code`.
 - Marketplace nằm ở `.claude-plugin/marketplace.json` ở gốc repo (tên `hoc-claude-code`). Cài bằng `claude plugin marketplace add ./` rồi `claude plugin install hoc-plugin@hoc-claude-code`.

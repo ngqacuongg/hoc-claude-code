@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pomodoro</title>
+<style>
+  :root {
+    --bg: #f6f5f1; --card: #ffffff; --text: #1f1f1c; --muted: #77756d;
+    --line: #e4e2db; --accent: #2f6f5e; --accent-soft: #e2efe9; --danger: #b54a3c;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #161614; --card: #201f1c; --text: #ecebe6; --muted: #9a988f;
+      --line: #33322d; --accent: #6fbfa6; --accent-soft: #24352f; --danger: #e07a6a;
+    }
+  }
+  /* Giờ nghỉ dùng màu khác để nhìn là biết đang ở chế độ nào */
+  body.break { --accent: #b07a2a; }
+  @media (prefers-color-scheme: dark) { body.break { --accent: #e0b060; } }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  main { max-width: 420px; margin: 0 auto; padding: 32px 16px 64px; text-align: center; }
+  h1 { font-size: 22px; margin: 0; }
+  .sub { color: var(--muted); font-size: 14px; margin-top: 2px; }
+
+  .modes { display: inline-flex; gap: 4px; margin: 24px 0 8px; }
+  button {
+    font: inherit; color: inherit; background: var(--card); border: 1px solid var(--line);
+    border-radius: 8px; padding: 6px 12px; cursor: pointer;
+  }
+  button:hover { border-color: var(--accent); }
+  .modes button[aria-pressed=true] { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+
+  .dial { position: relative; width: 260px; height: 260px; margin: 16px auto; }
+  .dial svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .dial circle { fill: none; stroke-width: 10; }
+  .dial .track { stroke: var(--line); }
+  .dial .fill { stroke: var(--accent); stroke-linecap: round; transition: stroke-dashoffset .3s linear; }
+  .time {
+    position: absolute; inset: 0; display: grid; place-content: center;
+    font-size: 56px; font-weight: 600; font-variant-numeric: tabular-nums;
+  }
+  .time small { display: block; font-size: 14px; font-weight: 400; color: var(--muted); }
+
+  .controls { display: flex; gap: 8px; justify-content: center; }
+  .controls .main { background: var(--accent); color: var(--bg); border-color: var(--accent); min-width: 120px; padding: 10px 16px; }
+
+  .count {
+    margin-top: 28px; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px;
+  }
+  .dots { font-size: 22px; letter-spacing: 4px; min-height: 1.5em; overflow-wrap: anywhere; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Pomodoro</h1>
+  <div class="sub">25 phút tập trung, 5 phút nghỉ</div>
+
+  <div class="modes" role="group" aria-label="Chế độ">
+    <button id="mFocus" aria-pressed="true">Tập trung</button>
+    <button id="mBreak" aria-pressed="false">Nghỉ</button>
+  </div>
+
+  <div class="dial">
+    <svg viewBox="0 0 120 120" aria-hidden="true">
+      <circle class="track" cx="60" cy="60" r="54"></circle>
+      <circle class="fill" id="ring" cx="60" cy="60" r="54"></circle>
+    </svg>
+    <div class="time" role="timer" aria-live="off"><span id="time">25:00</span><small id="label">Tập trung</small></div>
+  </div>
+
+  <div class="controls">
+    <button class="main" id="start">Bắt đầu</button>
+    <button id="reset">Đặt lại</button>
+    <button id="skip">Bỏ qua</button>
+  </div>
+
+  <div class="count">
+    <div id="countText">Hôm nay chưa xong phiên nào</div>
+    <div class="dots" id="dots" aria-hidden="true"></div>
+  </div>
+</main>
+
+<script>
+// Số phiên tập trung đã xong theo ngày: { "2026-11-04": 3, ... }
+const KEY = 'pomodoro-v1';
+const LEN = { focus: 25 * 60, break: 5 * 60 };
+const LABEL = { focus: 'Tập trung', break: 'Nghỉ' };
+
+let counts = load();
+let mode = 'focus';
+let remaining = LEN.focus; // giây còn lại khi đang dừng
+let endAt = null;          // mốc thời gian kết thúc khi đang chạy
+let tick = null;
+
+function load() {
+  try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; }
+}
+function save() {
+  try { localStorage.setItem(KEY, JSON.stringify(counts)); } catch {}
+}
+// Khoá ngày theo giờ địa phương, giống todo/
+function todayKey() {
+  const d = new Date(), p = n => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
+}
+
+// Tính thời gian còn lại từ mốc kết thúc thay vì trừ dần mỗi giây:
+// trình duyệt làm chậm setInterval khi tab ẩn, nên đếm kiểu trừ dần sẽ bị lệch.
+function left() {
+  return endAt ? Math.max(0, Math.round((endAt - Date.now()) / 1000)) : remaining;
+}
+
+const ring = document.getElementById('ring');
+const C = 2 * Math.PI * 54;
+ring.style.strokeDasharray = C;
+
+function render() {
+  const s = left();
+  const mm = String(Math.floor(s / 60)).padStart(2, '0');
+  const ss = String(s % 60).padStart(2, '0');
+  document.getElementById('time').textContent = `${mm}:${ss}`;
+  document.getElementById('label').textContent = LABEL[mode];
+  document.title = endAt ? `${mm}:${ss} · ${LABEL[mode]}` : 'Pomodoro';
+  ring.style.strokeDashoffset = C * (1 - s / LEN[mode]);
+  document.body.classList.toggle('break', mode === 'break');
+  document.getElementById('mFocus').setAttribute('aria-pressed', mode === 'focus');
+  document.getElementById('mBreak').setAttribute('aria-pressed', mode === 'break');
+  document.getElementById('start').textContent = endAt ? 'Tạm dừng' : (s < LEN[mode] ? 'Tiếp tục' : 'Bắt đầu');
+
+  const n = counts[todayKey()] || 0;
+  document.getElementById('countText').textContent =
+    n ? `Hôm nay đã xong ${n} phiên (${n * 25} phút tập trung)` : 'Hôm nay chưa xong phiên nào';
+  document.getElementById('dots').textContent = '🍅'.repeat(n);
+}
+
+function start() {
+  endAt = Date.now() + remaining * 1000;
+  tick = setInterval(() => { if (left() === 0) finish(); else render(); }, 250);
+  render();
+}
+function pause() {
+  remaining = left();
+  endAt = null;
+  clearInterval(tick);
+  render();
+}
+function setMode(m) {
+  pause();
+  mode = m;
+  remaining = LEN[m];
+  render();
+}
+// Hết giờ: nếu vừa xong phiên tập trung thì cộng 1, rồi chuyển sang chế độ kia.
+function finish() {
+  if (mode === 'focus') {
+    const k = todayKey();
+    counts[k] = (counts[k] || 0) + 1;
+    save();
+  }
+  beep();
+  setMode(mode === 'focus' ? 'break' : 'focus');
+}
+
+// Tiếng chuông ngắn bằng Web Audio, không cần file âm thanh
+function beep() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    [0, 0.25, 0.5].forEach(t => {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.frequency.value = 880;
+      g.gain.setValueAtTime(0.2, ctx.currentTime + t);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + t + 0.2);
+      o.connect(g).connect(ctx.destination);
+      o.start(ctx.currentTime + t);
+      o.stop(ctx.currentTime + t + 0.2);
+    });
+  } catch {}
+}
+
+document.getElementById('start').onclick = () => (endAt ? pause() : start());
+document.getElementById('reset').onclick = () => setMode(mode);
+document.getElementById('skip').onclick = () => setMode(mode === 'focus' ? 'break' : 'focus');
+document.getElementById('mFocus').onclick = () => setMode('focus');
+document.getElementById('mBreak').onclick = () => setMode('break');
+
+render();
+</script>
+</body>
+</html>
