@@ -153,10 +153,36 @@
   .cols4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 40px; }
   @media (max-width: 860px) { .cols4 { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 480px) { .cols4 { grid-template-columns: 1fr; } }
-  /* dự án + ảnh bấm để phóng to */
-  .project { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 22px; margin-bottom: 40px; }
-  .project h4 { margin: 0 0 6px; font: 400 24px/1.25 var(--serif); }
-  .project p { margin: 0 0 18px; color: var(--muted); max-width: 720px; }
+  /* dự án & poster: lưới thẻ dùng chung */
+  .gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 40px; }
+  @media (max-width: 860px) { .gallery { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 440px) { .gallery { grid-template-columns: 1fr; } }
+  .pcard { display: flex; flex-direction: column; text-align: left; font: inherit; color: inherit; padding: 0; background: var(--card);
+           border: 1px solid var(--line); border-radius: 14px; overflow: hidden; cursor: pointer; transition: transform .25s, border-color .25s, box-shadow .25s; }
+  .pcard.static { cursor: default; }
+  .pcard:not(.static):hover { transform: translateY(-4px); border-color: var(--accent); box-shadow: 0 14px 34px -22px var(--accent); }
+  .pc-img { position: relative; display: block; aspect-ratio: 4 / 5; background: var(--accent-soft); overflow: hidden; border-bottom: 1px solid var(--line); }
+  .pc-img img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+  .pcard[data-book] .pc-img { background: #d4fbc9; }                 /* bìa brochure hình vuông: hiện trọn, nền trùng màu bìa */
+  .pcard[data-book] .pc-img img { object-fit: contain; object-position: center; }
+  .pc-img .noimg { position: absolute; inset: 0; display: grid; place-items: center; font: 13px var(--mono); color: var(--muted); }
+  .pc-tag { position: absolute; left: 10px; top: 10px; font: 11px var(--mono); color: #fff; background: rgba(0,0,0,.55); padding: 2px 8px; border-radius: 6px; }
+  .pc-body { display: flex; flex-direction: column; gap: 4px; padding: 14px 16px 16px; flex: 1; }
+  .pc-body b { font: 600 15px/1.4 var(--sans); }
+  .pc-where { color: var(--muted); font-size: 13px; line-height: 1.45; }
+  .pc-body .award { align-self: flex-start; }
+  .pc-cta { margin-top: auto; padding-top: 8px; font-size: 14px; color: var(--accent); }
+  /* cửa sổ brochure */
+  #bookDlg { width: min(960px, 96vw); max-height: 94vh; overflow: auto; border: 1px solid var(--line); border-radius: 16px; background: var(--card); color: var(--text); padding: 20px 22px 22px; }
+  #bookDlg::backdrop { background: rgba(0,0,0,.6); backdrop-filter: blur(3px); }
+  .book-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  .book-head h4 { margin: 0; font: 400 22px/1.25 var(--serif); }
+  .book-text { margin: 6px 0 4px; color: var(--muted); font-size: 14px; max-width: 760px; }
+  .sheets { display: none; gap: 14px; padding: 14px 0 18px; }
+  .sheets figure { margin: 0; }
+  .sheets figcaption { font: 12px var(--mono); color: var(--muted); margin-top: 4px; }
+  .book-stage[data-sheets="true"] .book-wrap { display: none; }
+  .book-stage[data-sheets="true"] .sheets { display: grid; }
   /* brochure lật trang */
   .book-wrap { perspective: 2000px; overflow: hidden; padding: 14px 0 18px; }
   .book { position: relative; width: min(100%, 860px); aspect-ratio: 2 / 1; margin: 0 auto; transform-style: preserve-3d;
@@ -178,8 +204,6 @@
   .book-nav button { font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 6px 12px; cursor: pointer; white-space: nowrap; }
   .book-nav button:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
   .book-nav button:disabled { opacity: .35; cursor: default; }
-  .book-hint { text-align: center; font-size: 13px !important; margin: 12px auto 0 !important; }
-  .linkish { font: inherit; color: var(--accent); background: none; border: 0; padding: 0; cursor: zoom-in; text-decoration: underline; }
   @media (prefers-reduced-motion: reduce) { .book, .leaf { transition: none; } }
   .zoom { display: block; width: 100%; padding: 0; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: none; cursor: zoom-in; }
   .zoom img { display: block; width: 100%; height: auto; transition: transform .3s; }
@@ -193,14 +217,6 @@
   .interest .n { font: 400 36px/1 var(--serif); color: var(--accent); }
   .interest p { margin: 10px 0 0; font-size: 15px; }
   h3.sub { font: 13px var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin: 0 0 14px; }
-  .posters { list-style: none; margin: 0 0 36px; padding: 0; counter-reset: p; }
-  .posters li { counter-increment: p; display: grid; grid-template-columns: 44px 1fr 84px; gap: 6px 16px; align-items: start; padding: 16px 0; border-top: 1px solid var(--line); }
-  .posters li::before { content: "0" counter(p); font: 400 22px var(--serif); color: var(--muted); }
-  .posters b { display: block; font-weight: 600; }
-  .posters .thumb { width: 84px; }
-  .posters .thumb img { aspect-ratio: 3 / 4; object-fit: cover; object-position: top; }
-  @media (max-width: 480px) { .posters li { grid-template-columns: 32px 1fr 64px; } .posters .thumb { width: 64px; } }
-  .posters span { color: var(--muted); font-size: 14px; }
   .award { display: inline-block; margin-top: 6px; font: 12px var(--mono); color: var(--warm); background: var(--warm-soft); padding: 2px 8px; border-radius: 6px; }
   .studies { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
   @media (max-width: 720px) { .studies { grid-template-columns: 1fr; } }
@@ -349,6 +365,7 @@
 <main id="chapters"></main>
 
 <footer data-t="footer"></footer>
+<dialog id="bookDlg"><div id="bookBox"></div></dialog>
 <dialog id="lb"><img id="lbImg" alt=""></dialog>
 <div class="toast" id="toast"></div>
 
@@ -443,6 +460,8 @@ const ME = {
            "My capstone project as an intern at Touching Soul Center. I read the research on food, nutrients and stress and turned it into an easy-to-read folded brochure for adults: first the gut–brain axis, then four familiar foods (banana, cacao, avocado, yogurt)."],
     // Brochure thật là tờ gấp 4 ô vuông mỗi mặt. Mỗi trang = một ô:
     // sheet là ảnh mặt giấy, col là ô thứ mấy tính từ trái (0–3). Thứ tự dưới đây là thứ tự lật.
+    short: ["Brochure gấp về thực phẩm, dưỡng chất và stress. Dự án kết khoá thực tập.", "A folded brochure on food, nutrients and stress. My internship capstone."],
+    where: "Touching Soul Center, 2026", thumb: "img/nutrition-cover.jpg",
     sheets: { out: "img/nutrition-outside.jpg", in: "img/nutrition-inside.jpg" },
     pages: [
       { sheet: "out", col: 3, name: ["Bìa", "Cover"] },
@@ -455,18 +474,19 @@ const ME = {
       { sheet: "out", col: 0, name: ["Lời kết & tài liệu tham khảo", "Closing & references"] },
     ] },
 
-  // Poster. img: ảnh đặt trong portfolio/img (bỏ trống nếu chưa có).
+  // Poster. thumb: ảnh nhỏ trên thẻ; img: ảnh nét mở khi bấm (bỏ trống nếu chưa có bản nét).
   posters: [
-    { title: ["Xu hướng kiểu hình và kiểu gen của vi khuẩn Gram âm kháng carbapenem sau COVID-19", "Temporal trends in phenotype and genotype of carbapenem-resistant Gram-negative bacteria after COVID-19"],
-      where: "HCMC Society of Medical Laboratory Technology Conference, 2026", award: ["Poster được bình chọn nhiều nhất", "People's Choice Poster Award"] },
+    { title: ["Xu hướng theo thời gian về kiểu hình và kiểu gen kháng carbapenem của vi khuẩn Gram âm sau đại dịch COVID-19", "Temporal trends in phenotype and genotype of carbapenem-resistant Gram-negative bacteria after COVID-19"],
+      where: "HCMC Society of Medical Laboratory Technology Conference, 2026", award: ["Poster được bình chọn nhiều nhất", "People's Choice Poster Award"],
+      img: "img/poster-peoples-choice.jpg", thumb: "img/poster-peoples-choice-sm.jpg" },
     { title: ["Đặc điểm lâm sàng và hệ gene của E. coli kháng carbapenem gây nhiễm khuẩn huyết", "Clinical characteristics and genome of carbapenem-resistant E. coli causing bloodstream infections"],
-      where: "Pasteur Institute Scientific Conference, 10/2026", img: "img/poster-hnkh2026.jpg" },
+      where: "Pasteur Institute Scientific Conference, 10/2026", img: "img/poster-hnkh2026.jpg", thumb: "img/poster-hnkh2026-sm.jpg" },
     { title: ["Tương quan giữa đặc điểm lâm sàng và hồ sơ gen của E. coli kháng carbapenem trong nhiễm khuẩn huyết", "Correlating clinical characteristics with the genomic profile of carbapenem-resistant E. coli in bloodstream infections"],
-      where: "CHRO 2026, 23rd International Conference on Campylobacter, Helicobacter and Related Organisms", img: "img/poster-ecoli.png" },
+      where: "CHRO 2026, 23rd International Conference on Campylobacter, Helicobacter and Related Organisms", img: "img/poster-ecoli.jpg", thumb: "img/poster-ecoli-sm.jpg" },
     { title: ["CAR-T vạn năng “sẵn có” từ tế bào gốc máu cuống rốn, nhắm đích CLL-1 trong điều trị AML", "A universal “off-the-shelf” CAR-T from cord-blood stem cells, targeting CLL-1 for AML"],
-      where: "Stem Cell Innovation Contest 2025 · Cell Technology in Viet Nam Conference", award: ["Giải Khuyến khích, Ý tưởng sáng tạo (nhóm)", "Innovative Idea Poster, Consolation Prize (group)"], img: "img/poster-cart.jpg" },
+      where: "Stem Cell Innovation Contest 2025 · Cell Technology in Viet Nam Conference", award: ["Giải Khuyến khích, Ý tưởng sáng tạo (nhóm)", "Innovative Idea Poster, Consolation Prize (group)"], img: "img/poster-cart.jpg", thumb: "img/poster-cart-sm.jpg" },
     { title: ["Mô hình tế bào gan từ hiPSC để nghiên cứu ung thư gan liên quan NAFLD/NASH", "hiPSC-derived hepatocyte models for studying NAFLD/NASH-related HCC"],
-      where: "Stem Cell Innovation Contest 2025", award: ["Top 18 Ý tưởng Poster (cá nhân)", "Top 18 Poster Idea (individual)"], img: "img/poster-hipsc.png" },
+      where: "Stem Cell Innovation Contest 2025", award: ["Top 18 Ý tưởng Poster (cá nhân)", "Top 18 Poster Idea (individual)"], img: "img/poster-hipsc.jpg", thumb: "img/poster-hipsc-sm.jpg" },
   ],
   studies: [
     ["Hiệu quả nghiệm pháp Epley so với Semont-Plus trong chóng mặt tư thế kịch phát lành tính", "Epley vs Semont-Plus maneuver in benign paroxysmal positional vertigo"],
@@ -561,10 +581,10 @@ const UI = {
   footer: ["Tự viết bằng HTML, CSS, JS thuần cùng Claude Code", "Hand-written in plain HTML, CSS & JS with Claude Code"],
   next: ["Tiếp theo", "Next"], all: ["Tất cả", "All"],
   kinds: { edu: ["Học vấn", "Education"], lab: ["Thực tập", "Internship"], research: ["Nghiên cứu", "Research"], next: ["Sắp tới", "Up next"] },
-  interestsTitle: ["Câu hỏi mình theo đuổi", "Questions I chase"], postersTitle: ["Poster tại hội nghị", "Conference posters"],
-  nutritionTitle: ["Dự án: dinh dưỡng cho sức khoẻ tinh thần", "Project: nutrition for mental health"], zoom: ["Bấm để xem lớn", "Tap to enlarge"],
-  bookHint: ["Bấm vào trang để lật. Chữ nhỏ quá? Xem cả tờ:", "Tap a page to flip. Text too small? See the full sheet:"],
-  sheetOut: ["mặt ngoài", "outside"], sheetIn: ["mặt trong", "inside"],
+  interestsTitle: ["Câu hỏi mình theo đuổi", "Questions I chase"], projectsTitle: ["Dự án & poster", "Projects & posters"],
+  openBook: ["Mở brochure", "Open the brochure"], close: ["Đóng", "Close"], noImage: ["Chưa có ảnh", "Image coming"],
+  bothSides: ["Cả hai mặt của tờ brochure", "Both sides of the sheet"], sideOut: ["Mặt ngoài", "Outside"], sideIn: ["Mặt trong", "Inside"],
+  zoom: ["Bấm để xem lớn", "Tap to enlarge"],
   emailTitle: ["Email", "Email"],
   studiesTitle: ["Đang tham gia tại BV Quân y 175", "Ongoing at 175 Military Hospital"], soon: ["sắp có", "soon"],
   goalTitle: ["Mục tiêu dài hạn", "Long-term goal"], alongsideTitle: ["Song song với đó", "Alongside"],
@@ -723,36 +743,60 @@ let bookAt = 0;
 const pageBg = (pg) => `background-image:url(${ME.nutrition.sheets[pg.sheet]});background-position:${pg.col / 3 * 100}% 0`;
 function bookLabel() {
   const P = ME.nutrition.pages, n = P.length, a = bookAt * 2;          // a = số trang nằm bên trái gáy
+  if (a > n) return t(UI.bothSides);
   const shown = bookAt === 0 ? [1] : a >= n ? [n] : [a, a + 1];
   return `${shown.join("–")} / ${n} · ${shown.map((k) => t(P[k - 1].name)).join(" · ")}`;
 }
+// Các trạng thái: 0 = đóng (bìa) … leaves = lật hết (trang cuối) … leaves + 1 = trải cả hai mặt giấy
 function bookHTML() {
-  const P = ME.nutrition.pages, leaves = P.length / 2;
-  return `<div class="book-wrap"><div class="book" id="book" data-at="${bookAt}" data-end="${bookAt === leaves}">
-      ${Array.from({ length: leaves }, (_, i) => `<div class="leaf ${i < bookAt ? "flipped" : ""}" data-leaf="${i}" style="z-index:${i < bookAt ? i + 1 : leaves - i}">
-        <div class="face front" style="${pageBg(P[2 * i])}"></div><div class="face back" style="${pageBg(P[2 * i + 1])}"></div></div>`).join("")}
-    </div></div>
-    <div class="book-nav">
-      <button data-flip="-1" ${bookAt === 0 ? "disabled" : ""}>${t(UI.prev)}</button>
-      <span id="bookPos">${bookLabel()}</span>
-      <button data-flip="1" ${bookAt === leaves ? "disabled" : ""}>${t(UI.nextStep)}</button>
+  const N = ME.nutrition, P = N.pages, leaves = P.length / 2;
+  return `<div class="book-head"><h4>${t(N.title)}</h4><button class="icon-btn" data-close aria-label="${t(UI.close)}">✕</button></div>
+    <p class="book-text">${t(N.text)}</p>
+    <div class="book-stage" id="bookStage" data-sheets="false">
+      <div class="book-wrap"><div class="book" id="book" data-at="0" data-end="false">
+        ${Array.from({ length: leaves }, (_, i) => `<div class="leaf" data-leaf="${i}" style="z-index:${leaves - i}">
+          <div class="face front" style="${pageBg(P[2 * i])}"></div><div class="face back" style="${pageBg(P[2 * i + 1])}"></div></div>`).join("")}
+      </div></div>
+      <div class="sheets">
+        <figure><button class="zoom" data-zoom="${N.sheets.out}" data-wide="1"><img src="${N.sheets.out}" alt="${t(UI.sideOut)}"></button><figcaption>${t(UI.sideOut)}</figcaption></figure>
+        <figure><button class="zoom" data-zoom="${N.sheets.in}" data-wide="1"><img src="${N.sheets.in}" alt="${t(UI.sideIn)}"></button><figcaption>${t(UI.sideIn)}</figcaption></figure>
+      </div>
     </div>
-    <p class="book-hint">${t(UI.bookHint)}
-      <button class="linkish" data-zoom="${ME.nutrition.sheets.out}">${t(UI.sheetOut)}</button> ·
-      <button class="linkish" data-zoom="${ME.nutrition.sheets.in}">${t(UI.sheetIn)}</button></p>`;
+    <div class="book-nav">
+      <button data-flip="-1" disabled>${t(UI.prev)}</button>
+      <span id="bookPos">${bookLabel()}</span>
+      <button data-flip="1">${t(UI.nextStep)}</button>
+    </div>`;
 }
+function openBook() { bookAt = 0; $("#bookBox").innerHTML = bookHTML(); $("#bookDlg").showModal(); }
 function flipBook(dir) {
-  const book = $("#book"), leaves = book.children.length, i = dir > 0 ? bookAt : bookAt - 1;
-  if (i < 0 || i >= leaves) return;
-  const leaf = book.children[i];
-  bookAt += dir;
-  leaf.style.zIndex = leaves + 1;                                   // lá đang lật luôn nằm trên cùng
-  leaf.classList.toggle("flipped", dir > 0);
-  setTimeout(() => { leaf.style.zIndex = dir > 0 ? i + 1 : leaves - i; }, 350);   // giữa chừng thì xếp lại thứ tự chồng
-  book.dataset.at = bookAt; book.dataset.end = bookAt === leaves;
+  const book = $("#book"), leaves = book.children.length, to = bookAt + dir;
+  if (to < 0 || to > leaves + 1) return;
+  if (to <= leaves && bookAt <= leaves) {                           // lật một lá
+    const i = dir > 0 ? bookAt : bookAt - 1, leaf = book.children[i];
+    leaf.style.zIndex = leaves + 1;                                 // lá đang lật luôn nằm trên cùng
+    leaf.classList.toggle("flipped", dir > 0);
+    setTimeout(() => { leaf.style.zIndex = dir > 0 ? i + 1 : leaves - i; }, 350);   // giữa chừng thì xếp lại thứ tự chồng
+  }
+  bookAt = to;
+  book.dataset.at = Math.min(bookAt, leaves); book.dataset.end = bookAt >= leaves;
+  $("#bookStage").dataset.sheets = bookAt > leaves;                 // qua trang cuối: trải cả hai mặt giấy
   $("#bookPos").innerHTML = bookLabel();
   document.querySelector('[data-flip="-1"]').disabled = bookAt === 0;
-  document.querySelector('[data-flip="1"]').disabled = bookAt === leaves;
+  document.querySelector('[data-flip="1"]').disabled = bookAt === leaves + 1;
+}
+
+/* ---- Dự án & poster: cùng một kiểu thẻ ---- */
+function projectCard(x) {
+  const pic = x.thumb ? `<img src="${esc(x.thumb)}" alt="${t(x.title)}" loading="lazy">` : `<span class="noimg">${t(UI.noImage)}</span>`;
+  const body = `<span class="pc-img">${pic}<span class="pc-tag">${esc(x.tag)}</span></span>
+    <span class="pc-body"><b>${t(x.title)}</b><span class="pc-where">${t(x.where)}</span>
+      ${x.short ? `<span class="pc-where">${t(x.short)}</span>` : ""}
+      ${x.award ? `<span class="award">★ ${t(x.award)}</span>` : ""}
+      ${x.book ? `<span class="pc-cta">${t(UI.openBook)} →</span>` : ""}</span>`;
+  if (x.book) return `<button class="pcard" data-book>${body}</button>`;
+  if (x.img) return `<button class="pcard" data-zoom="${esc(x.img)}" title="${t(UI.zoom)}">${body}</button>`;
+  return `<div class="pcard static">${body}</div>`;
 }
 
 function chapterBody(id) {
@@ -773,15 +817,8 @@ function chapterBody(id) {
     case "research": return `
       <h3 class="sub">${t(UI.interestsTitle)}</h3>
       <div class="cols4">${ME.interests.map((x, i) => `<div class="interest"><div class="n">0${i + 1}</div><p>${t(x)}</p></div>`).join("")}</div>
-      <h3 class="sub">${t(UI.nutritionTitle)}</h3>
-      <div class="project">
-        <div class="project-text"><h4>${t(ME.nutrition.title)}</h4><p>${t(ME.nutrition.text)}</p></div>
-        ${bookHTML()}
-      </div>
-      <h3 class="sub">${t(UI.postersTitle)}</h3>
-      <ol class="posters">${ME.posters.map((p) => `<li><div><b>${t(p.title)}</b><span>${t(p.where)}</span>
-        ${p.award ? `<br><span class="award">★ ${t(p.award)}</span>` : ""}</div>
-        ${p.img ? `<button class="zoom thumb" data-zoom="${esc(p.img)}" title="${t(UI.zoom)}"><img src="${esc(p.img)}" alt="${t(p.title)}" loading="lazy"></button>` : `<span></span>`}</li>`).join("")}</ol>
+      <h3 class="sub">${t(UI.projectsTitle)}</h3>
+      <div class="gallery">${[{ ...ME.nutrition, book: true, tag: "Brochure" }, ...ME.posters.map((p) => ({ ...p, tag: "Poster" }))].map(projectCard).join("")}</div>
       <h3 class="sub">${t(UI.studiesTitle)}</h3>
       <div class="studies">${ME.studies.map((s) => `<div class="study">${t(s)}</div>`).join("")}</div>`;
     case "teach": return `<div class="works one">${ME.teach.map(workCard).join("")}</div><p class="note">${t(UI.privateNote)}</p>`;
@@ -822,9 +859,11 @@ document.addEventListener("click", (e) => {
   const nav = e.target.closest("[data-flip]");
   if (nav) return flipBook(+nav.dataset.flip);
   const leaf = e.target.closest(".leaf");                           // bấm trang phải: lật tới; bấm trang trái: lật lui
-  if (leaf) return flipBook(leaf.classList.contains("flipped") ? -1 : 1);
+  if (leaf) return flipBook(bookAt === $("#book").children.length || !leaf.classList.contains("flipped") ? 1 : -1);   // ở trang cuối, bấm tiếp sẽ trải cả tờ
+  if (e.target.closest("[data-book]")) return openBook();
+  if (e.target.closest("[data-close]") || e.target === $("#bookDlg")) return $("#bookDlg").close();
   const zoom = e.target.closest("[data-zoom]");
-  if (zoom) { const img = zoom.querySelector("img"); $("#lbImg").src = zoom.dataset.zoom; $("#lbImg").alt = img ? img.alt : ""; $("#lbImg").classList.toggle("wide", zoom.classList.contains("linkish")); $("#lb").showModal(); }
+  if (zoom) { const img = zoom.querySelector("img"); $("#lbImg").src = zoom.dataset.zoom; $("#lbImg").alt = img ? img.alt : ""; $("#lbImg").classList.toggle("wide", !!zoom.dataset.wide); $("#lb").showModal(); }
 });
 $("#lb").addEventListener("click", () => $("#lb").close());   // bấm bất kỳ đâu để đóng
 
