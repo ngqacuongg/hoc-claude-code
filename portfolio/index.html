@@ -166,6 +166,60 @@
   .video { aspect-ratio: 16/9; width: 100%; border: 0; display: block; }
   .note { font-size: 13px; color: var(--muted); margin-top: 18px; }
 
+  /* học code */
+  .muted { color: var(--muted); font-size: 15px; }
+  .courses { display: grid; gap: 12px; }
+  .course { background: var(--card); border: 1px solid var(--line); border-radius: 14px; transition: border-color .2s; }
+  .course:hover, .course[open] { border-color: var(--accent); }
+  .course summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: 44px 1fr auto; gap: 14px; align-items: center; padding: 16px 18px; }
+  .course summary::-webkit-details-marker { display: none; }
+  .ci { font-size: 28px; }
+  .ct b { display: block; font-weight: 600; }
+  .ct small { display: block; color: var(--muted); font-size: 14px; line-height: 1.5; }
+  .cm { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; text-align: right; }
+  .badge { font: 12px var(--mono); color: var(--accent); background: var(--accent-soft); padding: 2px 8px; border-radius: 6px; white-space: nowrap; }
+  .ago { font: 12px var(--mono); color: var(--muted); text-transform: none; letter-spacing: 0; }
+  .nb { list-style: none; margin: 0 18px; padding: 0; border-top: 1px solid var(--line); }
+  .nb a { display: flex; gap: 10px; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--line); text-decoration: none; font-size: 15px; }
+  .nb a:hover { color: var(--accent); }
+  .nb .type, .items .type { font: 11px var(--mono); color: var(--accent); background: var(--accent-soft); padding: 1px 7px; border-radius: 5px; min-width: 64px; text-align: center; }
+  .nb .go { margin-left: auto; color: var(--muted); }
+  .repo-link { display: inline-block; margin: 10px 18px 16px; font: 12px var(--mono); color: var(--muted); text-decoration: none; word-break: break-all; }
+  .repo-link:hover { color: var(--accent); }
+  @media (max-width: 560px) {
+    .course summary { grid-template-columns: 34px 1fr; }
+    .cm { grid-column: 2; align-items: flex-start; flex-direction: row; flex-wrap: wrap; gap: 8px; }
+  }
+  .tools { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  @media (max-width: 860px) { .tools { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .tools { grid-template-columns: 1fr; } }
+  .tool { background: var(--card); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column;
+          transition: transform .25s, border-color .25s; }
+  .tool:hover { transform: translateY(-3px); border-color: var(--accent); }
+  /* khung xem trước: trang thật thu nhỏ còn 1/4, không bấm được */
+  .shot { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: var(--bg); border-bottom: 1px solid var(--line); }
+  .shot::before { content: "● ● ●"; position: absolute; z-index: 1; top: 0; left: 0; right: 0; height: 18px; padding-left: 8px;
+                  font-size: 7px; line-height: 18px; letter-spacing: 2px; color: var(--muted); background: var(--card); border-bottom: 1px solid var(--line); }
+  .shot iframe { position: absolute; top: 18px; left: 0; width: 400%; height: 400%; border: 0; transform: scale(.25); transform-origin: 0 0; pointer-events: none; }
+  .shot-ph { position: absolute; inset: 18px 0 0; display: grid; place-items: center; font: 400 28px var(--serif); color: var(--accent); background: var(--accent-soft); }
+  .tool-body { padding: 16px; display: flex; flex-direction: column; flex: 1; }
+  .tool h4 { margin: 0 0 4px; font: 600 17px var(--sans); }
+  .tool p { margin: 0 0 12px; color: var(--muted); font-size: 14px; }
+  .tool-links { display: flex; gap: 16px; margin-top: auto; padding-top: 14px; font-size: 14px; }
+  .tool-links a { text-decoration: none; color: var(--accent); }
+  .tool-links a:hover { text-decoration: underline; }
+  .live { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+  .gh-stats { display: flex; gap: 32px; margin-bottom: 12px; }
+  .gh-stats b { display: block; font: 400 26px/1.1 var(--serif); }
+  .gh-stats span { font-size: 13px; color: var(--muted); }
+  .commits { list-style: none; margin: 0; padding: 0; }
+  .commits a { display: grid; grid-template-columns: 70px 1fr auto; gap: 12px; align-items: baseline; padding: 8px 0;
+               border-top: 1px solid var(--line); text-decoration: none; font-size: 14px; }
+  .commits a:hover span { color: var(--accent); }
+  .commits code { font: 12px var(--mono); color: var(--accent); }
+  .commits time { font: 12px var(--mono); color: var(--muted); white-space: nowrap; }
+  @media (max-width: 560px) { .commits a { grid-template-columns: 60px 1fr; } .commits time { grid-column: 2; } }
+
   /* kỹ năng */
   .skills { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
   @media (max-width: 720px) { .skills { grid-template-columns: 1fr; } }
@@ -332,15 +386,49 @@ const ME = {
         { type: "Lesson", label: ["Bài 1: Cách nếm có hệ thống", "Lesson 1: How to taste"], url: "https://claude.ai/artifact/SgEqAYy53jf6DcxbxGJrpj" },
         { type: "Practice", label: ["Phòng thực hành nếm rượu", "Tasting practice room"], url: "https://claude.ai/artifact/4XtMktHJ1egkLEcAu43SGd" },
       ] },
-    { icon: "🤖", cover: "linear-gradient(135deg,#1f1f1c,#4a4943)", who: ["Tự học", "Self-study"],
-      title: ["Học Claude Code bằng cách tự làm công cụ", "Learning Claude Code by building tools"],
-      text: ["Mỗi nhu cầu nhỏ trong ngày thành một dự án: danh sách việc, đồng hồ tập trung, bản tin buổi sáng, một plugin, và chính trang này.", "Every small daily need becomes a project: a todo list, a focus timer, a morning brief, a plugin, and this very site."],
+  ],
+
+  // Học code. Phần "school" là các repo môn học; "build" là công cụ tự làm.
+  // Thời gian cập nhật và commit gần đây được lấy trực tiếp từ GitHub khi mở trang.
+  github: "ngqacuongg",
+  school: [
+    { repo: "Programming-for-Data-Science-and-Visualization-Course", icon: "📊",
+      title: ["Lập trình cho Khoa học Dữ liệu & Trực quan hoá", "Programming for Data Science & Visualization"],
+      text: ["Làm quen Python và các thư viện dữ liệu: phân tích, vẽ biểu đồ, rồi dựng mô hình hồi quy.", "Getting fluent in Python and its data libraries: analysis, charts, then regression models."],
       items: [
-        { type: "Web app", label: ["Todo hằng ngày", "Daily todo"], url: "https://ngqacuongg.github.io/hoc-claude-code/todo/" },
-        { type: "Web app", label: ["Pomodoro 25/5", "Pomodoro 25/5"], url: "https://ngqacuongg.github.io/hoc-claude-code/pomodoro/" },
-        { type: "Web app", label: ["Bản tin buổi sáng", "Morning brief"], url: "https://ngqacuongg.github.io/hoc-claude-code/brief/" },
-        { type: "Plugin", label: ["hoc-plugin (mã nguồn)", "hoc-plugin (source)"], url: "https://github.com/ngqacuongg/hoc-claude-code/tree/main/hoc-plugin" },
+        { label: ["Phân tích & trực quan hoá dữ liệu", "Data analysis & visualization"], path: "Assignment 1 - Data analysis and visualization/220214_assignment1_notebook.ipynb" },
+        { label: ["Hồi quy tuyến tính: khoản vay mua nhà", "Linear regression: house loans"], path: "Assignment 2 - Linear Regression/220214_assignment2_notebook.ipynb" },
+        { label: ["Hồi quy logistic: dự đoán bệnh tim", "Logistic regression: heart disease"], path: "Assignment 3 - Logistic Regression/220214_assignment3_notebook.ipynb" },
       ] },
+    { repo: "Introduction-to-Statistics-Course", icon: "📈",
+      title: ["Nhập môn Thống kê", "Introduction to Statistics"],
+      text: ["Tư duy thống kê qua một dự án y tế công cộng: ước tính mức độ béo phì từ thói quen ăn uống và vận động.", "Statistical thinking through a public-health project: estimating obesity levels from eating habits and activity."],
+      items: [
+        { label: ["Khám phá & trực quan hoá dữ liệu béo phì", "Exploring the obesity dataset"], path: "First Project.ipynb" },
+        { label: ["Dự án cuối kỳ: dự đoán béo phì ở Mexico, Peru, Colombia", "Final project: obesity in Mexico, Peru & Colombia"], path: "Final Project.ipynb" },
+      ] },
+    { repo: "Machine-Learing-for-Data-Science-Course", icon: "🧠",
+      title: ["Machine Learning cho Khoa học Dữ liệu", "Machine Learning for Data Science"],
+      text: ["Năm thuật toán, năm bộ dữ liệu thật, từ Naive Bayes đến mạng nơ-ron sâu.", "Five algorithms on five real datasets, from Naive Bayes to deep neural networks."],
+      items: [
+        { label: ["Naive Bayes: bảo hiểm du lịch", "Naive Bayes: travel insurance"], path: "ML4DS-220214-Assignment1/220214_assignment1_notebook.ipynb" },
+        { label: ["K-means: phân nhóm khách hàng thẻ tín dụng", "K-means: credit card customer segments"], path: "ML4DS-220214-Assignment2/220214_assignment2_notebook.ipynb" },
+        { label: ["Decision Tree & Random Forest: tuyển dụng", "Decision Tree & Random Forest: recruitment"], path: "ML4DS-220214-Assignment3/220214_assignment3_notebook.ipynb" },
+        { label: ["SVM & ensemble: chẩn đoán ung thư vú", "SVM & ensembles: breast cancer diagnosis"], path: "ML4DS-220214-Assignment4/220214_assignment4_notebook.ipynb" },
+        { label: ["Mạng nơ-ron sâu: phân loại ảnh CIFAR-10", "Deep neural network: CIFAR-10 images"], path: "ML4DS-220214-Assignment5/220214_assignment5_notebook.ipynb" },
+      ] },
+  ],
+  build: [
+    { title: ["Todo hằng ngày", "Daily todo"], text: ["Danh sách việc theo ngày, gợi ý chuyển việc còn dở sang hôm nay.", "A per-day task list that carries unfinished tasks forward."],
+      url: "https://ngqacuongg.github.io/hoc-claude-code/todo/", code: "todo", tags: ["HTML", "JS", "localStorage"] },
+    { title: ["Pomodoro 25/5", "Pomodoro 25/5"], text: ["Đồng hồ tập trung, đếm số phiên trong ngày.", "A focus timer that counts today's sessions."],
+      url: "https://ngqacuongg.github.io/hoc-claude-code/pomodoro/", code: "pomodoro", tags: ["HTML", "JS"] },
+    { title: ["Bản tin buổi sáng", "Morning brief"], text: ["Tác vụ 8h sáng tạo danh sách việc, Python gộp thành một trang.", "An 8 am task writes the day's list; Python builds it into a page."],
+      url: "https://ngqacuongg.github.io/hoc-claude-code/brief/", code: "brief", tags: ["Python", "Automation"] },
+    { title: ["Trang cá nhân này", "This website"], text: ["Một file HTML, hai ngôn ngữ, tự lấy hoạt động mới từ GitHub.", "One HTML file, two languages, live activity from GitHub."],
+      url: "https://ngqacuongg.github.io/hoc-claude-code/portfolio/", code: "portfolio", tags: ["HTML", "Canvas", "GitHub API"], noPreview: true },
+    { title: ["hoc-plugin", "hoc-plugin"], text: ["Plugin Claude Code: skill tạo dự án mới, hook tóm tắt repo và nhắc commit.", "A Claude Code plugin: a new-project skill plus summary and commit-reminder hooks."],
+      url: "", code: "hoc-plugin", tags: ["Claude Code", "Bash", "Hooks"] },
   ],
   skills: [
     [["Phòng thí nghiệm", "Laboratory"], ["Cell culture", "PCR", "DNA extraction", "Sanger sequencing", "MALDI-TOF", "VITEK", "Kirby–Bauer", "Microscopy", "CLSI standards"]],
@@ -360,6 +448,13 @@ const UI = {
   kinds: { edu: ["Học tập", "Education"], lab: ["Phòng lab", "Lab"], research: ["Nghiên cứu", "Research"], lead: ["Cộng đồng", "Community"] },
   interestsTitle: ["Câu hỏi mình theo đuổi", "Questions I chase"], postersTitle: ["Poster tại hội nghị", "Conference posters"],
   studiesTitle: ["Đang tham gia tại BV Quân y 175", "Ongoing at 175 Military Hospital"], soon: ["sắp có", "soon"],
+  schoolTitle: ["Ở trường: Python & dữ liệu", "At university: Python & data"],
+  buildTitle: ["Tự làm: công cụ với Claude Code", "On my own: tools built with Claude Code"],
+  liveTitle: ["Hoạt động gần đây trên GitHub", "Recent activity on GitHub"],
+  liveLoading: ["Đang lấy dữ liệu từ GitHub…", "Fetching from GitHub…"],
+  liveFail: ["Chưa lấy được dữ liệu từ GitHub, xem trực tiếp tại hồ sơ.", "Couldn't reach GitHub right now; see the profile directly."],
+  repos: ["repo công khai", "public repos"], lastPush: ["lần push gần nhất", "last push"], updated: ["cập nhật", "updated"],
+  here: ["bạn đang ở đây", "you are here"], open: ["Mở bản chạy", "Open live"], source: ["Mã nguồn", "Source"], notebooks: ["bài", "notebooks"], profile: ["Xem hồ sơ GitHub", "View GitHub profile"],
   privateNote: ["Một số tài liệu được tạo cùng Claude; nếu link chưa mở được, hãy nhắn mình để xin quyền xem.", "Some materials were made with Claude; if a link doesn't open, message me for access."],
 };
 const CHAPTERS = [
@@ -371,8 +466,11 @@ const CHAPTERS = [
     intro: ["Slides, handout và tài liệu mình làm để dạy học sinh và trình bày cho nhóm.", "Slides, handouts and materials I made to teach students and present to peers."] },
   { id: "learn", kicker: ["05 · Tự học", "05 · Self-study"], title: ["Tò mò ngoài giờ", "Curiosity after hours"],
     intro: ["Những chủ đề mình tự học, mỗi bài đều có một trang để thực hành.", "Topics I teach myself; each one comes with a page to practise on."] },
-  { id: "skills", kicker: ["06 · Kỹ năng", "06 · Skills"], title: ["Hộp đồ nghề", "The toolbox"] },
-  { id: "contact", kicker: ["07 · Liên hệ", "07 · Say hi"], title: ["Cùng nói chuyện nhé.", "Let's talk."],
+  { id: "code", kicker: ["06 · Học code", "06 · Learning code"], title: ["Từ notebook đến công cụ của riêng mình", "From notebooks to my own tools"],
+    intro: ["Mình học lập trình ở trường với Python và dữ liệu, rồi tự học tiếp bằng cách làm công cụ cho chính mình. Phần này tự cập nhật từ GitHub.",
+            "I learned to code at university with Python and data, then kept going by building tools for myself. This section updates itself from GitHub."] },
+  { id: "skills", kicker: ["07 · Kỹ năng", "07 · Skills"], title: ["Hộp đồ nghề", "The toolbox"] },
+  { id: "contact", kicker: ["08 · Liên hệ", "08 · Say hi"], title: ["Cùng nói chuyện nhé.", "Let's talk."],
     intro: ["Hợp tác nghiên cứu, cơ hội học tập, hay chỉ muốn chào hỏi, cứ nhắn cho mình.", "Research collaboration, study opportunities, or just hello: send me a message."] },
 ];
 
@@ -395,6 +493,85 @@ function workCard(w) {
               : `<div class="cover" style="--cover:${w.cover}"><span class="big">${w.icon}</span><span class="who">${t(w.who)}</span></div>`}
     <div class="body"><h4>${t(w.title)}</h4><p>${t(w.text)}</p><ul class="items">${items}</ul></div>
   </article>`;
+}
+
+/* ---- Chương Học code ---- */
+const REPO = "hoc-claude-code";
+const ghUrl = (repo, path) => `https://github.com/${ME.github}/${repo}` + (path ? `/blob/HEAD/${path.split("/").map(encodeURIComponent).join("/")}` : "");
+let gh = { state: "loading", repos: {}, commits: [], count: 0 };   // điền khi GitHub trả lời
+
+function ago(iso) {
+  if (!iso) return "";
+  const s = (new Date(iso) - Date.now()) / 1000, rtf = new Intl.RelativeTimeFormat(lang, { numeric: "auto" });
+  for (const [u, n] of [["year", 31536000], ["month", 2592000], ["day", 86400], ["hour", 3600], ["minute", 60]])
+    if (Math.abs(s) >= n) return rtf.format(Math.round(s / n), u);
+  return rtf.format(0, "minute");
+}
+const repoMeta = (repo) => gh.repos[repo] ? `${t(UI.updated)} ${esc(ago(gh.repos[repo]))}` : "";
+
+function liveHTML() {
+  if (gh.state === "loading") return `<p class="muted">${t(UI.liveLoading)}</p>`;
+  if (gh.state === "fail") return `<p class="muted">${t(UI.liveFail)} <a href="${ghUrl("")}" target="_blank" rel="noopener">github.com/${esc(ME.github)} ↗</a></p>`;
+  const last = Object.values(gh.repos).sort().pop();
+  return `<div class="gh-stats">
+      <div><b>${gh.count}</b><span>${t(UI.repos)}</span></div>
+      <div><b>${esc(ago(last))}</b><span>${t(UI.lastPush)}</span></div>
+    </div>
+    <ol class="commits">${gh.commits.map((c) => `<li><a href="${esc(c.url)}" target="_blank" rel="noopener">
+      <code>${esc(c.sha)}</code><span>${esc(c.msg)}</span><time>${esc(ago(c.date))}</time></a></li>`).join("")}</ol>`;
+}
+
+function codeChapter() {
+  const school = ME.school.map((c) => `
+    <details class="course">
+      <summary><span class="ci">${c.icon}</span><span class="ct"><b>${t(c.title)}</b><small>${t(c.text)}</small></span>
+        <span class="cm"><span class="badge">${c.items.length} ${t(UI.notebooks)}</span><span class="ago" data-repo="${esc(c.repo)}">${repoMeta(c.repo)}</span></span></summary>
+      <ol class="nb">${c.items.map((i) => `<li><a href="${ghUrl(c.repo, i.path)}" target="_blank" rel="noopener">
+        <span class="type">.ipynb</span>${t(i.label)}<span class="go">↗</span></a></li>`).join("")}</ol>
+      <a class="repo-link" href="${ghUrl(c.repo)}" target="_blank" rel="noopener">${esc(c.repo)} ↗</a>
+    </details>`).join("");
+  const build = ME.build.map((b) => `
+    <article class="tool">
+      <div class="shot">${b.url && !b.noPreview
+        ? `<iframe src="${esc(b.url)}" loading="lazy" tabindex="-1" aria-hidden="true" title=""></iframe>`
+        : `<div class="shot-ph">${b.noPreview ? "◎ " + t(UI.here) : "{ }"}</div>`}</div>
+      <div class="tool-body"><h4>${t(b.title)}</h4><p>${t(b.text)}</p>
+        <div class="tags">${b.tags.map((x) => `<span class="tag">${esc(x)}</span>`).join("")}</div>
+        <div class="tool-links">
+          ${b.url ? `<a href="${esc(b.url)}" target="_blank" rel="noopener">${t(UI.open)} ↗</a>` : ""}
+          <a href="https://github.com/${ME.github}/${REPO}/tree/HEAD/${esc(b.code)}" target="_blank" rel="noopener">${t(UI.source)} ↗</a>
+        </div></div>
+    </article>`).join("");
+  return `
+    <h3 class="sub">${t(UI.schoolTitle)}</h3><div class="courses">${school}</div>
+    <h3 class="sub" style="margin-top:44px">${t(UI.buildTitle)} <span class="ago" data-repo="${REPO}">${repoMeta(REPO)}</span></h3>
+    <div class="tools">${build}</div>
+    <h3 class="sub" style="margin-top:44px">${t(UI.liveTitle)}</h3>
+    <div class="live" id="ghLive">${liveHTML()}</div>
+    <a class="btn" style="margin-top:16px" href="${ghUrl("")}" target="_blank" rel="noopener">${t(UI.profile)} ↗</a>`;
+}
+
+// Gọi GitHub API công khai (không cần token, giới hạn 60 lần/giờ cho mỗi người xem),
+// lưu tạm 30 phút để mỗi lần tải lại trang không phải gọi lại.
+async function loadGitHub() {
+  const KEY = "portfolio-gh";
+  let cached = null; try { cached = JSON.parse(store.get(KEY)); } catch {}
+  if (cached && Date.now() - cached.at < 30 * 60 * 1000) { gh = cached.data; return paintGitHub(); }
+  try {
+    const [repos, commits] = await Promise.all([
+      fetch(`https://api.github.com/users/${ME.github}/repos?per_page=100`).then((r) => r.ok ? r.json() : Promise.reject(r.status)),
+      fetch(`https://api.github.com/repos/${ME.github}/${REPO}/commits?per_page=6`).then((r) => r.ok ? r.json() : Promise.reject(r.status)),
+    ]);
+    gh = { state: "ok", count: repos.length,
+      repos: Object.fromEntries(repos.map((r) => [r.name, r.pushed_at])),
+      commits: commits.map((c) => ({ sha: c.sha.slice(0, 7), msg: c.commit.message.split("\n")[0], date: c.commit.author.date, url: c.html_url })) };
+    store.set(KEY, JSON.stringify({ at: Date.now(), data: gh }));
+  } catch { gh = { ...gh, state: "fail" }; }
+  paintGitHub();
+}
+function paintGitHub() {
+  const live = $("#ghLive"); if (live) live.innerHTML = liveHTML();
+  document.querySelectorAll(".ago[data-repo]").forEach((el) => el.innerHTML = repoMeta(el.dataset.repo));
 }
 
 function chapterBody(id) {
@@ -420,6 +597,7 @@ function chapterBody(id) {
       <div class="studies">${ME.studies.map((s) => `<div class="study">${t(s)}</div>`).join("")}</div>`;
     case "teach": return `<div class="works">${ME.teach.map(workCard).join("")}</div><p class="note">${t(UI.privateNote)}</p>`;
     case "learn": return `<div class="works">${ME.learn.map(workCard).join("")}</div>`;
+    case "code": return codeChapter();
     case "skills": return `<div class="skills">${ME.skills.map(([g, list]) =>
         `<div class="skill-group"><h4>${t(g)}</h4><div class="tags">${list.map((s) => `<span class="tag">${esc(s)}</span>`).join("")}</div></div>`).join("")}</div>`;
     case "contact": return `<div class="cta">${ME.links.map((l) =>
@@ -494,6 +672,7 @@ addEventListener("scroll", () => {
 }, { passive: true });
 
 render();
+loadGitHub();
 
 /* Mạng nơ-ron ở phần mở đầu: các nút trôi chậm, nối nhau khi đủ gần, bị con trỏ hút nhẹ.
    Hình ảnh này gợi đến mạng kết nối não, chủ đề mình đang học. */
