@@ -157,10 +157,30 @@
   .project { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 22px; margin-bottom: 40px; }
   .project h4 { margin: 0 0 6px; font: 400 24px/1.25 var(--serif); }
   .project p { margin: 0 0 18px; color: var(--muted); max-width: 720px; }
-  .shots { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; counter-reset: sh; }
-  .shots li { counter-increment: sh; }
-  .shots span { display: block; font-size: 13px; color: var(--muted); margin-top: 6px; }
-  .shots span::before { content: counter(sh) ". "; font-family: var(--mono); color: var(--accent); }
+  /* brochure lật trang */
+  .book-wrap { perspective: 2000px; overflow: hidden; padding: 14px 0 18px; }
+  .book { position: relative; width: min(100%, 860px); aspect-ratio: 2 / 1; margin: 0 auto; transform-style: preserve-3d;
+          transition: transform .7s cubic-bezier(.4, .1, .2, 1); }
+  .book[data-at="0"] { transform: translateX(-25%); }               /* đang đóng: đưa bìa ra giữa */
+  .book[data-end="true"] { transform: translateX(25%); }            /* lật hết: đưa trang cuối ra giữa */
+  .leaf { position: absolute; top: 0; left: 50%; width: 50%; height: 100%; transform-origin: left center; transform-style: preserve-3d;
+          transition: transform .7s cubic-bezier(.4, .1, .2, 1); cursor: pointer; }
+  .leaf.flipped { transform: rotateY(-180deg); }
+  .face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+          background-size: 400% 100%; background-repeat: no-repeat; background-color: #e9f5e4;
+          box-shadow: 0 6px 22px -10px rgba(0,0,0,.45), inset 0 0 0 1px rgba(0,0,0,.06); }
+  .face.front { border-radius: 0 8px 8px 0; }
+  .face.back { transform: rotateY(180deg); border-radius: 8px 0 0 8px; }
+  .face::after { content: ""; position: absolute; top: 0; bottom: 0; width: 9%; pointer-events: none; }     /* bóng ở gáy sách */
+  .face.front::after { left: 0; background: linear-gradient(to right, rgba(0,0,0,.16), transparent); }
+  .face.back::after { right: 0; background: linear-gradient(to left, rgba(0,0,0,.16), transparent); }
+  .book-nav { display: flex; align-items: center; justify-content: center; gap: 16px; font: 13px var(--mono); color: var(--muted); text-align: center; }
+  .book-nav button { font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 6px 12px; cursor: pointer; white-space: nowrap; }
+  .book-nav button:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+  .book-nav button:disabled { opacity: .35; cursor: default; }
+  .book-hint { text-align: center; font-size: 13px !important; margin: 12px auto 0 !important; }
+  .linkish { font: inherit; color: var(--accent); background: none; border: 0; padding: 0; cursor: zoom-in; text-decoration: underline; }
+  @media (prefers-reduced-motion: reduce) { .book, .leaf { transition: none; } }
   .zoom { display: block; width: 100%; padding: 0; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: none; cursor: zoom-in; }
   .zoom img { display: block; width: 100%; height: auto; transition: transform .3s; }
   .zoom:hover { border-color: var(--accent); }
@@ -168,6 +188,7 @@
   #lb { padding: 0; border: 0; background: none; max-width: 96vw; max-height: 94vh; overflow: auto; cursor: zoom-out; border-radius: 10px; }
   #lb::backdrop { background: rgba(0,0,0,.8); }
   #lb img { display: block; max-width: min(1200px, 96vw); height: auto; }
+  #lb img.wide { max-width: none; height: min(900px, 86vh); width: auto; }   /* tờ brochure rất dài: cho cuộn ngang để đọc được chữ */
   .interest { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 20px; }
   .interest .n { font: 400 36px/1 var(--serif); color: var(--accent); }
   .interest p { margin: 10px 0 0; font-size: 15px; }
@@ -420,9 +441,18 @@ const ME = {
     title: ["Dinh Dưỡng Chữa Lành: nên ăn gì khi căng thẳng?", "Healing Nutrition: what to eat when you're stressed?"],
     text: ["Dự án kết khoá thực tập của mình tại Touching Soul Center. Mình đọc các nghiên cứu về thực phẩm, dưỡng chất và stress, rồi chuyển thành một brochure gấp dễ đọc cho người trưởng thành: bắt đầu từ trục ruột–não, sau đó là bốn thực phẩm quen thuộc (chuối, cacao, bơ, sữa chua).",
            "My capstone project as an intern at Touching Soul Center. I read the research on food, nutrients and stress and turned it into an easy-to-read folded brochure for adults: first the gut–brain axis, then four familiar foods (banana, cacao, avocado, yogurt)."],
-    images: [
-      { src: "img/nutrition-outside.jpg", cap: ["Mặt ngoài: bìa, mô hình Sinh học – Tâm – Xã, “bộ não thứ hai” và tài liệu tham khảo", "Outside: cover, the bio-psycho-social model, the “second brain”, and references"] },
-      { src: "img/nutrition-inside.jpg", cap: ["Mặt trong: chuối, cacao, bơ, sữa chua, mỗi loại gồm dưỡng chất, tác động và gợi ý dùng", "Inside: banana, cacao, avocado, yogurt, each with nutrients, effects and serving tips"] },
+    // Brochure thật là tờ gấp 4 ô vuông mỗi mặt. Mỗi trang = một ô:
+    // sheet là ảnh mặt giấy, col là ô thứ mấy tính từ trái (0–3). Thứ tự dưới đây là thứ tự lật.
+    sheets: { out: "img/nutrition-outside.jpg", in: "img/nutrition-inside.jpg" },
+    pages: [
+      { sheet: "out", col: 3, name: ["Bìa", "Cover"] },
+      { sheet: "out", col: 1, name: ["Mô hình Sinh – Tâm – Xã", "The bio-psycho-social model"] },
+      { sheet: "out", col: 2, name: ["“Bộ não thứ hai”", "The “second brain”"] },
+      { sheet: "in", col: 0, name: ["Chuối", "Banana"] },
+      { sheet: "in", col: 1, name: ["Cacao", "Cacao"] },
+      { sheet: "in", col: 2, name: ["Bơ", "Avocado"] },
+      { sheet: "in", col: 3, name: ["Sữa chua", "Yogurt"] },
+      { sheet: "out", col: 0, name: ["Lời kết & tài liệu tham khảo", "Closing & references"] },
     ] },
 
   // Poster. img: ảnh đặt trong portfolio/img (bỏ trống nếu chưa có).
@@ -533,6 +563,8 @@ const UI = {
   kinds: { edu: ["Học vấn", "Education"], lab: ["Thực tập", "Internship"], research: ["Nghiên cứu", "Research"], next: ["Sắp tới", "Up next"] },
   interestsTitle: ["Câu hỏi mình theo đuổi", "Questions I chase"], postersTitle: ["Poster tại hội nghị", "Conference posters"],
   nutritionTitle: ["Dự án: dinh dưỡng cho sức khoẻ tinh thần", "Project: nutrition for mental health"], zoom: ["Bấm để xem lớn", "Tap to enlarge"],
+  bookHint: ["Bấm vào trang để lật. Chữ nhỏ quá? Xem cả tờ:", "Tap a page to flip. Text too small? See the full sheet:"],
+  sheetOut: ["mặt ngoài", "outside"], sheetIn: ["mặt trong", "inside"],
   emailTitle: ["Email", "Email"],
   studiesTitle: ["Đang tham gia tại BV Quân y 175", "Ongoing at 175 Military Hospital"], soon: ["sắp có", "soon"],
   goalTitle: ["Mục tiêu dài hạn", "Long-term goal"], alongsideTitle: ["Song song với đó", "Alongside"],
@@ -684,6 +716,45 @@ function selectStep(i) {
   line.scrollTo({ left: el.offsetLeft - line.offsetLeft - (line.clientWidth - el.clientWidth) / 2, behavior: "smooth" });
 }
 
+/* ---- Brochure lật trang ----
+   Mỗi "lá" (leaf) là một tờ có mặt trước và mặt sau. Lá nằm ở nửa phải của cuốn sách;
+   khi lật, nó xoay 180° quanh gáy (mép trái) sang nửa trái. bookAt = số lá đã lật. */
+let bookAt = 0;
+const pageBg = (pg) => `background-image:url(${ME.nutrition.sheets[pg.sheet]});background-position:${pg.col / 3 * 100}% 0`;
+function bookLabel() {
+  const P = ME.nutrition.pages, n = P.length, a = bookAt * 2;          // a = số trang nằm bên trái gáy
+  const shown = bookAt === 0 ? [1] : a >= n ? [n] : [a, a + 1];
+  return `${shown.join("–")} / ${n} · ${shown.map((k) => t(P[k - 1].name)).join(" · ")}`;
+}
+function bookHTML() {
+  const P = ME.nutrition.pages, leaves = P.length / 2;
+  return `<div class="book-wrap"><div class="book" id="book" data-at="${bookAt}" data-end="${bookAt === leaves}">
+      ${Array.from({ length: leaves }, (_, i) => `<div class="leaf ${i < bookAt ? "flipped" : ""}" data-leaf="${i}" style="z-index:${i < bookAt ? i + 1 : leaves - i}">
+        <div class="face front" style="${pageBg(P[2 * i])}"></div><div class="face back" style="${pageBg(P[2 * i + 1])}"></div></div>`).join("")}
+    </div></div>
+    <div class="book-nav">
+      <button data-flip="-1" ${bookAt === 0 ? "disabled" : ""}>${t(UI.prev)}</button>
+      <span id="bookPos">${bookLabel()}</span>
+      <button data-flip="1" ${bookAt === leaves ? "disabled" : ""}>${t(UI.nextStep)}</button>
+    </div>
+    <p class="book-hint">${t(UI.bookHint)}
+      <button class="linkish" data-zoom="${ME.nutrition.sheets.out}">${t(UI.sheetOut)}</button> ·
+      <button class="linkish" data-zoom="${ME.nutrition.sheets.in}">${t(UI.sheetIn)}</button></p>`;
+}
+function flipBook(dir) {
+  const book = $("#book"), leaves = book.children.length, i = dir > 0 ? bookAt : bookAt - 1;
+  if (i < 0 || i >= leaves) return;
+  const leaf = book.children[i];
+  bookAt += dir;
+  leaf.style.zIndex = leaves + 1;                                   // lá đang lật luôn nằm trên cùng
+  leaf.classList.toggle("flipped", dir > 0);
+  setTimeout(() => { leaf.style.zIndex = dir > 0 ? i + 1 : leaves - i; }, 350);   // giữa chừng thì xếp lại thứ tự chồng
+  book.dataset.at = bookAt; book.dataset.end = bookAt === leaves;
+  $("#bookPos").innerHTML = bookLabel();
+  document.querySelector('[data-flip="-1"]').disabled = bookAt === 0;
+  document.querySelector('[data-flip="1"]').disabled = bookAt === leaves;
+}
+
 function chapterBody(id) {
   switch (id) {
     case "about": return `<p class="bio-lead">${t(ME.bioLead)}</p>
@@ -705,8 +776,7 @@ function chapterBody(id) {
       <h3 class="sub">${t(UI.nutritionTitle)}</h3>
       <div class="project">
         <div class="project-text"><h4>${t(ME.nutrition.title)}</h4><p>${t(ME.nutrition.text)}</p></div>
-        <ol class="shots">${ME.nutrition.images.map((m) => `<li><button class="zoom" data-zoom="${esc(m.src)}" title="${t(UI.zoom)}">
-          <img src="${esc(m.src)}" alt="${t(m.cap)}" loading="lazy"></button><span>${t(m.cap)}</span></li>`).join("")}</ol>
+        ${bookHTML()}
       </div>
       <h3 class="sub">${t(UI.postersTitle)}</h3>
       <ol class="posters">${ME.posters.map((p) => `<li><div><b>${t(p.title)}</b><span>${t(p.where)}</span>
@@ -749,8 +819,12 @@ function render() {
 document.addEventListener("click", (e) => {
   const step = e.target.closest("[data-step]");
   if (step && !step.disabled) return selectStep(+step.dataset.step);
+  const nav = e.target.closest("[data-flip]");
+  if (nav) return flipBook(+nav.dataset.flip);
+  const leaf = e.target.closest(".leaf");                           // bấm trang phải: lật tới; bấm trang trái: lật lui
+  if (leaf) return flipBook(leaf.classList.contains("flipped") ? -1 : 1);
   const zoom = e.target.closest("[data-zoom]");
-  if (zoom) { const img = zoom.querySelector("img"); $("#lbImg").src = zoom.dataset.zoom; $("#lbImg").alt = img ? img.alt : ""; $("#lb").showModal(); }
+  if (zoom) { const img = zoom.querySelector("img"); $("#lbImg").src = zoom.dataset.zoom; $("#lbImg").alt = img ? img.alt : ""; $("#lbImg").classList.toggle("wide", zoom.classList.contains("linkish")); $("#lb").showModal(); }
 });
 $("#lb").addEventListener("click", () => $("#lb").close());   // bấm bất kỳ đâu để đóng
 
