@@ -4,3 +4,5 @@
 *.skill
 # Bản tóm tắt việc buổi sáng (riêng tư, không đăng công khai)
 briefs/
+# Kết quả graphify (knowledge graph của repo, tạo lại được)
+graphify-out/

@@ -1,0 +1,546 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nguyễn Quốc Anh Cường</title>
+<meta name="description" content="Nguyen Quoc Anh Cuong: neuroscience & biohealth, research, teaching and the tools I build.">
+<meta property="og:title" content="Nguyễn Quốc Anh Cường">
+<meta property="og:description" content="From the lab bench to the brain: research, teaching and the tools I build.">
+<!-- Font có đủ dấu tiếng Việt; Iowan/Georgia trên máy hiện sai dấu chữ ư, ơ -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f6f5f1; --card: #ffffff; --text: #1f1f1c; --muted: #6f6d66;
+    --line: #e4e2db; --accent: #2f6f5e; --accent-soft: #e2efe9; --warm: #b8673a; --warm-soft: #f6e8de;
+    --serif: "Lora", "Times New Roman", serif;
+    --sans: "Be Vietnam Pro", -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  :root[data-theme="dark"] {
+    --bg: #141412; --card: #1e1d1a; --text: #ecebe6; --muted: #9a988f;
+    --line: #302f2a; --accent: #6fbfa6; --accent-soft: #22332d; --warm: #e0976a; --warm-soft: #3a2a20;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #141412; --card: #1e1d1a; --text: #ecebe6; --muted: #9a988f;
+      --line: #302f2a; --accent: #6fbfa6; --accent-soft: #22332d; --warm: #e0976a; --warm-soft: #3a2a20;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 64px; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.65 var(--sans); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 20px; }
+  em { font-style: italic; color: var(--accent); }
+
+  /* thanh trên cùng */
+  #progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; background: var(--accent); z-index: 30; }
+  nav { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--bg) 82%, transparent);
+        backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+  nav .wrap { display: flex; align-items: center; gap: 8px; height: 56px; }
+  .logo { font: 600 15px var(--mono); text-decoration: none; margin-right: auto; }
+  .logo b { color: var(--accent); }
+  #chapterNow { font: 13px var(--mono); color: var(--muted); }
+  .icon-btn { font: 600 13px var(--mono); color: var(--muted); background: none; border: 1px solid var(--line);
+              border-radius: 8px; min-width: 36px; height: 34px; padding: 0 8px; cursor: pointer; }
+  .icon-btn:hover { color: var(--text); border-color: var(--accent); }
+  @media (max-width: 560px) { #chapterNow { display: none; } }
+
+  /* thanh chương bên phải (desktop) */
+  #rail { position: fixed; right: 22px; top: 50%; transform: translateY(-50%); z-index: 15;
+          display: flex; flex-direction: column; gap: 14px; }
+  #rail a { position: relative; display: block; width: 10px; height: 10px; border-radius: 50%;
+            border: 2px solid var(--muted); opacity: .55; transition: .25s; }
+  #rail a.on { background: var(--accent); border-color: var(--accent); opacity: 1; transform: scale(1.3); }
+  #rail a span { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); white-space: nowrap;
+                 font: 12px var(--mono); color: var(--text); background: var(--card); border: 1px solid var(--line);
+                 padding: 2px 8px; border-radius: 6px; opacity: 0; pointer-events: none; transition: .2s; }
+  #rail a:hover span { opacity: 1; }
+  @media (max-width: 1100px) { #rail { display: none; } }
+
+  /* mở đầu */
+  header.hero { position: relative; min-height: min(92vh, 820px); display: flex; align-items: center; overflow: hidden;
+                border-bottom: 1px solid var(--line); }
+  #net { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .hero .wrap { position: relative; width: 100%; padding-top: 60px; padding-bottom: 60px; pointer-events: none; }
+  .hero .wrap a, .hero .wrap button { pointer-events: auto; }
+  .pill { display: inline-flex; align-items: center; gap: 8px; font: 13px var(--mono); color: var(--muted);
+          border: 1px solid var(--line); border-radius: 99px; padding: 4px 12px; background: var(--card); }
+  .pill i { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
+  @keyframes pulse { 50% { opacity: .3; } }
+  h1 { font: 400 clamp(42px, 8vw, 88px)/1 var(--serif); letter-spacing: -.025em; margin: 22px 0 0; }
+  h1 small { display: block; font: 400 clamp(16px, 2vw, 20px) var(--mono); color: var(--muted); letter-spacing: 0; margin-bottom: 14px; }
+  .lead { font: 400 clamp(19px, 2.4vw, 24px)/1.45 var(--serif); max-width: 640px; margin: 24px 0 0; }
+  .interests { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 26px; }
+  .interests span { font-size: 14px; background: var(--card); border: 1px solid var(--line); border-radius: 99px; padding: 5px 14px; }
+  .cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font: 500 15px var(--sans);
+         padding: 10px 18px; border-radius: 10px; border: 1px solid var(--line); background: var(--card); color: var(--text); cursor: pointer; }
+  .btn:hover { border-color: var(--accent); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+  .scroll-hint { position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%); font: 12px var(--mono);
+                 color: var(--muted); animation: bob 2s infinite; }
+  @keyframes bob { 50% { transform: translate(-50%, 6px); } }
+
+  /* chương */
+  section { padding: 84px 0; border-bottom: 1px solid var(--line); }
+  .kicker { font: 13px var(--mono); color: var(--accent); letter-spacing: .05em; text-transform: uppercase; }
+  h2 { font: 400 clamp(30px, 4.5vw, 44px)/1.1 var(--serif); margin: 8px 0 12px; letter-spacing: -.015em; }
+  .intro { color: var(--muted); font-size: 17px; max-width: 620px; margin: 0 0 36px; }
+  .next { display: inline-flex; gap: 10px; align-items: baseline; margin-top: 44px; text-decoration: none;
+          color: var(--muted); font: 14px var(--mono); }
+  .next b { font: 400 22px var(--serif); color: var(--text); }
+  .next:hover b { color: var(--accent); }
+
+  .about { display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; }
+  .about p { margin: 0 0 16px; font-size: 17px; }
+  .facts { list-style: none; margin: 0; padding: 0; border: 1px solid var(--line); border-radius: 14px; background: var(--card); align-self: start; }
+  .facts li { padding: 12px 16px; border-top: 1px solid var(--line); font-size: 15px; }
+  .facts li:first-child { border-top: none; }
+  .facts small { display: block; font: 12px var(--mono); color: var(--muted); }
+  @media (max-width: 720px) { .about { grid-template-columns: 1fr; } }
+
+  /* hành trình */
+  .legend { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 26px; }
+  .chip { font: 13px var(--sans); color: var(--muted); background: var(--card); border: 1px solid var(--line);
+          border-radius: 99px; padding: 5px 13px; cursor: pointer; display: inline-flex; gap: 6px; align-items: center; }
+  .chip i { width: 8px; height: 8px; border-radius: 50%; }
+  .chip[aria-pressed="true"] { background: var(--text); color: var(--bg); border-color: var(--text); }
+  .timeline { list-style: none; margin: 0; padding: 0 0 0 24px; border-left: 2px solid var(--line); }
+  .timeline li { position: relative; padding: 0 0 8px 18px; }
+  .timeline li.hide { display: none; }
+  .timeline li::before { content: ""; position: absolute; left: -31px; top: 22px; width: 12px; height: 12px;
+                         border-radius: 50%; background: var(--bg); border: 2px solid var(--dot, var(--accent)); }
+  .timeline details { border-radius: 12px; padding: 12px 14px; transition: background .2s; }
+  .timeline details:hover, .timeline details[open] { background: var(--card); }
+  .timeline summary { list-style: none; cursor: pointer; }
+  .timeline summary::-webkit-details-marker { display: none; }
+  .timeline time { font: 12px var(--mono); color: var(--muted); }
+  .timeline h4 { margin: 2px 0 0; font-size: 17px; }
+  .timeline h4::after { content: " +"; color: var(--muted); font-weight: 400; }
+  .timeline details[open] h4::after { content: " –"; }
+  .timeline .org { color: var(--muted); font-size: 15px; }
+  .timeline ul { margin: 8px 0 0; padding-left: 18px; font-size: 15px; }
+
+  /* nghiên cứu */
+  .cols3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 40px; }
+  @media (max-width: 720px) { .cols3 { grid-template-columns: 1fr; } }
+  .interest { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 20px; }
+  .interest .n { font: 400 36px/1 var(--serif); color: var(--accent); }
+  .interest p { margin: 10px 0 0; font-size: 15px; }
+  h3.sub { font: 13px var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin: 0 0 14px; }
+  .posters { list-style: none; margin: 0 0 36px; padding: 0; counter-reset: p; }
+  .posters li { counter-increment: p; display: grid; grid-template-columns: 44px 1fr; gap: 6px; padding: 16px 0; border-top: 1px solid var(--line); }
+  .posters li::before { content: "0" counter(p); font: 400 22px var(--serif); color: var(--muted); }
+  .posters b { display: block; font-weight: 600; }
+  .posters span { color: var(--muted); font-size: 14px; }
+  .award { display: inline-block; margin-top: 6px; font: 12px var(--mono); color: var(--warm); background: var(--warm-soft); padding: 2px 8px; border-radius: 6px; }
+  .studies { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  @media (max-width: 720px) { .studies { grid-template-columns: 1fr; } }
+  .study { border-left: 3px solid var(--accent); padding: 4px 0 4px 14px; font-size: 15px; }
+
+  /* tác phẩm (artifact) */
+  .works { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+  @media (max-width: 720px) { .works { grid-template-columns: 1fr; } }
+  .work { background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden;
+          display: flex; flex-direction: column; transition: transform .25s, box-shadow .25s, border-color .25s; }
+  .work:hover { transform: translateY(-4px); border-color: var(--accent); box-shadow: 0 14px 34px -22px var(--accent); }
+  .cover { height: 132px; position: relative; display: flex; align-items: flex-end; padding: 14px 18px;
+           background: var(--cover); color: #fff; }
+  .cover .big { position: absolute; right: 14px; top: 6px; font-size: 64px; opacity: .9; filter: saturate(.9); }
+  .cover .who { font: 12px var(--mono); background: rgba(0,0,0,.25); padding: 2px 8px; border-radius: 6px; }
+  .work .body { padding: 18px; flex: 1; display: flex; flex-direction: column; }
+  .work h4 { margin: 0 0 6px; font: 600 18px var(--sans); }
+  .work p { margin: 0 0 14px; color: var(--muted); font-size: 15px; }
+  .items { list-style: none; margin: auto 0 0; padding: 0; border-top: 1px solid var(--line); }
+  .items li { border-bottom: 1px solid var(--line); }
+  .items li:last-child { border-bottom: none; }
+  .items a, .items span.row { display: flex; align-items: center; gap: 10px; padding: 9px 2px; text-decoration: none; font-size: 15px; }
+  .items a:hover { color: var(--accent); }
+  .items .type { font: 11px var(--mono); color: var(--accent); background: var(--accent-soft); padding: 1px 7px; border-radius: 5px; min-width: 64px; text-align: center; }
+  .items .go { margin-left: auto; color: var(--muted); }
+  .items span.row { color: var(--muted); }
+  .video { aspect-ratio: 16/9; width: 100%; border: 0; display: block; }
+  .note { font-size: 13px; color: var(--muted); margin-top: 18px; }
+
+  /* kỹ năng */
+  .skills { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  @media (max-width: 720px) { .skills { grid-template-columns: 1fr; } }
+  .skill-group { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+  .skill-group h4 { margin: 0 0 12px; font: 12px var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { font-size: 13px; color: var(--text); background: var(--accent-soft); padding: 3px 10px; border-radius: 6px; }
+
+  .contact { text-align: center; }
+  .contact h2 { font-size: clamp(36px, 6vw, 60px); }
+  .contact .intro { margin: 0 auto; }
+  .contact .cta { justify-content: center; }
+  footer { padding: 28px 0 40px; color: var(--muted); font: 12px var(--mono); text-align: center; }
+
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translate(-50%, 20px); opacity: 0;
+           background: var(--text); color: var(--bg); padding: 10px 18px; border-radius: 10px; font-size: 14px;
+           transition: .25s; pointer-events: none; z-index: 40; }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity .7s, transform .7s; }
+  .reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .pill i, .scroll-hint { animation: none; }
+  }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<nav>
+  <div class="wrap">
+    <a class="logo" href="#top">~/<b>ngqacuongg</b></a>
+    <span id="chapterNow"></span>
+    <button class="icon-btn" id="langBtn" aria-label="Language"></button>
+    <button class="icon-btn" id="themeBtn" aria-label="Theme">◐</button>
+  </div>
+</nav>
+<div id="rail"></div>
+
+<header class="hero" id="top">
+  <canvas id="net" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <span class="pill"><i></i><span data-t="status"></span></span>
+    <h1><small data-t="hello"></small><span id="name"></span></h1>
+    <p class="lead" data-t="lead"></p>
+    <div class="interests" id="interests"></div>
+    <div class="cta">
+      <a class="btn primary" href="#about" data-t="start"></a>
+      <button class="btn" id="shareBtn" data-t="share"></button>
+    </div>
+  </div>
+  <div class="scroll-hint" data-t="scroll"></div>
+</header>
+
+<main id="chapters"></main>
+
+<footer data-t="footer"></footer>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ==================================================================
+   NỘI DUNG: chỉ cần sửa phần này.
+   Mỗi đoạn chữ viết dạng ["tiếng Việt", "English"].
+   Thêm video: trong một mục "works", thêm  video: "https://www.youtube.com/embed/<mã>"
+   ================================================================== */
+const ME = {
+  name: ["Nguyễn Quốc Anh Cường", "Nguyen Quoc Anh Cuong"],
+  status: ["Trợ lý nghiên cứu · Bệnh viện Quân y 175", "Research Assistant · 175 Military Hospital"],
+  hello: ["Xin chào, mình là", "Hi, I'm"],
+  lead: ["Mình đi từ bàn thí nghiệm đến bộ não: tìm hiểu cách tế bào “nói chuyện” với nhau, rồi dạy lại điều mình học và tự làm công cụ để học nhanh hơn.",
+         "From the lab bench to the brain: I study how cells talk to each other, teach what I learn, and build small tools to learn faster."],
+  interests: [
+    ["Tín hiệu kẽm & viêm thần kinh", "Zinc signalling & neuroinflammation"],
+    ["Serotonin & trục ruột–não", "Serotonin & the gut–brain axis"],
+    ["Mô hình tính toán cho từng bệnh nhân", "Patient-specific computational modelling"],
+  ],
+  about: [
+    ["Mình tốt nghiệp Đại học Fulbright Việt Nam với hai chuyên ngành: Khoa học Tích hợp (hướng Sức khỏe Sinh học) và Tâm lý học. Hai ngành này gặp nhau ở một câu hỏi mình theo đuổi mãi: sinh học của não ảnh hưởng thế nào đến tâm trí và bệnh tật?",
+     "I graduated from Fulbright University Vietnam with a double major in Integrated Sciences (Biohealth) and Psychology. The two meet at one question I keep chasing: how does the biology of the brain shape the mind, and disease?"],
+    ["Mình đã làm ở phòng vi sinh lâm sàng, phòng sinh học phân tử, và giờ là trợ lý nghiên cứu ở khoa Thần kinh. Song song, mình dạy sinh học, dẫn journal club, và học lập trình bằng cách tự làm công cụ cho chính mình.",
+     "I have worked in a clinical microbiology lab, a molecular biology lab, and now as a research assistant in neurophysiology. Alongside that I teach biology, lead journal clubs, and learn to code by building tools for myself."],
+  ],
+  facts: [
+    [["Đang ở", "Based in"], ["TP. Hồ Chí Minh, Việt Nam", "Ho Chi Minh City, Vietnam"]],
+    [["Học vấn", "Education"], ["Fulbright University Vietnam, 2022–2026", "Fulbright University Vietnam, 2022–2026"]],
+    [["Hiện tại", "Now"], ["Trợ lý nghiên cứu, Khoa Thần kinh, BV Quân y 175", "Research Assistant, Neurophysiology, 175 Military Hospital"]],
+    [["Ngôn ngữ", "Languages"], ["Tiếng Việt, English (thành thạo)", "Vietnamese, English (fluent)"]],
+  ],
+  links: [
+    { label: "LinkedIn", url: "https://www.linkedin.com/in/ngqacuongg/", primary: true },
+    { label: "GitHub", url: "https://github.com/ngqacuongg" },
+  ],
+
+  // Hành trình. kind: edu | lab | research | lead
+  journey: [
+    { date: "2022 – 2024", kind: "lead", title: ["Đồng sáng lập Science Lab", "Co-founded Science Lab"], org: "Phu Yen, Vietnam",
+      points: [["Làm nội dung giáo dục và hoạt động khoa học thực hành.", "Developed educational content and hands-on science activities."]] },
+    { date: "09/2022 – 06/2026", kind: "edu", title: ["Đại học Fulbright Việt Nam", "Fulbright University Vietnam"], org: ["Cử nhân Khoa học Tích hợp & Tâm lý học", "B.S. Integrated Sciences & B.A. Psychology"],
+      points: [["Môn tiêu biểu: Thần kinh học nhận thức (A), Lập trình cho Khoa học Dữ liệu (A), Tâm lý bất thường (A), Machine Learning (A−).",
+                "Highlights: Cognitive Neuroscience (A), Programming for Data Science (A), Abnormal Psychology (A), Machine Learning (A−)."]] },
+    { date: "2024 – 2026", kind: "lead", title: ["Phó chủ nhiệm & cố vấn học thuật, Fulbright STEM Club", "Vice President & Academic Advisor, Fulbright STEM Club"], org: "Fulbright University Vietnam",
+      points: [["Cố vấn nội dung, đồng tổ chức sự kiện khoa học, truyền đạt STEM cho sinh viên và cộng đồng.", "Advised on content, co-organized science events, communicated STEM to students and the community."]] },
+    { date: "05 – 08/2025", kind: "lab", title: ["Thực tập sinh, Phòng Vi sinh Lâm sàng", "Intern, Clinical Microbiology Laboratory"], org: ["Bệnh viện Bệnh Nhiệt đới TP.HCM", "Hospital for Tropical Diseases, HCMC"],
+      points: [["Định danh vi khuẩn và làm kháng sinh đồ (MALDI-TOF, VITEK, Kirby–Bauer) theo chuẩn CLSI.", "Microbial identification and antibiotic susceptibility testing (MALDI-TOF, VITEK, Kirby–Bauer) under CLSI standards."]] },
+    { date: "2025 – nay", kind: "lead", title: ["Thành viên Journal Club, Innovative Bioscience Group", "Journal Club member, Innovative Bioscience Group"], org: "Online",
+      points: [["Đọc, phân tích và trình bày bài báo sinh học cho nhóm.", "Read, analyze and present biology papers to the group."]] },
+    { date: "09/2025 – 06/2026", kind: "lab", title: ["Thực tập sinh, Trung tâm Y Sinh học Phân tử", "Intern, Center for Molecular Biomedicine"], org: ["Đại học Y Dược TP.HCM", "University of Medicine and Pharmacy at HCMC"],
+      points: [["Giải trình tự Sanger, nuôi cấy tế bào động vật, PCR, tách chiết DNA; nhận chứng chỉ thực hành sinh học phân tử.", "Sanger sequencing, mammalian cell culture, PCR and DNA extraction; earned a molecular biology lab practice certificate."]] },
+    { date: "09 – 12/2025", kind: "research", title: ["Stem Cell Innovation Contest 2025", "Stem Cell Innovation Contest 2025"], org: ["Viện Tế bào gốc, ĐH Khoa học Tự nhiên", "Stem Cell Institute, VNUHCM–University of Science"],
+      points: [["Top 18 Ý tưởng Poster (cá nhân): mô hình tế bào gan từ hiPSC để nghiên cứu ung thư gan liên quan NAFLD/NASH.", "Top 18 Poster Idea (individual): hiPSC-derived hepatocyte models for NAFLD/NASH-related liver cancer."],
+               ["Giải Khuyến khích (nhóm): CAR-T “off-the-shelf” từ iPSC cho bệnh bạch cầu AML.", "Consolation Prize (group): universal off-the-shelf CAR-T from iPSC for AML."]] },
+    { date: "08/2026 – nay", kind: "research", title: ["Trợ lý nghiên cứu, Khoa Thần kinh", "Research Assistant, Neurophysiology Department"], org: ["Bệnh viện Quân y 175", "175 Military Hospital"],
+      points: [["Hỗ trợ ba nghiên cứu lâm sàng, xây dựng cơ sở dữ liệu và quy trình nhập liệu, chuẩn bị hồ sơ theo quy định đạo đức nghiên cứu.", "Support three clinical studies, build databases and data-entry workflows, prepare protocol documents under research ethics rules."]] },
+  ],
+
+  posters: [
+    { title: ["Xu hướng kiểu hình và kiểu gen của vi khuẩn Gram âm kháng carbapenem sau COVID-19", "Temporal trends in phenotype and genotype of carbapenem-resistant Gram-negative bacteria after COVID-19"],
+      where: "HCMC Society of Medical Laboratory Technology Conference, 2026", award: ["Poster được bình chọn nhiều nhất", "People's Choice Poster Award"] },
+    { title: ["Đặc điểm lâm sàng và cấu trúc di truyền toàn bộ gen của E. coli kháng carbapenem gây nhiễm khuẩn huyết", "Clinical characteristics and whole-genome structure of carbapenem-resistant E. coli in bloodstream infections"],
+      where: "Pasteur Institute Scientific Conference, 2026" },
+    { title: ["Đặc điểm lâm sàng và hồ sơ gen của E. coli kháng carbapenem gây nhiễm khuẩn huyết", "Clinical characteristics and genomic profiles of carbapenem-resistant E. coli causing bloodstream infections"],
+      where: "CHRO 2026, 23rd International Conference on Campylobacter, Helicobacter and Related Organisms" },
+    { title: ["CAR-T “off-the-shelf” từ iPSC cho điều trị AML an toàn, hiệu quả", "Building a universal “off-the-shelf” CAR-T from iPSC for safe and effective AML treatment"],
+      where: "Cell Technology in Viet Nam Conference, 2025", award: ["Giải Khuyến khích, Ý tưởng sáng tạo", "Innovative Idea Poster, Consolation Prize"] },
+  ],
+  studies: [
+    ["Hiệu quả nghiệm pháp Epley so với Semont-Plus trong chóng mặt tư thế kịch phát lành tính", "Epley vs Semont-Plus maneuver in benign paroxysmal positional vertigo"],
+    ["Độ cứng gan (FibroScan) và chỉ dấu viêm với tiên lượng đột quỵ thiếu máu não có MASLD", "Liver stiffness (FibroScan) and inflammation in ischemic stroke prognosis with MASLD"],
+    ["Sổ đăng ký Quốc gia bệnh ALS Việt Nam", "The Vietnam National ALS Registry"],
+  ],
+
+  // Tác phẩm: mỗi mục là một bộ, gồm nhiều artifact (slides, handout, trang thực hành, video...)
+  teach: [
+    { icon: "🧬", cover: "linear-gradient(135deg,#2f6f5e,#5c9d7f)", who: ["Đi dạy", "Teaching"],
+      title: ["Di truyền học, Giai đoạn 1: Nhiễm sắc thể & Phân bào", "Genetics Stage 1: Chromosomes & Cell Division"],
+      text: ["Bộ bài giảng cho học sinh, đi từ nhiễm sắc thể đến nguyên phân và giảm phân, kèm handout để tự ôn.", "A lesson set for students, from chromosomes to mitosis and meiosis, with a handout for self-review."],
+      items: [
+        { type: "Course", label: ["Trang bài học", "Lesson page"], url: "https://claude.ai/artifact/LNFj4Hj4D81TettW3LT5Fj" },
+        { type: "Slides", label: ["Slides bài giảng (K1–K4)", "Lesson slides (K1–K4)"], url: "https://claude.ai/artifact/TXimM1CPftLzyooBko9JTj" },
+        { type: "Handout", label: ["Handout cho học sinh", "Student handout"], url: "https://claude.ai/artifact/UJ5toMQMZZ8Cn8JZwye7AL" },
+      ] },
+    { icon: "🔬", cover: "linear-gradient(135deg,#3b4f7a,#6a7fb0)", who: ["Journal Club", "Journal Club"],
+      title: ["Prox1: đọc và trình bày Fig 1 & Fig 7", "Prox1: presenting Fig 1 & Fig 7"],
+      text: ["Phần trình bày của mình ở journal club Innovative Bioscience Group: mổ xẻ dữ liệu, rồi kể lại thành một câu chuyện dễ theo.", "My part at the Innovative Bioscience Group journal club: unpacking the data and retelling it as an easy-to-follow story."],
+      items: [ { type: "Slides", label: ["Slides Journal Club", "Journal club slides"], url: "https://claude.ai/artifact/XAfs79fiTEGauweazQfKii" } ] },
+    { icon: "🥗", cover: "linear-gradient(135deg,#b8673a,#d9965f)", who: ["Cộng đồng", "Community"],
+      title: ["Dinh dưỡng chữa lành cho sức khỏe tinh thần", "Nutrition for mental health"],
+      text: ["Đề xuất dự án và brochure truyền thông về dinh dưỡng và sức khỏe tinh thần, trình bày trong chương trình thực tập TSC.", "A project proposal and brochure on nutrition and mental health, presented in the TSC internship program."],
+      items: [ { type: "Brochure", label: ["Brochure & bài trình bày (sắp đăng)", "Brochure & talk (coming soon)"], url: "" } ] },
+  ],
+  learn: [
+    { icon: "🧠", cover: "linear-gradient(135deg,#4b3f72,#8a6fb8)", who: ["Tự học", "Self-study"],
+      title: ["Network Spreading: protein lan kiểu prion", "Network Spreading: prion-like protein spread"],
+      text: ["Protein bệnh lý lan trong não theo mạng kết nối thế nào? Mình học mô hình Network Diffusion và tự chạy thử trên trang thực hành.", "How do pathological proteins spread along brain networks? I studied the Network Diffusion Model and tried it on a practice page."],
+      items: [
+        { type: "Lesson", label: ["Bài 1: Protein lan kiểu prion", "Lesson 1: Prion-like spread"], url: "https://claude.ai/artifact/5znsrfs9yM4Ns2qyuVWB3P" },
+        { type: "Practice", label: ["Trang thực hành mô hình", "Interactive model practice"], url: "https://claude.ai/artifact/KUqeE5ghvZVHBpDvLtCCnB" },
+      ] },
+    { icon: "🍷", cover: "linear-gradient(135deg,#7a2e3b,#b5566a)", who: ["Sở thích", "For fun"],
+      title: ["Nếm rượu vang có hệ thống", "Systematic wine tasting"],
+      text: ["Một góc ngoài phòng lab: học cách nếm bằng giác quan, và hiểu vì sao não “cảm” được hương vị.", "A corner outside the lab: tasting with the senses, and why the brain perceives flavour."],
+      items: [
+        { type: "Lesson", label: ["Bài 1: Cách nếm có hệ thống", "Lesson 1: How to taste"], url: "https://claude.ai/artifact/SgEqAYy53jf6DcxbxGJrpj" },
+        { type: "Practice", label: ["Phòng thực hành nếm rượu", "Tasting practice room"], url: "https://claude.ai/artifact/4XtMktHJ1egkLEcAu43SGd" },
+      ] },
+    { icon: "🤖", cover: "linear-gradient(135deg,#1f1f1c,#4a4943)", who: ["Tự học", "Self-study"],
+      title: ["Học Claude Code bằng cách tự làm công cụ", "Learning Claude Code by building tools"],
+      text: ["Mỗi nhu cầu nhỏ trong ngày thành một dự án: danh sách việc, đồng hồ tập trung, bản tin buổi sáng, một plugin, và chính trang này.", "Every small daily need becomes a project: a todo list, a focus timer, a morning brief, a plugin, and this very site."],
+      items: [
+        { type: "Web app", label: ["Todo hằng ngày", "Daily todo"], url: "https://ngqacuongg.github.io/hoc-claude-code/todo/" },
+        { type: "Web app", label: ["Pomodoro 25/5", "Pomodoro 25/5"], url: "https://ngqacuongg.github.io/hoc-claude-code/pomodoro/" },
+        { type: "Web app", label: ["Bản tin buổi sáng", "Morning brief"], url: "https://ngqacuongg.github.io/hoc-claude-code/brief/" },
+        { type: "Plugin", label: ["hoc-plugin (mã nguồn)", "hoc-plugin (source)"], url: "https://github.com/ngqacuongg/hoc-claude-code/tree/main/hoc-plugin" },
+      ] },
+  ],
+  skills: [
+    [["Phòng thí nghiệm", "Laboratory"], ["Cell culture", "PCR", "DNA extraction", "Sanger sequencing", "MALDI-TOF", "VITEK", "Kirby–Bauer", "Microscopy", "CLSI standards"]],
+    [["Tính toán", "Computational"], ["Python", "R", "Git/GitHub", "Clinical databases", "Claude Code"]],
+    [["Đang học", "In development"], ["Electrophysiology", "Fluorescence imaging", "Statistics", "Bioinformatics"]],
+    [["Giao tiếp khoa học", "Science communication"], ["Teaching", "Journal club", "Scientific posters", "Slides & handouts"]],
+  ],
+};
+
+/* Chữ cố định của giao diện */
+const UI = {
+  status: ME.status, hello: ME.hello, lead: ME.lead,
+  start: ["Bắt đầu câu chuyện ↓", "Start the story ↓"], share: ["Chia sẻ trang này", "Share this page"],
+  scroll: ["cuộn xuống", "scroll"], copied: ["Đã chép link", "Link copied"],
+  footer: ["Tự viết bằng HTML, CSS, JS thuần cùng Claude Code", "Hand-written in plain HTML, CSS & JS with Claude Code"],
+  next: ["Tiếp theo", "Next"], all: ["Tất cả", "All"],
+  kinds: { edu: ["Học tập", "Education"], lab: ["Phòng lab", "Lab"], research: ["Nghiên cứu", "Research"], lead: ["Cộng đồng", "Community"] },
+  interestsTitle: ["Câu hỏi mình theo đuổi", "Questions I chase"], postersTitle: ["Poster tại hội nghị", "Conference posters"],
+  studiesTitle: ["Đang tham gia tại BV Quân y 175", "Ongoing at 175 Military Hospital"], soon: ["sắp có", "soon"],
+  privateNote: ["Một số tài liệu được tạo cùng Claude; nếu link chưa mở được, hãy nhắn mình để xin quyền xem.", "Some materials were made with Claude; if a link doesn't open, message me for access."],
+};
+const CHAPTERS = [
+  { id: "about", kicker: ["01 · Khởi đầu", "01 · Beginnings"], title: ["Một chút về mình", "A little about me"] },
+  { id: "journey", kicker: ["02 · Hành trình", "02 · The path"], title: ["Từng bước, từ phòng học đến phòng lab", "Step by step, from classroom to lab"],
+    intro: ["Bấm vào từng mốc để xem chi tiết, hoặc lọc theo loại.", "Tap a milestone for details, or filter by type."] },
+  { id: "research", kicker: ["03 · Nghiên cứu", "03 · Research"], title: ["Những gì mình đang tìm hiểu", "What I'm figuring out"] },
+  { id: "teach", kicker: ["04 · Dạy & chia sẻ", "04 · Teaching & sharing"], title: ["Học xong thì kể lại", "Learn it, then pass it on"],
+    intro: ["Slides, handout và tài liệu mình làm để dạy học sinh và trình bày cho nhóm.", "Slides, handouts and materials I made to teach students and present to peers."] },
+  { id: "learn", kicker: ["05 · Tự học", "05 · Self-study"], title: ["Tò mò ngoài giờ", "Curiosity after hours"],
+    intro: ["Những chủ đề mình tự học, mỗi bài đều có một trang để thực hành.", "Topics I teach myself; each one comes with a page to practise on."] },
+  { id: "skills", kicker: ["06 · Kỹ năng", "06 · Skills"], title: ["Hộp đồ nghề", "The toolbox"] },
+  { id: "contact", kicker: ["07 · Liên hệ", "07 · Say hi"], title: ["Cùng nói chuyện nhé.", "Let's talk."],
+    intro: ["Hợp tác nghiên cứu, cơ hội học tập, hay chỉ muốn chào hỏi, cứ nhắn cho mình.", "Research collaboration, study opportunities, or just hello: send me a message."] },
+];
+
+/* ================================================================== */
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const store = { get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+                set(k, v) { try { localStorage.setItem(k, v); } catch {} } };
+let lang = store.get("portfolio-lang") || (navigator.language.startsWith("vi") ? "vi" : "en");
+const t = (x) => Array.isArray(x) ? esc(x[lang === "vi" ? 0 : 1]) : esc(x ?? "");
+const KIND_COLOR = { edu: "#5c7fb8", lab: "#b8673a", research: "var(--accent)", lead: "#8a6fb8" };
+let kindFilter = "all";
+
+function workCard(w) {
+  const items = w.items.map((i) => i.url
+    ? `<li><a href="${esc(i.url)}" target="_blank" rel="noopener"><span class="type">${esc(i.type)}</span>${t(i.label)}<span class="go">↗</span></a></li>`
+    : `<li><span class="row"><span class="type">${esc(i.type)}</span>${t(i.label)}<span class="go">${t(UI.soon)}</span></span></li>`).join("");
+  return `<article class="work">
+    ${w.video ? `<iframe class="video" src="${esc(w.video)}" loading="lazy" allowfullscreen title="${t(w.title)}"></iframe>`
+              : `<div class="cover" style="--cover:${w.cover}"><span class="big">${w.icon}</span><span class="who">${t(w.who)}</span></div>`}
+    <div class="body"><h4>${t(w.title)}</h4><p>${t(w.text)}</p><ul class="items">${items}</ul></div>
+  </article>`;
+}
+
+function chapterBody(id) {
+  switch (id) {
+    case "about": return `<div class="about">
+        <div>${ME.about.map((p) => `<p>${t(p)}</p>`).join("")}</div>
+        <ul class="facts">${ME.facts.map(([k, v]) => `<li><small>${t(k)}</small>${t(v)}</li>`).join("")}</ul></div>`;
+    case "journey": return `<div class="legend">
+        <button class="chip" data-kind="all" aria-pressed="${kindFilter === "all"}">${t(UI.all)}</button>
+        ${Object.keys(UI.kinds).map((k) => `<button class="chip" data-kind="${k}" aria-pressed="${kindFilter === k}"><i style="background:${KIND_COLOR[k]}"></i>${t(UI.kinds[k])}</button>`).join("")}
+      </div>
+      <ol class="timeline">${ME.journey.map((j) => `
+        <li data-kind="${j.kind}" style="--dot:${KIND_COLOR[j.kind]}" class="${kindFilter !== "all" && kindFilter !== j.kind ? "hide" : ""}">
+          <details><summary><time>${esc(j.date.replace("nay", lang === "vi" ? "nay" : "present"))}</time><h4>${t(j.title)}</h4><div class="org">${t(j.org)}</div></summary>
+          <ul>${j.points.map((p) => `<li>${t(p)}</li>`).join("")}</ul></details></li>`).join("")}</ol>`;
+    case "research": return `
+      <h3 class="sub">${t(UI.interestsTitle)}</h3>
+      <div class="cols3">${ME.interests.map((x, i) => `<div class="interest"><div class="n">0${i + 1}</div><p>${t(x)}</p></div>`).join("")}</div>
+      <h3 class="sub">${t(UI.postersTitle)}</h3>
+      <ol class="posters">${ME.posters.map((p) => `<li><div><b>${t(p.title)}</b><span>${t(p.where)}</span>
+        ${p.award ? `<br><span class="award">★ ${t(p.award)}</span>` : ""}</div></li>`).join("")}</ol>
+      <h3 class="sub">${t(UI.studiesTitle)}</h3>
+      <div class="studies">${ME.studies.map((s) => `<div class="study">${t(s)}</div>`).join("")}</div>`;
+    case "teach": return `<div class="works">${ME.teach.map(workCard).join("")}</div><p class="note">${t(UI.privateNote)}</p>`;
+    case "learn": return `<div class="works">${ME.learn.map(workCard).join("")}</div>`;
+    case "skills": return `<div class="skills">${ME.skills.map(([g, list]) =>
+        `<div class="skill-group"><h4>${t(g)}</h4><div class="tags">${list.map((s) => `<span class="tag">${esc(s)}</span>`).join("")}</div></div>`).join("")}</div>`;
+    case "contact": return `<div class="cta">${ME.links.map((l) =>
+        `<a class="btn ${l.primary ? "primary" : ""}" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)} ↗</a>`).join("")}</div>`;
+  }
+}
+
+function render() {
+  document.documentElement.lang = lang;
+  document.title = t(ME.name);
+  $("#name").textContent = ME.name[lang === "vi" ? 0 : 1];
+  document.querySelectorAll("[data-t]").forEach((el) => el.innerHTML = t(UI[el.dataset.t]));
+  $("#interests").innerHTML = ME.interests.map((x) => `<span>${t(x)}</span>`).join("");
+  $("#langBtn").textContent = lang === "vi" ? "EN" : "VI";
+  $("#chapters").innerHTML = CHAPTERS.map((c, i) => {
+    const nx = CHAPTERS[i + 1];
+    return `<section id="${c.id}" class="${c.id === "contact" ? "contact" : ""}"><div class="wrap reveal">
+      <div class="kicker">${t(c.kicker)}</div><h2>${t(c.title)}</h2>
+      ${c.intro ? `<p class="intro">${t(c.intro)}</p>` : ""}
+      ${chapterBody(c.id)}
+      ${nx ? `<div><a class="next" href="#${nx.id}">${t(UI.next)} → <b>${t(nx.title)}</b></a></div>` : ""}
+    </div></section>`;
+  }).join("");
+  $("#rail").innerHTML = CHAPTERS.map((c) => `<a href="#${c.id}" data-id="${c.id}"><span>${t(c.kicker)}</span></a>`).join("");
+  observe();
+}
+
+// Lọc hành trình (gắn một lần, vì nội dung được vẽ lại)
+document.addEventListener("click", (e) => {
+  const chip = e.target.closest(".chip[data-kind]"); if (!chip) return;
+  kindFilter = chip.dataset.kind;
+  document.querySelectorAll(".chip[data-kind]").forEach((c) => c.setAttribute("aria-pressed", c === chip));
+  document.querySelectorAll(".timeline > li").forEach((li) =>
+    li.classList.toggle("hide", kindFilter !== "all" && li.dataset.kind !== kindFilter));
+});
+
+// Hiện dần + đánh dấu chương đang đọc
+let revealObs, chapObs;
+function observe() {
+  revealObs?.disconnect(); chapObs?.disconnect();
+  revealObs = new IntersectionObserver((es) => es.forEach((e) => {
+    if (e.isIntersecting) { e.target.classList.add("in"); revealObs.unobserve(e.target); }
+  }), { threshold: 0.08 });
+  document.querySelectorAll(".reveal").forEach((el) => revealObs.observe(el));
+  chapObs = new IntersectionObserver((es) => es.forEach((e) => {
+    if (!e.isIntersecting) return;
+    const c = CHAPTERS.find((x) => x.id === e.target.id);
+    $("#chapterNow").innerHTML = c ? t(c.kicker) : "";
+    document.querySelectorAll("#rail a").forEach((a) => a.classList.toggle("on", a.dataset.id === e.target.id));
+  }), { rootMargin: "-45% 0px -50% 0px" });
+  document.querySelectorAll("main section, header.hero").forEach((s) => chapObs.observe(s));
+}
+
+// Ngôn ngữ, giao diện, chia sẻ
+$("#langBtn").onclick = () => { lang = lang === "vi" ? "en" : "vi"; store.set("portfolio-lang", lang); render();
+  document.querySelectorAll(".reveal").forEach((el) => el.classList.add("in")); };
+let theme = store.get("portfolio-theme") || "auto";
+const applyTheme = () => theme === "auto" ? document.documentElement.removeAttribute("data-theme")
+                                          : document.documentElement.setAttribute("data-theme", theme);
+applyTheme();
+$("#themeBtn").onclick = () => { theme = { auto: "light", light: "dark", dark: "auto" }[theme]; store.set("portfolio-theme", theme); applyTheme(); };
+const toast = (m) => { const el = $("#toast"); el.textContent = m; el.classList.add("show"); setTimeout(() => el.classList.remove("show"), 1800); };
+$("#shareBtn").onclick = async () => {
+  try {
+    if (navigator.share) await navigator.share({ title: document.title, url: location.href });
+    else { await navigator.clipboard.writeText(location.href); toast(UI.copied[lang === "vi" ? 0 : 1]); }
+  } catch {}
+};
+addEventListener("scroll", () => {
+  const h = document.documentElement;
+  $("#progress").style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100 + "%";
+}, { passive: true });
+
+render();
+
+/* Mạng nơ-ron ở phần mở đầu: các nút trôi chậm, nối nhau khi đủ gần, bị con trỏ hút nhẹ.
+   Hình ảnh này gợi đến mạng kết nối não, chủ đề mình đang học. */
+(function network() {
+  const cv = $("#net"), ctx = cv.getContext("2d"), hero = $("header.hero");
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let W, H, nodes = [], mouse = null, running = true, dpr = Math.min(devicePixelRatio || 1, 2);
+  const color = () => getComputedStyle(document.documentElement).getPropertyValue("--accent").trim();
+  function size() {
+    W = hero.clientWidth; H = hero.clientHeight;
+    cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const n = Math.round(Math.min(90, W * H / 14000));
+    nodes = Array.from({ length: n }, () => ({ x: Math.random() * W, y: Math.random() * H,
+      vx: (Math.random() - .5) * .3, vy: (Math.random() - .5) * .3, r: 1.2 + Math.random() * 2.2 }));
+  }
+  function frame() {
+    ctx.clearRect(0, 0, W, H);
+    const c = color(), D = 130;
+    ctx.strokeStyle = c; ctx.fillStyle = c;
+    for (const p of nodes) {
+      if (!reduce) {
+        if (mouse) { const dx = mouse.x - p.x, dy = mouse.y - p.y, d = Math.hypot(dx, dy);
+          if (d < 200) { p.vx += dx / d * .02; p.vy += dy / d * .02; } }
+        p.vx *= .99; p.vy *= .99; p.x += p.vx; p.y += p.vy;
+        if (p.x < 0 || p.x > W) p.vx *= -1;
+        if (p.y < 0 || p.y > H) p.vy *= -1;
+        const sp = Math.hypot(p.vx, p.vy); if (sp < .12) { p.vx += (Math.random() - .5) * .05; p.vy += (Math.random() - .5) * .05; }
+      }
+    }
+    for (let i = 0; i < nodes.length; i++) for (let j = i + 1; j < nodes.length; j++) {
+      const a = nodes[i], b = nodes[j], d = Math.hypot(a.x - b.x, a.y - b.y);
+      if (d < D) { ctx.globalAlpha = (1 - d / D) * .35; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
+    }
+    for (const p of nodes) {
+      const near = mouse && Math.hypot(mouse.x - p.x, mouse.y - p.y) < 120;
+      ctx.globalAlpha = near ? .9 : .45; ctx.beginPath(); ctx.arc(p.x, p.y, near ? p.r + 1.5 : p.r, 0, 7); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    if (running && !reduce) requestAnimationFrame(frame);
+  }
+  hero.addEventListener("pointermove", (e) => { const r = hero.getBoundingClientRect(); mouse = { x: e.clientX - r.left, y: e.clientY - r.top }; });
+  hero.addEventListener("pointerleave", () => mouse = null);
+  addEventListener("resize", () => { size(); if (reduce) frame(); });
+  // Tạm dừng khi phần mở đầu khuất khỏi màn hình, đỡ tốn pin
+  new IntersectionObserver(([e]) => { const was = running; running = e.isIntersecting; if (running && !was && !reduce) frame(); }).observe(hero);
+  size(); frame();
+})();
+</script>
+</body>
+</html>

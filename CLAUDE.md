@@ -38,6 +38,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Kiểm tra sau khi sửa: `claude plugin validate .` (marketplace), `claude plugin validate hoc-plugin`, và `claude --plugin-dir ./hoc-plugin plugin details hoc-plugin`.
 - Khi sửa plugin thì tăng `version` ở cả `plugin.json` lẫn `marketplace.json`, vì người đã cài chỉ nhận bản cập nhật khi số phiên bản đổi.
 
+### `portfolio/`: trang cá nhân (digital CV)
+- Một file `index.html` duy nhất, cùng bảng màu với `todo/`. Chạy bằng `open portfolio/index.html`. Khi push sẽ lên https://ngqacuongg.github.io/hoc-claude-code/portfolio/
+- Nội dung lấy từ CV (`~/Downloads/[NTU Application]/NQACuong_CV.pdf`) và các artifact trên claude.ai. Toàn bộ nằm trong object `ME` ở đầu thẻ `<script>`; mỗi đoạn chữ viết dạng `["tiếng Việt", "English"]`. Thứ tự chương nằm trong `CHAPTERS`.
+- Ngoại lệ duy nhất về thư viện ngoài: font Lora và Be Vietnam Pro từ Google Fonts, vì font hệ thống kiểu Iowan/Georgia hiện sai dấu chữ ư, ơ.
+- Trang công khai: không đưa số điện thoại, email, GPA hay liên hệ người tham chiếu trong CV lên nếu người dùng chưa đồng ý. Link artifact claude.ai mặc định là riêng tư, người xem chỉ mở được khi người dùng đã bật chia sẻ.
+- `localStorage`: khoá `portfolio-theme` (sáng/tối) và `portfolio-lang` (vi/en).
+
 ## Cách làm việc với người dùng
 
 - Trả lời bằng **tiếng Việt**. Code, tên file và commit message có thể dùng tiếng Anh.
@@ -58,6 +65,17 @@ Các plugin và skill sau đã có sẵn trong phiên (đồng bộ từ tài kh
   - Cài ở `~/.claude/skills/anatomy` (git clone) nên dùng được ở mọi dự án và không nằm trong repo này. Cập nhật bằng `git -C ~/.claude/skills/anatomy pull`.
   - Cần Node.js ≥ 20.10, và Chrome hoặc Chromium để skill tự kiểm tra hình.
   - File hình tạo ra trong repo này sẽ được đăng công khai qua GitHub Pages khi push.
+- **`find-skills`** (https://github.com/vercel-labs/skills): tìm và gợi ý skill trên https://skills.sh/ khi người dùng hỏi "có skill nào cho X không".
+  - Cài ở `~/.claude/skills/find-skills` bằng cách chép tay `SKILL.md` (máy chưa có Node nên không chạy được `npx skills add`).
+  - Skill gọi `npx skills find ...`, nên cần cài Node.js thì mới tìm kiếm được; khi chưa có Node, chỉ xem được bảng xếp hạng trên skills.sh.
+- **`graphify`** (https://github.com/Graphify-Labs/graphify, Apache-2.0): biến một thư mục (code, tài liệu, PDF, ảnh) thành knowledge graph để hỏi đáp thay vì grep. Gọi bằng `/graphify .`; dòng lệnh có `graphify query "<câu hỏi>"`, `graphify path A B`, `graphify explain X`.
+  - Cần CLI `graphify` (gói Python `graphifyy`, Python ≥ 3.10). Máy chỉ có Python 3.9 nên cài qua `uv` (`~/.local/bin/uv`, uv tự quản Python riêng): `uv tool install "graphifyy[pdf]"` (phần `[pdf]` thêm `pypdf` để đọc file PDF), rồi `graphify install` ghi skill vào `~/.claude/skills/graphify` và thêm một đoạn vào `~/.claude/CLAUDE.md`.
+  - Cập nhật: `uv tool upgrade graphifyy && graphify install`. Gỡ: `graphify uninstall` rồi `uv tool uninstall graphifyy`.
+  - Phần code phân tích tại máy (tree-sitter, không dùng LLM). Kết quả nằm ở `graphify-out/` (`graph.html`, `GRAPH_REPORT.md`, `graph.json`); nếu chạy trong repo này thì thêm `graphify-out/` vào `.gitignore` hoặc chấp nhận nó lên Pages.
+- **`agent-skills`** (https://github.com/addyosmani/agent-skills, MIT): plugin gồm 25 skill quy trình làm phần mềm (spec, chia việc, TDD, review, debug, bảo mật, ship), lệnh `/spec`, `/plan`, `/build`, `/test`, `/review`, `/code-simplify`, `/ship`, `/webperf`, `/constraints`, và 4 agent (code-reviewer, security-auditor, test-engineer, web-performance-auditor).
+  - Cài bằng `claude plugin marketplace add addyosmani/agent-skills` rồi `claude plugin install agent-skills@addy-agent-skills` (cấp người dùng). Cập nhật: `claude plugin marketplace update addy-agent-skills`.
+  - Các script trong `hooks/` của repo không được `plugin.json` đăng ký nên không tự chạy.
+- **`ponytail`** (https://github.com/DietrichGebert/ponytail): hiện chỉ có skill chính, đồng bộ từ claude.ai (`anthropic-skills:ponytail`). Bản plugin đầy đủ có thêm skill phụ và hook viết bằng Node, nên chưa cài vì máy chưa có Node.
 
 ## Hướng dẫn và bộ nhớ từ claude.ai
 
