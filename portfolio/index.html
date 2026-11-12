@@ -117,7 +117,7 @@
 
   /* hành trình: timeline ngang */
   .hline { display: flex; overflow-x: auto; scroll-snap-type: x proximity; padding: 4px 2px 16px; scrollbar-width: thin; }
-  .step { flex: 1 0 150px; display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start;
+  .step { flex: 1 0 128px; display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start;
           text-align: left; background: none; border: 0; font: inherit; color: inherit; cursor: pointer;
           padding: 0 14px 0 0; scroll-snap-align: start; opacity: .62; transition: opacity .2s; }
   .step:hover, .step[aria-selected="true"] { opacity: 1; }
@@ -149,52 +149,36 @@
   @media (max-width: 720px) { .alongside { grid-template-columns: 1fr; } }
   @media (prefers-reduced-motion: reduce) { .step.now .rail i { animation: none; } }
 
-  /* thư mục bài giảng (kiểu Drive) */
-  .drive { display: grid; grid-template-columns: 230px 1fr; background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; min-height: 300px; }
-  .drive-side { border-right: 1px solid var(--line); padding: 12px; display: flex; flex-direction: column; gap: 4px; background: color-mix(in srgb, var(--bg) 55%, var(--card)); }
-  .folder { display: grid; grid-template-columns: 30px 1fr; gap: 0 8px; align-items: center; text-align: left; font: inherit; color: inherit;
-            background: none; border: 0; border-radius: 10px; padding: 10px; cursor: pointer; }
-  .folder:hover { background: var(--accent-soft); }
-  .folder[aria-pressed="true"] { background: var(--accent); color: var(--bg); }
-  .folder .fi { font-size: 22px; grid-row: span 2; }
-  .folder b { font: 600 15px var(--sans); }
-  .folder small { font: 12px var(--mono); opacity: .75; }
-  .drive-main { padding: 16px 20px 20px; min-width: 0; }
-  .crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font: 13px var(--mono); color: var(--muted); margin-bottom: 6px; }
-  .crumbs button { font: inherit; color: var(--accent); background: none; border: 0; padding: 0; cursor: pointer; }
-  .crumbs button:hover { text-decoration: underline; }
-  .drive-main h4 { margin: 0 0 4px; font: 400 24px/1.2 var(--serif); }
-  .drive-desc { margin: 0 0 14px; color: var(--muted); font-size: 15px; }
-  .rows { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
-  .rows li { border-bottom: 1px solid var(--line); }
-  .row { display: grid; grid-template-columns: 30px 1fr auto 18px; gap: 10px; align-items: center; width: 100%; text-align: left; font: inherit; color: inherit;
-         background: none; border: 0; padding: 11px 4px; cursor: pointer; text-decoration: none; border-radius: 8px; }
-  .row:hover { background: var(--accent-soft); }
-  .row .ri { font-size: 20px; text-align: center; }
-  .row .rn b { display: block; font: 500 15px/1.35 var(--sans); }
-  .row .rn small { color: var(--muted); font-size: 13px; }
-  .row .rm { font: 12px var(--mono); color: var(--muted); white-space: nowrap; }
-  .row .rg { color: var(--muted); }
-  .row.ghost { cursor: default; color: var(--muted); font-size: 14px; grid-template-columns: 30px 1fr; }
-  .row.ghost:hover { background: none; }
-  @media (max-width: 720px) {
-    .drive { grid-template-columns: 1fr; }
-    .drive-side { flex-direction: row; border-right: 0; border-bottom: 1px solid var(--line); overflow-x: auto; }
-    .folder { flex: 1 0 auto; }
-    .row { grid-template-columns: 26px 1fr 18px; } .row .rm { display: none; }
-  }
-
   /* nghiên cứu */
-  .cols3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 40px; }
-  @media (max-width: 720px) { .cols3 { grid-template-columns: 1fr; } }
+  .cols4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 40px; }
+  @media (max-width: 860px) { .cols4 { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 480px) { .cols4 { grid-template-columns: 1fr; } }
+  /* dự án + ảnh bấm để phóng to */
+  .project { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 22px; margin-bottom: 40px; }
+  .project h4 { margin: 0 0 6px; font: 400 24px/1.25 var(--serif); }
+  .project p { margin: 0 0 18px; color: var(--muted); max-width: 720px; }
+  .shots { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; counter-reset: sh; }
+  .shots li { counter-increment: sh; }
+  .shots span { display: block; font-size: 13px; color: var(--muted); margin-top: 6px; }
+  .shots span::before { content: counter(sh) ". "; font-family: var(--mono); color: var(--accent); }
+  .zoom { display: block; width: 100%; padding: 0; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: none; cursor: zoom-in; }
+  .zoom img { display: block; width: 100%; height: auto; transition: transform .3s; }
+  .zoom:hover { border-color: var(--accent); }
+  .zoom:hover img { transform: scale(1.02); }
+  #lb { padding: 0; border: 0; background: none; max-width: 96vw; max-height: 94vh; overflow: auto; cursor: zoom-out; border-radius: 10px; }
+  #lb::backdrop { background: rgba(0,0,0,.8); }
+  #lb img { display: block; max-width: min(1200px, 96vw); height: auto; }
   .interest { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 20px; }
   .interest .n { font: 400 36px/1 var(--serif); color: var(--accent); }
   .interest p { margin: 10px 0 0; font-size: 15px; }
   h3.sub { font: 13px var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin: 0 0 14px; }
   .posters { list-style: none; margin: 0 0 36px; padding: 0; counter-reset: p; }
-  .posters li { counter-increment: p; display: grid; grid-template-columns: 44px 1fr; gap: 6px; padding: 16px 0; border-top: 1px solid var(--line); }
+  .posters li { counter-increment: p; display: grid; grid-template-columns: 44px 1fr 84px; gap: 6px 16px; align-items: start; padding: 16px 0; border-top: 1px solid var(--line); }
   .posters li::before { content: "0" counter(p); font: 400 22px var(--serif); color: var(--muted); }
   .posters b { display: block; font-weight: 600; }
+  .posters .thumb { width: 84px; }
+  .posters .thumb img { aspect-ratio: 3 / 4; object-fit: cover; object-position: top; }
+  @media (max-width: 480px) { .posters li { grid-template-columns: 32px 1fr 64px; } .posters .thumb { width: 64px; } }
   .posters span { color: var(--muted); font-size: 14px; }
   .award { display: inline-block; margin-top: 6px; font: 12px var(--mono); color: var(--warm); background: var(--warm-soft); padding: 2px 8px; border-radius: 6px; }
   .studies { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
@@ -279,6 +263,13 @@
   .commits time { font: 12px var(--mono); color: var(--muted); white-space: nowrap; }
   @media (max-width: 560px) { .commits a { grid-template-columns: 60px 1fr; } .commits time { grid-column: 2; } }
 
+  .works.one { grid-template-columns: minmax(0, 560px); }
+  .emails { list-style: none; margin: 28px auto 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+  .emails li { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 10px 16px; text-align: left; }
+  .emails small { display: block; font: 12px var(--mono); color: var(--muted); }
+  .emails a { text-decoration: none; font-size: 15px; word-break: break-all; }
+  .emails a:hover { color: var(--accent); }
+
   /* kỹ năng */
   .skills { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
   @media (max-width: 720px) { .skills { grid-template-columns: 1fr; } }
@@ -337,6 +328,7 @@
 <main id="chapters"></main>
 
 <footer data-t="footer"></footer>
+<dialog id="lb"><img id="lbImg" alt=""></dialog>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -347,14 +339,15 @@
    ================================================================== */
 const ME = {
   name: ["Nguyễn Quốc Anh Cường", "Nguyen Quoc Anh Cuong"],
-  status: ["Trợ lý nghiên cứu · Bệnh viện Quân y 175", "Research Assistant · 175 Military Hospital"],
+  status: ["Trợ lý nghiên cứu · BV Quân y 175 & BV Bệnh Nhiệt đới", "Research Assistant · 175 Military Hospital & Hospital for Tropical Diseases"],
   hello: ["Xin chào, mình là", "Hi, I'm"],
   lead: ["Mình đi từ bàn thí nghiệm đến bộ não: tìm hiểu cách tế bào “nói chuyện” với nhau, rồi dạy lại điều mình học và tự làm công cụ để học nhanh hơn.",
          "From the lab bench to the brain: I study how cells talk to each other, teach what I learn, and build small tools to learn faster."],
   interests: [
-    ["Tín hiệu kẽm & viêm thần kinh", "Zinc signalling & neuroinflammation"],
+    ["Bệnh ở não bắt đầu từ đâu: viêm thần kinh trong bệnh tâm thần và thoái hoá thần kinh", "Where brain disease begins: neuroinflammation in psychiatric and neurodegenerative conditions"],
     ["Serotonin & trục ruột–não", "Serotonin & the gut–brain axis"],
     ["Mô hình tính toán cho từng bệnh nhân", "Patient-specific computational modelling"],
+    ["Dinh dưỡng cho sức khoẻ tinh thần", "Nutrition for mental health"],
   ],
   bioLead: ["Mình học sinh học và tâm lý học, hiện làm nghiên cứu lâm sàng về thần kinh. Mình muốn hiểu điều gì trục trặc trong não từ rất sớm, trước khi tế bào thần kinh mất đi, để có những cách giúp người bệnh nhẹ nhàng hơn.",
             "I'm a biology and psychology graduate working in clinical neuroscience research. I want to understand what goes wrong in the brain early, before neurons are lost, so that people can be helped in gentler ways."],
@@ -377,12 +370,16 @@ const ME = {
   facts: [
     [["Đang ở", "Based in"], ["TP. Hồ Chí Minh, Việt Nam", "Ho Chi Minh City, Vietnam"]],
     [["Học vấn", "Education"], ["Cử nhân Khoa học Tích hợp & Tâm lý học, Fulbright University Vietnam", "B.S. Integrated Sciences & B.A. Psychology, Fulbright University Vietnam"]],
-    [["Hiện tại", "Now"], ["Trợ lý nghiên cứu, Khoa Thần kinh, BV Quân y 175", "Research Assistant, Neurophysiology, 175 Military Hospital"]],
+    [["Hiện tại", "Now"], ["Trợ lý nghiên cứu tại BV Quân y 175 (Khoa Thần kinh) và BV Bệnh Nhiệt đới", "Research Assistant at 175 Military Hospital (Neurophysiology) and the Hospital for Tropical Diseases"]],
     [["Ngôn ngữ", "Languages"], ["Tiếng Việt, English (thành thạo)", "Vietnamese, English (fluent)"]],
   ],
   links: [
     { label: "LinkedIn", url: "https://www.linkedin.com/in/ngqacuongg/", primary: true },
     { label: "GitHub", url: "https://github.com/ngqacuongg" },
+  ],
+  emails: [
+    { label: ["Cá nhân", "Personal"], address: "ngcuong.official@gmail.com" },
+    { label: ["Công việc", "Work"], address: "cuong.nguyen.220214@alumni.fulbright.edu.vn" },
   ],
 
   // Hành trình (timeline ngang): học vấn → thực tập lab → trợ lý nghiên cứu.
@@ -400,8 +397,12 @@ const ME = {
     { date: "09/2025 – 06/2026", kind: "lab", title: ["Thực tập Y Sinh học Phân tử", "Molecular Biomedicine intern"], org: ["Đại học Y Dược TP.HCM", "University of Medicine and Pharmacy at HCMC"],
       points: [["Mười tháng học giải trình tự Sanger, nuôi cấy tế bào động vật, PCR và tách chiết DNA.", "Ten months training in Sanger sequencing, mammalian cell culture, PCR and DNA extraction."],
                ["Nhận chứng chỉ “Molecular Biology Laboratory Practice for Undergraduate Students”.", "Earned the certificate “Molecular Biology Laboratory Practice for Undergraduate Students”."]] },
-    { date: "08/2026 – nay", kind: "research", now: true, title: ["Trợ lý nghiên cứu", "Research Assistant"], org: ["Khoa Thần kinh, Bệnh viện Quân y 175", "Neurophysiology Dept., 175 Military Hospital"],
-      points: [["Hỗ trợ ba nghiên cứu lâm sàng: chóng mặt tư thế (Epley so với Semont-Plus), tiên lượng đột quỵ ở người có MASLD, và Sổ đăng ký Quốc gia bệnh ALS.", "Support three clinical studies: positional vertigo (Epley vs Semont-Plus), stroke prognosis with MASLD, and the Vietnam National ALS Registry."],
+    { date: "07/2026", kind: "lab", title: ["Thực tập tại Touching Soul Center", "Intern at Touching Soul Center"], org: ["Chương trình thực tập TSC · đợt 07/2026", "TSC Intern Program · 07/2026 cohort"],
+      points: [["Thực tập về sức khoẻ tinh thần, nhìn con người theo mô hình Sinh học – Tâm lý – Xã hội.", "An internship in mental health, seeing people through the bio-psycho-social model."],
+               ["Dự án kết khoá: brochure “Dinh Dưỡng Chữa Lành”, giải thích mối liên hệ giữa thực phẩm, dưỡng chất và stress. Xem ở chương Nghiên cứu.", "Capstone project: the “Healing Nutrition” brochure on how food and nutrients relate to stress. See the Research chapter."]] },
+    { date: "08/2026 – nay", kind: "research", now: true, title: ["Trợ lý nghiên cứu ở hai bệnh viện", "Research Assistant at two hospitals"], org: ["BV Quân y 175 · BV Bệnh Nhiệt đới", "175 Military Hospital · Hospital for Tropical Diseases"],
+      points: [["BV Quân y 175, Khoa Thần kinh: hỗ trợ ba nghiên cứu lâm sàng về chóng mặt tư thế (Epley so với Semont-Plus), tiên lượng đột quỵ ở người có MASLD, và Sổ đăng ký Quốc gia bệnh ALS.", "175 Military Hospital, Neurophysiology: support three clinical studies on positional vertigo (Epley vs Semont-Plus), stroke prognosis with MASLD, and the Vietnam National ALS Registry."],
+               ["BV Bệnh Nhiệt đới: cùng lúc làm trợ lý nghiên cứu, nối tiếp công việc về vi khuẩn kháng carbapenem.", "Hospital for Tropical Diseases: research assistant at the same time, continuing the work on carbapenem-resistant bacteria."],
                ["Điều phối hoạt động nghiên cứu, xây dựng cơ sở dữ liệu và quy trình nhập liệu, chuẩn bị hồ sơ theo quy định đạo đức nghiên cứu.", "Coordinate research, build databases and data-entry workflows, prepare documents under research-ethics rules."]] },
     { date: "2027 →", kind: "next", title: ["Cao học về thần kinh học", "Graduate study in neuroscience"], org: ["Bước tiếp theo", "The next step"],
       points: [["Mình muốn học hình ảnh huỳnh quang và điện sinh lý tế bào, để nghiên cứu tín hiệu kẽm và serotonin trong tế bào thần kinh.", "I want to train in fluorescence imaging and cellular electrophysiology, to study zinc and serotonin signalling in neurons."]] },
@@ -414,15 +415,28 @@ const ME = {
     ["2025 – nay", ["Thành viên Journal Club, Innovative Bioscience Group.", "Journal Club member, Innovative Bioscience Group."]],
   ],
 
+  // Dự án Dinh dưỡng: ảnh xếp theo thứ tự đọc của brochure
+  nutrition: {
+    title: ["Dinh Dưỡng Chữa Lành: nên ăn gì khi căng thẳng?", "Healing Nutrition: what to eat when you're stressed?"],
+    text: ["Dự án kết khoá thực tập của mình tại Touching Soul Center. Mình đọc các nghiên cứu về thực phẩm, dưỡng chất và stress, rồi chuyển thành một brochure gấp dễ đọc cho người trưởng thành: bắt đầu từ trục ruột–não, sau đó là bốn thực phẩm quen thuộc (chuối, cacao, bơ, sữa chua).",
+           "My capstone project as an intern at Touching Soul Center. I read the research on food, nutrients and stress and turned it into an easy-to-read folded brochure for adults: first the gut–brain axis, then four familiar foods (banana, cacao, avocado, yogurt)."],
+    images: [
+      { src: "img/nutrition-outside.jpg", cap: ["Mặt ngoài: bìa, mô hình Sinh học – Tâm – Xã, “bộ não thứ hai” và tài liệu tham khảo", "Outside: cover, the bio-psycho-social model, the “second brain”, and references"] },
+      { src: "img/nutrition-inside.jpg", cap: ["Mặt trong: chuối, cacao, bơ, sữa chua, mỗi loại gồm dưỡng chất, tác động và gợi ý dùng", "Inside: banana, cacao, avocado, yogurt, each with nutrients, effects and serving tips"] },
+    ] },
+
+  // Poster. img: ảnh đặt trong portfolio/img (bỏ trống nếu chưa có).
   posters: [
     { title: ["Xu hướng kiểu hình và kiểu gen của vi khuẩn Gram âm kháng carbapenem sau COVID-19", "Temporal trends in phenotype and genotype of carbapenem-resistant Gram-negative bacteria after COVID-19"],
       where: "HCMC Society of Medical Laboratory Technology Conference, 2026", award: ["Poster được bình chọn nhiều nhất", "People's Choice Poster Award"] },
-    { title: ["Đặc điểm lâm sàng và cấu trúc di truyền toàn bộ gen của E. coli kháng carbapenem gây nhiễm khuẩn huyết", "Clinical characteristics and whole-genome structure of carbapenem-resistant E. coli in bloodstream infections"],
-      where: "Pasteur Institute Scientific Conference, 2026" },
-    { title: ["Đặc điểm lâm sàng và hồ sơ gen của E. coli kháng carbapenem gây nhiễm khuẩn huyết", "Clinical characteristics and genomic profiles of carbapenem-resistant E. coli causing bloodstream infections"],
-      where: "CHRO 2026, 23rd International Conference on Campylobacter, Helicobacter and Related Organisms" },
-    { title: ["CAR-T “off-the-shelf” từ iPSC cho điều trị AML an toàn, hiệu quả", "Building a universal “off-the-shelf” CAR-T from iPSC for safe and effective AML treatment"],
-      where: "Cell Technology in Viet Nam Conference, 2025", award: ["Giải Khuyến khích, Ý tưởng sáng tạo", "Innovative Idea Poster, Consolation Prize"] },
+    { title: ["Đặc điểm lâm sàng và hệ gene của E. coli kháng carbapenem gây nhiễm khuẩn huyết", "Clinical characteristics and genome of carbapenem-resistant E. coli causing bloodstream infections"],
+      where: "Pasteur Institute Scientific Conference, 10/2026", img: "img/poster-hnkh2026.jpg" },
+    { title: ["Tương quan giữa đặc điểm lâm sàng và hồ sơ gen của E. coli kháng carbapenem trong nhiễm khuẩn huyết", "Correlating clinical characteristics with the genomic profile of carbapenem-resistant E. coli in bloodstream infections"],
+      where: "CHRO 2026, 23rd International Conference on Campylobacter, Helicobacter and Related Organisms", img: "img/poster-ecoli.png" },
+    { title: ["CAR-T vạn năng “sẵn có” từ tế bào gốc máu cuống rốn, nhắm đích CLL-1 trong điều trị AML", "A universal “off-the-shelf” CAR-T from cord-blood stem cells, targeting CLL-1 for AML"],
+      where: "Stem Cell Innovation Contest 2025 · Cell Technology in Viet Nam Conference", award: ["Giải Khuyến khích, Ý tưởng sáng tạo (nhóm)", "Innovative Idea Poster, Consolation Prize (group)"], img: "img/poster-cart.jpg" },
+    { title: ["Mô hình tế bào gan từ hiPSC để nghiên cứu ung thư gan liên quan NAFLD/NASH", "hiPSC-derived hepatocyte models for studying NAFLD/NASH-related HCC"],
+      where: "Stem Cell Innovation Contest 2025", award: ["Top 18 Ý tưởng Poster (cá nhân)", "Top 18 Poster Idea (individual)"], img: "img/poster-hipsc.png" },
   ],
   studies: [
     ["Hiệu quả nghiệm pháp Epley so với Semont-Plus trong chóng mặt tư thế kịch phát lành tính", "Epley vs Semont-Plus maneuver in benign paroxysmal positional vertigo"],
@@ -430,29 +444,16 @@ const ME = {
     ["Sổ đăng ký Quốc gia bệnh ALS Việt Nam", "The Vietnam National ALS Registry"],
   ],
 
-  // Dạy & chia sẻ: kiểu thư mục Drive. Thư mục → chủ đề (units) → tệp (files).
-  // Thêm bài mới: thêm một mục vào "units" của thư mục tương ứng.
-  // type của tệp: Course | Slides | Handout | Practice | Video | Doc
-  folders: [
-    { icon: "🧬", name: ["Be Biology Teacher", "Be Biology Teacher"],
-      text: ["Bài giảng Sinh học mình soạn và dạy cho học sinh. Mỗi thư mục là một chủ đề, mở ra để xem trang bài học, slides và handout.",
-             "Biology lessons I write and teach. Each folder is one topic: open it for the lesson page, slides and handout."],
-      units: [
-        { name: ["Di truyền học · Giai đoạn 1: Nhiễm sắc thể & Phân bào", "Genetics · Stage 1: Chromosomes & Cell Division"],
-          note: ["Buổi K1–K4", "Sessions K1–K4"], date: "11/2026",
-          files: [
-            { type: "Course", name: ["Trang bài học", "Lesson page"], url: "https://claude.ai/artifact/LNFj4Hj4D81TettW3LT5Fj" },
-            { type: "Slides", name: ["Slides bài giảng (K1–K4)", "Lesson slides (K1–K4)"], url: "https://claude.ai/artifact/TXimM1CPftLzyooBko9JTj" },
-            { type: "Handout", name: ["Handout cho học sinh", "Student handout"], url: "https://claude.ai/artifact/UJ5toMQMZZ8Cn8JZwye7AL" },
-          ] },
-      ] },
-    { icon: "🔬", name: ["Journal Club", "Journal Club"],
-      text: ["Các bài báo mình đọc và trình bày ở Innovative Bioscience Group. Mỗi thư mục là một bài báo.",
-             "Papers I read and present at the Innovative Bioscience Group. Each folder is one paper."],
-      units: [
-        { name: ["Prox1 · Fig 1 & Fig 7", "Prox1 · Fig 1 & Fig 7"],
-          note: ["Innovative Bioscience Group", "Innovative Bioscience Group"], date: "11/2026",
-          files: [ { type: "Slides", name: ["Slides trình bày", "Presentation slides"], url: "https://claude.ai/artifact/XAfs79fiTEGauweazQfKii" } ] },
+  // Dạy & chia sẻ: thẻ có ảnh bìa. Thêm bài giảng mới: thêm dòng vào "items".
+  teach: [
+    { icon: "🧬", cover: "linear-gradient(135deg,#2f6f5e,#5c9d7f)", who: ["Đi dạy", "Teaching"],
+      title: ["Be Biology Teacher", "Be Biology Teacher"],
+      text: ["Bài giảng Sinh học mình soạn và dạy cho học sinh. Bắt đầu với Di truyền học, Giai đoạn 1: từ nhiễm sắc thể đến nguyên phân và giảm phân (buổi K1–K4).",
+             "Biology lessons I write and teach. It starts with Genetics, Stage 1: from chromosomes to mitosis and meiosis (sessions K1–K4)."],
+      items: [
+        { type: "Course", label: ["Di truyền GĐ 1 · Trang bài học", "Genetics Stage 1 · Lesson page"], url: "https://claude.ai/artifact/LNFj4Hj4D81TettW3LT5Fj" },
+        { type: "Slides", label: ["Di truyền GĐ 1 · Slides bài giảng", "Genetics Stage 1 · Lesson slides"], url: "https://claude.ai/artifact/TXimM1CPftLzyooBko9JTj" },
+        { type: "Handout", label: ["Di truyền GĐ 1 · Handout cho học sinh", "Genetics Stage 1 · Student handout"], url: "https://claude.ai/artifact/UJ5toMQMZZ8Cn8JZwye7AL" },
       ] },
   ],
   learn: [
@@ -518,7 +519,7 @@ const ME = {
     [["Phòng thí nghiệm", "Laboratory"], ["Cell culture", "PCR", "DNA extraction", "Sanger sequencing", "MALDI-TOF", "VITEK", "Kirby–Bauer", "Microscopy", "CLSI standards"]],
     [["Tính toán", "Computational"], ["Python", "R", "Git/GitHub", "Clinical databases", "Claude Code"]],
     [["Đang học", "In development"], ["Electrophysiology", "Fluorescence imaging", "Statistics", "Bioinformatics"]],
-    [["Giao tiếp khoa học", "Science communication"], ["Teaching", "Journal club", "Scientific posters", "Slides & handouts"]],
+    [["Giao tiếp khoa học", "Science communication"], ["Journal club: reading & presenting papers", "Teaching", "Scientific posters", "Slides & handouts"]],
   ],
 };
 
@@ -529,12 +530,13 @@ const UI = {
   scroll: ["cuộn xuống", "scroll"], copied: ["Đã chép link", "Link copied"],
   footer: ["Tự viết bằng HTML, CSS, JS thuần cùng Claude Code", "Hand-written in plain HTML, CSS & JS with Claude Code"],
   next: ["Tiếp theo", "Next"], all: ["Tất cả", "All"],
-  kinds: { edu: ["Học vấn", "Education"], lab: ["Thực tập lab", "Lab internship"], research: ["Nghiên cứu", "Research"], next: ["Sắp tới", "Up next"] },
+  kinds: { edu: ["Học vấn", "Education"], lab: ["Thực tập", "Internship"], research: ["Nghiên cứu", "Research"], next: ["Sắp tới", "Up next"] },
   interestsTitle: ["Câu hỏi mình theo đuổi", "Questions I chase"], postersTitle: ["Poster tại hội nghị", "Conference posters"],
+  nutritionTitle: ["Dự án: dinh dưỡng cho sức khoẻ tinh thần", "Project: nutrition for mental health"], zoom: ["Bấm để xem lớn", "Tap to enlarge"],
+  emailTitle: ["Email", "Email"],
   studiesTitle: ["Đang tham gia tại BV Quân y 175", "Ongoing at 175 Military Hospital"], soon: ["sắp có", "soon"],
   goalTitle: ["Mục tiêu dài hạn", "Long-term goal"], alongsideTitle: ["Song song với đó", "Alongside"],
   prev: ["← Trước", "← Earlier"], nextStep: ["Sau →", "Later →"], nowTag: ["hiện tại", "now"],
-  topics: ["chủ đề", "topics"], files: ["tệp", "files"], addSoon: ["Bài mới sẽ được thêm vào đây.", "New entries will be added here."],
   schoolTitle: ["Ở trường: Python & dữ liệu", "At university: Python & data"],
   buildTitle: ["Tự làm: công cụ với Claude Code", "On my own: tools built with Claude Code"],
   liveTitle: ["Hoạt động gần đây trên GitHub", "Recent activity on GitHub"],
@@ -550,7 +552,7 @@ const CHAPTERS = [
     intro: ["Bấm vào từng mốc để xem mình đã làm gì ở đó.", "Tap a milestone to see what I did there."] },
   { id: "research", kicker: ["03 · Nghiên cứu", "03 · Research"], title: ["Những gì mình đang tìm hiểu", "What I'm figuring out"] },
   { id: "teach", kicker: ["04 · Dạy & chia sẻ", "04 · Teaching & sharing"], title: ["Học xong thì kể lại", "Learn it, then pass it on"],
-    intro: ["Hai thư mục, mở ra như Drive: bài giảng Sinh học mình dạy, và các bài báo mình trình bày. Mình sẽ thêm bài mới dần.", "Two folders that open like a drive: the biology lessons I teach and the papers I present. New ones get added over time."] },
+    intro: ["Slides, handout và trang bài học mình soạn để dạy Sinh học. Mình sẽ thêm bài mới dần.", "Slides, handouts and lesson pages I write to teach biology. New lessons get added over time."] },
   { id: "learn", kicker: ["05 · Tự học", "05 · Self-study"], title: ["Tò mò ngoài giờ", "Curiosity after hours"],
     intro: ["Những chủ đề mình tự học, mỗi bài đều có một trang để thực hành.", "Topics I teach myself; each one comes with a page to practise on."] },
   { id: "code", kicker: ["06 · Học code", "06 · Learning code"], title: ["Từ notebook đến công cụ của riêng mình", "From notebooks to my own tools"],
@@ -572,7 +574,6 @@ const t = (x) => Array.isArray(x) ? esc(x[lang === "vi" ? 0 : 1]) : esc(x ?? "")
 const count = (n, x) => `${n} ${lang === "vi" ? esc(x[0]) : esc(n === 1 ? x[1].replace(/s$/, "") : x[1])}`;
 const KIND_COLOR = { edu: "#5c7fb8", lab: "#b8673a", research: "var(--accent)", next: "#8a6fb8" };
 let jSel = ME.journey.findIndex((j) => j.now);      // mốc đang chọn trên timeline
-let fx = { folder: 0, unit: null };                 // vị trí đang mở trong thư mục bài giảng
 
 function workCard(w) {
   const items = w.items.map((i) => i.url
@@ -683,28 +684,6 @@ function selectStep(i) {
   line.scrollTo({ left: el.offsetLeft - line.offsetLeft - (line.clientWidth - el.clientWidth) / 2, behavior: "smooth" });
 }
 
-/* ---- Dạy & chia sẻ: thư mục kiểu Drive ---- */
-const FILE_ICON = { Course: "🌐", Slides: "🖥️", Handout: "📝", Practice: "🧪", Video: "🎬", Doc: "📄" };
-function driveHTML() {
-  const f = ME.folders[fx.folder], u = fx.unit === null ? null : f.units[fx.unit];
-  const side = ME.folders.map((x, i) => `<button class="folder" data-folder="${i}" aria-pressed="${i === fx.folder}">
-      <span class="fi">${x.icon}</span><b>${t(x.name)}</b><small>${count(x.units.length, UI.topics)}</small></button>`).join("");
-  const rows = u
-    ? u.files.map((x) => `<li><a class="row" href="${esc(x.url)}" target="_blank" rel="noopener">
-        <span class="ri">${FILE_ICON[x.type] || "📄"}</span><span class="rn"><b>${t(x.name)}</b></span><span class="rm">${esc(x.type)}</span><span class="rg">↗</span></a></li>`).join("")
-    : f.units.map((x, i) => `<li><button class="row" data-unit="${i}">
-        <span class="ri">📁</span><span class="rn"><b>${t(x.name)}</b><small>${t(x.note)}</small></span>
-        <span class="rm">${count(x.files.length, UI.files)} · ${esc(x.date)}</span><span class="rg">›</span></button></li>`).join("")
-      + `<li><span class="row ghost"><span class="ri">＋</span><span>${t(UI.addSoon)}</span></span></li>`;
-  return `<div class="drive-side">${side}</div>
-    <div class="drive-main">
-      <div class="crumbs">${u ? `<button data-unit="up">${t(f.name)}</button><span>/</span><span>${t(u.name)}</span>` : `<span>${t(f.name)}</span>`}</div>
-      <h4>${u ? t(u.name) : t(f.name)}</h4>
-      <p class="drive-desc">${u ? t(u.note) + " · " + esc(u.date) : t(f.text)}</p>
-      <ul class="rows">${rows}</ul>
-    </div>`;
-}
-
 function chapterBody(id) {
   switch (id) {
     case "about": return `<p class="bio-lead">${t(ME.bioLead)}</p>
@@ -722,19 +701,27 @@ function chapterBody(id) {
       <ul class="alongside">${ME.alongside.map(([d, x]) => `<li><time>${fmtDate(d)}</time><span>${t(x)}</span></li>`).join("")}</ul>`;
     case "research": return `
       <h3 class="sub">${t(UI.interestsTitle)}</h3>
-      <div class="cols3">${ME.interests.map((x, i) => `<div class="interest"><div class="n">0${i + 1}</div><p>${t(x)}</p></div>`).join("")}</div>
+      <div class="cols4">${ME.interests.map((x, i) => `<div class="interest"><div class="n">0${i + 1}</div><p>${t(x)}</p></div>`).join("")}</div>
+      <h3 class="sub">${t(UI.nutritionTitle)}</h3>
+      <div class="project">
+        <div class="project-text"><h4>${t(ME.nutrition.title)}</h4><p>${t(ME.nutrition.text)}</p></div>
+        <ol class="shots">${ME.nutrition.images.map((m) => `<li><button class="zoom" data-zoom="${esc(m.src)}" title="${t(UI.zoom)}">
+          <img src="${esc(m.src)}" alt="${t(m.cap)}" loading="lazy"></button><span>${t(m.cap)}</span></li>`).join("")}</ol>
+      </div>
       <h3 class="sub">${t(UI.postersTitle)}</h3>
       <ol class="posters">${ME.posters.map((p) => `<li><div><b>${t(p.title)}</b><span>${t(p.where)}</span>
-        ${p.award ? `<br><span class="award">★ ${t(p.award)}</span>` : ""}</div></li>`).join("")}</ol>
+        ${p.award ? `<br><span class="award">★ ${t(p.award)}</span>` : ""}</div>
+        ${p.img ? `<button class="zoom thumb" data-zoom="${esc(p.img)}" title="${t(UI.zoom)}"><img src="${esc(p.img)}" alt="${t(p.title)}" loading="lazy"></button>` : `<span></span>`}</li>`).join("")}</ol>
       <h3 class="sub">${t(UI.studiesTitle)}</h3>
       <div class="studies">${ME.studies.map((s) => `<div class="study">${t(s)}</div>`).join("")}</div>`;
-    case "teach": return `<div class="drive" id="drive">${driveHTML()}</div><p class="note">${t(UI.privateNote)}</p>`;
+    case "teach": return `<div class="works one">${ME.teach.map(workCard).join("")}</div><p class="note">${t(UI.privateNote)}</p>`;
     case "learn": return `<div class="works">${ME.learn.map(workCard).join("")}</div>`;
     case "code": return codeChapter();
     case "skills": return `<div class="skills">${ME.skills.map(([g, list]) =>
         `<div class="skill-group"><h4>${t(g)}</h4><div class="tags">${list.map((s) => `<span class="tag">${esc(s)}</span>`).join("")}</div></div>`).join("")}</div>`;
     case "contact": return `<div class="cta">${ME.links.map((l) =>
-        `<a class="btn ${l.primary ? "primary" : ""}" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)} ↗</a>`).join("")}</div>`;
+        `<a class="btn ${l.primary ? "primary" : ""}" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)} ↗</a>`).join("")}</div>
+      <ul class="emails">${ME.emails.map((m) => `<li><small>Email · ${t(m.label)}</small><a href="mailto:${esc(m.address)}">${esc(m.address)}</a></li>`).join("")}</ul>`;
   }
 }
 
@@ -758,16 +745,14 @@ function render() {
   observe();
 }
 
-// Bấm trên timeline và trong thư mục (gắn một lần ở document, vì nội dung được vẽ lại khi đổi ngôn ngữ)
+// Bấm trên timeline và bấm ảnh để xem lớn (gắn một lần ở document, vì nội dung được vẽ lại khi đổi ngôn ngữ)
 document.addEventListener("click", (e) => {
   const step = e.target.closest("[data-step]");
   if (step && !step.disabled) return selectStep(+step.dataset.step);
-  const folder = e.target.closest("[data-folder]"), unit = e.target.closest("[data-unit]");
-  if (folder) fx = { folder: +folder.dataset.folder, unit: null };
-  else if (unit) fx.unit = unit.dataset.unit === "up" ? null : +unit.dataset.unit;
-  else return;
-  $("#drive").innerHTML = driveHTML();
+  const zoom = e.target.closest("[data-zoom]");
+  if (zoom) { const img = zoom.querySelector("img"); $("#lbImg").src = zoom.dataset.zoom; $("#lbImg").alt = img ? img.alt : ""; $("#lb").showModal(); }
 });
+$("#lb").addEventListener("click", () => $("#lb").close());   // bấm bất kỳ đâu để đóng
 
 // Hiện dần + đánh dấu chương đang đọc
 let revealObs, chapObs;
