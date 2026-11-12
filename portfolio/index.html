@@ -95,35 +95,94 @@
   .next b { font: 400 22px var(--serif); color: var(--text); }
   .next:hover b { color: var(--accent); }
 
-  .about { display: grid; grid-template-columns: 1.4fr 1fr; gap: 40px; }
-  .about p { margin: 0 0 16px; font-size: 17px; }
-  .facts { list-style: none; margin: 0; padding: 0; border: 1px solid var(--line); border-radius: 14px; background: var(--card); align-self: start; }
+  /* tiểu sử */
+  .bio-lead { font: 400 clamp(20px, 2.6vw, 26px)/1.45 var(--serif); max-width: 760px; margin: 0 0 40px; }
+  .about { display: grid; grid-template-columns: 1.5fr 1fr; gap: 44px; }
+  .story { list-style: none; margin: 0; padding: 0; counter-reset: s; }
+  .story li { counter-increment: s; display: grid; grid-template-columns: 46px 1fr; gap: 4px 10px; padding: 0 0 26px; position: relative; }
+  .story li::before { content: counter(s); grid-row: span 2; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center;
+                      font: 400 17px var(--serif); color: var(--accent); background: var(--accent-soft); z-index: 1; }
+  .story li:not(:last-child)::after { content: ""; position: absolute; left: 16px; top: 34px; bottom: 0; width: 2px; background: var(--line); }
+  .story h4 { margin: 4px 0 0; font: 600 17px var(--sans); }
+  .story p { margin: 0; grid-column: 2; color: var(--muted); font-size: 16px; }
+  .side { display: grid; gap: 16px; align-self: start; }
+  .goal { background: var(--accent); color: var(--bg); border-radius: 14px; padding: 18px; }
+  .goal small { display: block; font: 12px var(--mono); opacity: .8; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 6px; }
+  .goal p { margin: 0; font: 400 18px/1.45 var(--serif); }
+  .facts { list-style: none; margin: 0; padding: 0; border: 1px solid var(--line); border-radius: 14px; background: var(--card); }
   .facts li { padding: 12px 16px; border-top: 1px solid var(--line); font-size: 15px; }
   .facts li:first-child { border-top: none; }
   .facts small { display: block; font: 12px var(--mono); color: var(--muted); }
-  @media (max-width: 720px) { .about { grid-template-columns: 1fr; } }
+  @media (max-width: 720px) { .about { grid-template-columns: 1fr; gap: 20px; } }
 
-  /* hành trình */
-  .legend { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 26px; }
-  .chip { font: 13px var(--sans); color: var(--muted); background: var(--card); border: 1px solid var(--line);
-          border-radius: 99px; padding: 5px 13px; cursor: pointer; display: inline-flex; gap: 6px; align-items: center; }
-  .chip i { width: 8px; height: 8px; border-radius: 50%; }
-  .chip[aria-pressed="true"] { background: var(--text); color: var(--bg); border-color: var(--text); }
-  .timeline { list-style: none; margin: 0; padding: 0 0 0 24px; border-left: 2px solid var(--line); }
-  .timeline li { position: relative; padding: 0 0 8px 18px; }
-  .timeline li.hide { display: none; }
-  .timeline li::before { content: ""; position: absolute; left: -31px; top: 22px; width: 12px; height: 12px;
-                         border-radius: 50%; background: var(--bg); border: 2px solid var(--dot, var(--accent)); }
-  .timeline details { border-radius: 12px; padding: 12px 14px; transition: background .2s; }
-  .timeline details:hover, .timeline details[open] { background: var(--card); }
-  .timeline summary { list-style: none; cursor: pointer; }
-  .timeline summary::-webkit-details-marker { display: none; }
-  .timeline time { font: 12px var(--mono); color: var(--muted); }
-  .timeline h4 { margin: 2px 0 0; font-size: 17px; }
-  .timeline h4::after { content: " +"; color: var(--muted); font-weight: 400; }
-  .timeline details[open] h4::after { content: " –"; }
-  .timeline .org { color: var(--muted); font-size: 15px; }
-  .timeline ul { margin: 8px 0 0; padding-left: 18px; font-size: 15px; }
+  /* hành trình: timeline ngang */
+  .hline { display: flex; overflow-x: auto; scroll-snap-type: x proximity; padding: 4px 2px 16px; scrollbar-width: thin; }
+  .step { flex: 1 0 150px; display: flex; flex-direction: column; align-items: stretch; justify-content: flex-start;
+          text-align: left; background: none; border: 0; font: inherit; color: inherit; cursor: pointer;
+          padding: 0 14px 0 0; scroll-snap-align: start; opacity: .62; transition: opacity .2s; }
+  .step:hover, .step[aria-selected="true"] { opacity: 1; }
+  .step time { display: block; font: 12px var(--mono); color: var(--muted); margin-bottom: 10px; white-space: nowrap; }
+  .step .rail { display: block; position: relative; height: 16px; margin: 0 -14px 12px 0; }
+  .step .rail::before { content: ""; position: absolute; left: 0; right: 0; top: 7px; border-top: 2px solid var(--dot); opacity: .45; }
+  .step.upnext .rail::before { border-top-style: dashed; }
+  .step:last-child .rail::before { right: 50%; }
+  .step .rail i { position: absolute; left: 0; top: 0; width: 16px; height: 16px; border-radius: 50%; background: var(--bg);
+                  border: 3px solid var(--dot); transition: transform .2s, background .2s; }
+  .step[aria-selected="true"] .rail i { background: var(--dot); transform: scale(1.25); }
+  .step.now .rail i { box-shadow: 0 0 0 0 var(--dot); animation: ring 2s infinite; }
+  @keyframes ring { 70% { box-shadow: 0 0 0 9px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
+  .step b { display: block; font: 600 15px/1.35 var(--sans); }
+  .step small { display: block; color: var(--muted); font-size: 13px; line-height: 1.4; margin-top: 2px; }
+  .step-detail { background: var(--card); border: 1px solid var(--line); border-left: 4px solid var(--dot); border-radius: 14px; padding: 20px 22px; margin-top: 8px; }
+  .step-detail .kind { font: 12px var(--mono); color: var(--dot); text-transform: uppercase; letter-spacing: .05em; }
+  .step-detail h4 { margin: 4px 0 2px; font: 400 24px/1.2 var(--serif); }
+  .step-detail .org { color: var(--muted); font-size: 15px; }
+  .step-detail ul { margin: 12px 0 0; padding-left: 18px; font-size: 15px; }
+  .step-detail li { margin-bottom: 4px; }
+  .step-nav { display: flex; justify-content: space-between; margin-top: 14px; }
+  .step-nav button { font: 13px var(--mono); color: var(--muted); background: none; border: 0; cursor: pointer; padding: 4px 0; }
+  .step-nav button:hover:not(:disabled) { color: var(--accent); }
+  .step-nav button:disabled { opacity: .3; cursor: default; }
+  .alongside { display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px 28px; margin: 0; padding: 0; list-style: none; }
+  .alongside li { display: grid; grid-template-columns: 96px 1fr; gap: 10px; padding: 9px 0; border-top: 1px solid var(--line); font-size: 14px; }
+  .alongside time { font: 12px var(--mono); color: var(--muted); padding-top: 2px; }
+  @media (max-width: 720px) { .alongside { grid-template-columns: 1fr; } }
+  @media (prefers-reduced-motion: reduce) { .step.now .rail i { animation: none; } }
+
+  /* thư mục bài giảng (kiểu Drive) */
+  .drive { display: grid; grid-template-columns: 230px 1fr; background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; min-height: 300px; }
+  .drive-side { border-right: 1px solid var(--line); padding: 12px; display: flex; flex-direction: column; gap: 4px; background: color-mix(in srgb, var(--bg) 55%, var(--card)); }
+  .folder { display: grid; grid-template-columns: 30px 1fr; gap: 0 8px; align-items: center; text-align: left; font: inherit; color: inherit;
+            background: none; border: 0; border-radius: 10px; padding: 10px; cursor: pointer; }
+  .folder:hover { background: var(--accent-soft); }
+  .folder[aria-pressed="true"] { background: var(--accent); color: var(--bg); }
+  .folder .fi { font-size: 22px; grid-row: span 2; }
+  .folder b { font: 600 15px var(--sans); }
+  .folder small { font: 12px var(--mono); opacity: .75; }
+  .drive-main { padding: 16px 20px 20px; min-width: 0; }
+  .crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font: 13px var(--mono); color: var(--muted); margin-bottom: 6px; }
+  .crumbs button { font: inherit; color: var(--accent); background: none; border: 0; padding: 0; cursor: pointer; }
+  .crumbs button:hover { text-decoration: underline; }
+  .drive-main h4 { margin: 0 0 4px; font: 400 24px/1.2 var(--serif); }
+  .drive-desc { margin: 0 0 14px; color: var(--muted); font-size: 15px; }
+  .rows { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+  .rows li { border-bottom: 1px solid var(--line); }
+  .row { display: grid; grid-template-columns: 30px 1fr auto 18px; gap: 10px; align-items: center; width: 100%; text-align: left; font: inherit; color: inherit;
+         background: none; border: 0; padding: 11px 4px; cursor: pointer; text-decoration: none; border-radius: 8px; }
+  .row:hover { background: var(--accent-soft); }
+  .row .ri { font-size: 20px; text-align: center; }
+  .row .rn b { display: block; font: 500 15px/1.35 var(--sans); }
+  .row .rn small { color: var(--muted); font-size: 13px; }
+  .row .rm { font: 12px var(--mono); color: var(--muted); white-space: nowrap; }
+  .row .rg { color: var(--muted); }
+  .row.ghost { cursor: default; color: var(--muted); font-size: 14px; grid-template-columns: 30px 1fr; }
+  .row.ghost:hover { background: none; }
+  @media (max-width: 720px) {
+    .drive { grid-template-columns: 1fr; }
+    .drive-side { flex-direction: row; border-right: 0; border-bottom: 1px solid var(--line); overflow-x: auto; }
+    .folder { flex: 1 0 auto; }
+    .row { grid-template-columns: 26px 1fr 18px; } .row .rm { display: none; }
+  }
 
   /* nghiên cứu */
   .cols3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 40px; }
@@ -297,15 +356,27 @@ const ME = {
     ["Serotonin & trục ruột–não", "Serotonin & the gut–brain axis"],
     ["Mô hình tính toán cho từng bệnh nhân", "Patient-specific computational modelling"],
   ],
-  about: [
-    ["Mình tốt nghiệp Đại học Fulbright Việt Nam với hai chuyên ngành: Khoa học Tích hợp (hướng Sức khỏe Sinh học) và Tâm lý học. Hai ngành này gặp nhau ở một câu hỏi mình theo đuổi mãi: sinh học của não ảnh hưởng thế nào đến tâm trí và bệnh tật?",
-     "I graduated from Fulbright University Vietnam with a double major in Integrated Sciences (Biohealth) and Psychology. The two meet at one question I keep chasing: how does the biology of the brain shape the mind, and disease?"],
-    ["Mình đã làm ở phòng vi sinh lâm sàng, phòng sinh học phân tử, và giờ là trợ lý nghiên cứu ở khoa Thần kinh. Song song, mình dạy sinh học, dẫn journal club, và học lập trình bằng cách tự làm công cụ cho chính mình.",
-     "I have worked in a clinical microbiology lab, a molecular biology lab, and now as a research assistant in neurophysiology. Alongside that I teach biology, lead journal clubs, and learn to code by building tools for myself."],
+  bioLead: ["Mình học sinh học và tâm lý học, hiện làm nghiên cứu lâm sàng về thần kinh. Mình muốn hiểu điều gì trục trặc trong não từ rất sớm, trước khi tế bào thần kinh mất đi, để có những cách giúp người bệnh nhẹ nhàng hơn.",
+            "I'm a biology and psychology graduate working in clinical neuroscience research. I want to understand what goes wrong in the brain early, before neurons are lost, so that people can be helped in gentler ways."],
+  story: [
+    { title: ["Ba ước mơ thời nhỏ", "Three childhood dreams"],
+      text: ["Hồi nhỏ mình muốn làm bác sĩ để chữa lành, nhà ngoại giao để bảo vệ người yếu thế, và nhà trị liệu tâm lý để mang lại sự bình an. Giờ mình thấy khoa học là con đường gom cả ba ước mơ ấy lại.",
+             "As a child I wanted to be a doctor who heals, a diplomat who protects the vulnerable, and a psychotherapist who brings peace of mind. I now see science as the way to bring all three together."] },
+    { title: ["Bước ngoặt: từ tâm lý học đến bộ não", "The turning point: from psychology to the brain"],
+      text: ["Ở Fulbright, mình bắt đầu với tâm lý học, nhưng cứ gặp mãi một câu hỏi: điều gì thật sự diễn ra trong não của người mắc rối loạn tâm thần nặng? Môn Thần kinh học năm ba rất khó, nhưng nó cho mình thấy mình thích sống cùng những câu hỏi chưa có lời đáp. Mình chọn học song ngành: não vận hành ra sao, và con người đau khổ rồi hồi phục thế nào.",
+             "At Fulbright I started with psychology, but one question kept returning: what is really happening inside the brain in severe psychiatric disorders? Neuroscience in my third year was demanding, and it showed me that I enjoy living with unanswered questions. I chose a double major: how the brain works, and how people suffer and recover."] },
+    { title: ["Vào phòng lab", "Into the lab"],
+      text: ["Ở phòng vi sinh lâm sàng, mình thấy kháng sinh diệt cả vi khuẩn có lợi, và bắt đầu tự hỏi: vi khuẩn đường ruột, vốn ảnh hưởng đến serotonin, liệu có thể giúp bộ não? Sau đó là mười tháng ở phòng sinh học phân tử, học nuôi cấy tế bào, PCR và giải trình tự.",
+             "In a clinical microbiology lab I saw that antibiotics also wipe out helpful microbes, and began to ask: could gut microbes, which influence serotonin, one day help the brain? Then came ten months in a molecular biology lab, learning cell culture, PCR and sequencing."] },
+    { title: ["Bên giường bệnh", "At the bedside"],
+      text: ["Giờ mình là trợ lý nghiên cứu ở khoa Thần kinh, hỗ trợ các nghiên cứu về đột quỵ và ALS. Thấy tổn thương não thay đổi cuộc sống người bệnh thế nào, mình tin rằng phải nhìn sớm hơn: vào những rối loạn tín hiệu đầu tiên, như mất cân bằng kẽm và viêm thần kinh, trước khi tế bào chết.",
+             "Now I'm a research assistant in a neurophysiology department, supporting studies on stroke and ALS. Seeing how brain damage changes patients' lives convinced me to look earlier: at the first signalling disturbances, such as zinc imbalance and neuroinflammation, before cells die."] },
   ],
+  goal: ["Trở thành nhà thần kinh học chuyển dịch, góp phần tìm ra những cách bảo vệ não nhẹ nhàng và có bằng chứng, để ít người phải phụ thuộc vào thuốc nặng hay thủ thuật xâm lấn.",
+         "To become a translational neuroscientist who helps develop gentler, evidence-based ways to protect the brain, so fewer people must rely on heavy drugs or invasive procedures."],
   facts: [
     [["Đang ở", "Based in"], ["TP. Hồ Chí Minh, Việt Nam", "Ho Chi Minh City, Vietnam"]],
-    [["Học vấn", "Education"], ["Fulbright University Vietnam, 2022–2026", "Fulbright University Vietnam, 2022–2026"]],
+    [["Học vấn", "Education"], ["Cử nhân Khoa học Tích hợp & Tâm lý học, Fulbright University Vietnam", "B.S. Integrated Sciences & B.A. Psychology, Fulbright University Vietnam"]],
     [["Hiện tại", "Now"], ["Trợ lý nghiên cứu, Khoa Thần kinh, BV Quân y 175", "Research Assistant, Neurophysiology, 175 Military Hospital"]],
     [["Ngôn ngữ", "Languages"], ["Tiếng Việt, English (thành thạo)", "Vietnamese, English (fluent)"]],
   ],
@@ -314,26 +385,33 @@ const ME = {
     { label: "GitHub", url: "https://github.com/ngqacuongg" },
   ],
 
-  // Hành trình. kind: edu | lab | research | lead
+  // Hành trình (timeline ngang): học vấn → thực tập lab → trợ lý nghiên cứu.
+  // kind: edu | lab | research | next.  now: true = mốc hiện tại.
   journey: [
-    { date: "2022 – 2024", kind: "lead", title: ["Đồng sáng lập Science Lab", "Co-founded Science Lab"], org: "Phu Yen, Vietnam",
-      points: [["Làm nội dung giáo dục và hoạt động khoa học thực hành.", "Developed educational content and hands-on science activities."]] },
-    { date: "09/2022 – 06/2026", kind: "edu", title: ["Đại học Fulbright Việt Nam", "Fulbright University Vietnam"], org: ["Cử nhân Khoa học Tích hợp & Tâm lý học", "B.S. Integrated Sciences & B.A. Psychology"],
-      points: [["Môn tiêu biểu: Thần kinh học nhận thức (A), Lập trình cho Khoa học Dữ liệu (A), Tâm lý bất thường (A), Machine Learning (A−).",
-                "Highlights: Cognitive Neuroscience (A), Programming for Data Science (A), Abnormal Psychology (A), Machine Learning (A−)."]] },
-    { date: "2024 – 2026", kind: "lead", title: ["Phó chủ nhiệm & cố vấn học thuật, Fulbright STEM Club", "Vice President & Academic Advisor, Fulbright STEM Club"], org: "Fulbright University Vietnam",
-      points: [["Cố vấn nội dung, đồng tổ chức sự kiện khoa học, truyền đạt STEM cho sinh viên và cộng đồng.", "Advised on content, co-organized science events, communicated STEM to students and the community."]] },
-    { date: "05 – 08/2025", kind: "lab", title: ["Thực tập sinh, Phòng Vi sinh Lâm sàng", "Intern, Clinical Microbiology Laboratory"], org: ["Bệnh viện Bệnh Nhiệt đới TP.HCM", "Hospital for Tropical Diseases, HCMC"],
-      points: [["Định danh vi khuẩn và làm kháng sinh đồ (MALDI-TOF, VITEK, Kirby–Bauer) theo chuẩn CLSI.", "Microbial identification and antibiotic susceptibility testing (MALDI-TOF, VITEK, Kirby–Bauer) under CLSI standards."]] },
-    { date: "2025 – nay", kind: "lead", title: ["Thành viên Journal Club, Innovative Bioscience Group", "Journal Club member, Innovative Bioscience Group"], org: "Online",
-      points: [["Đọc, phân tích và trình bày bài báo sinh học cho nhóm.", "Read, analyze and present biology papers to the group."]] },
-    { date: "09/2025 – 06/2026", kind: "lab", title: ["Thực tập sinh, Trung tâm Y Sinh học Phân tử", "Intern, Center for Molecular Biomedicine"], org: ["Đại học Y Dược TP.HCM", "University of Medicine and Pharmacy at HCMC"],
-      points: [["Giải trình tự Sanger, nuôi cấy tế bào động vật, PCR, tách chiết DNA; nhận chứng chỉ thực hành sinh học phân tử.", "Sanger sequencing, mammalian cell culture, PCR and DNA extraction; earned a molecular biology lab practice certificate."]] },
-    { date: "09 – 12/2025", kind: "research", title: ["Stem Cell Innovation Contest 2025", "Stem Cell Innovation Contest 2025"], org: ["Viện Tế bào gốc, ĐH Khoa học Tự nhiên", "Stem Cell Institute, VNUHCM–University of Science"],
-      points: [["Top 18 Ý tưởng Poster (cá nhân): mô hình tế bào gan từ hiPSC để nghiên cứu ung thư gan liên quan NAFLD/NASH.", "Top 18 Poster Idea (individual): hiPSC-derived hepatocyte models for NAFLD/NASH-related liver cancer."],
-               ["Giải Khuyến khích (nhóm): CAR-T “off-the-shelf” từ iPSC cho bệnh bạch cầu AML.", "Consolation Prize (group): universal off-the-shelf CAR-T from iPSC for AML."]] },
-    { date: "08/2026 – nay", kind: "research", title: ["Trợ lý nghiên cứu, Khoa Thần kinh", "Research Assistant, Neurophysiology Department"], org: ["Bệnh viện Quân y 175", "175 Military Hospital"],
-      points: [["Hỗ trợ ba nghiên cứu lâm sàng, xây dựng cơ sở dữ liệu và quy trình nhập liệu, chuẩn bị hồ sơ theo quy định đạo đức nghiên cứu.", "Support three clinical studies, build databases and data-entry workflows, prepare protocol documents under research ethics rules."]] },
+    { date: "09/2022", kind: "edu", title: ["Vào Fulbright", "Entered Fulbright"], org: ["Fulbright University Vietnam · 2022–2026", "Fulbright University Vietnam · 2022–2026"],
+      points: [["Hai năm đầu theo chương trình khai phóng: thử qua nghệ thuật, nhân văn, kinh tế, khoa học xã hội và tự nhiên để tìm con đường của mình.", "Two liberal-arts years exploring arts, humanities, economics, social and natural sciences to find my path."],
+               ["Tốt nghiệp 06/2026: Cử nhân Khoa học Tích hợp (hướng Sức khỏe Sinh học) và Cử nhân Tâm lý học. Chương trình dạy bằng tiếng Anh.", "Graduated 06/2026: B.S. in Integrated Sciences (Biohealth) and B.A. in Psychology. Taught in English."]] },
+    { date: "2024 – 2025", kind: "edu", title: ["Bước ngoặt: Thần kinh học", "Turning point: neuroscience"], org: ["Năm ba · chọn song ngành", "Third year · double major"],
+      points: [["Môn Principles of Neuroscience khiến mình quyết định học song ngành Khoa học Tích hợp và Tâm lý học.", "Principles of Neuroscience led me to commit to a double major in Integrated Sciences and Psychology."],
+               ["Môn tiêu biểu: Cognitive Neuroscience (A), Abnormal Psychology (A), Counseling Psychology (A), Programming for Data Science (A), Machine Learning (A−), Neurobiology (A−).", "Highlights: Cognitive Neuroscience (A), Abnormal Psychology (A), Counseling Psychology (A), Programming for Data Science (A), Machine Learning (A−), Neurobiology (A−)."]] },
+    { date: "05 – 08/2025", kind: "lab", title: ["Thực tập Vi sinh Lâm sàng", "Clinical Microbiology intern"], org: ["Bệnh viện Bệnh Nhiệt đới TP.HCM", "Hospital for Tropical Diseases, HCMC"],
+      points: [["Định danh vi khuẩn và làm kháng sinh đồ (MALDI-TOF, VITEK, Kirby–Bauer) theo chuẩn CLSI.", "Microbial identification and antibiotic susceptibility testing (MALDI-TOF, VITEK, Kirby–Bauer) under CLSI standards."],
+               ["Xử lý bệnh phẩm, ghi chép dữ liệu xét nghiệm. Từ đây có 3 poster hội nghị về vi khuẩn kháng carbapenem.", "Handled clinical specimens and lab records. This work led to 3 conference posters on carbapenem-resistant bacteria."]] },
+    { date: "09/2025 – 06/2026", kind: "lab", title: ["Thực tập Y Sinh học Phân tử", "Molecular Biomedicine intern"], org: ["Đại học Y Dược TP.HCM", "University of Medicine and Pharmacy at HCMC"],
+      points: [["Mười tháng học giải trình tự Sanger, nuôi cấy tế bào động vật, PCR và tách chiết DNA.", "Ten months training in Sanger sequencing, mammalian cell culture, PCR and DNA extraction."],
+               ["Nhận chứng chỉ “Molecular Biology Laboratory Practice for Undergraduate Students”.", "Earned the certificate “Molecular Biology Laboratory Practice for Undergraduate Students”."]] },
+    { date: "08/2026 – nay", kind: "research", now: true, title: ["Trợ lý nghiên cứu", "Research Assistant"], org: ["Khoa Thần kinh, Bệnh viện Quân y 175", "Neurophysiology Dept., 175 Military Hospital"],
+      points: [["Hỗ trợ ba nghiên cứu lâm sàng: chóng mặt tư thế (Epley so với Semont-Plus), tiên lượng đột quỵ ở người có MASLD, và Sổ đăng ký Quốc gia bệnh ALS.", "Support three clinical studies: positional vertigo (Epley vs Semont-Plus), stroke prognosis with MASLD, and the Vietnam National ALS Registry."],
+               ["Điều phối hoạt động nghiên cứu, xây dựng cơ sở dữ liệu và quy trình nhập liệu, chuẩn bị hồ sơ theo quy định đạo đức nghiên cứu.", "Coordinate research, build databases and data-entry workflows, prepare documents under research-ethics rules."]] },
+    { date: "2027 →", kind: "next", title: ["Cao học về thần kinh học", "Graduate study in neuroscience"], org: ["Bước tiếp theo", "The next step"],
+      points: [["Mình muốn học hình ảnh huỳnh quang và điện sinh lý tế bào, để nghiên cứu tín hiệu kẽm và serotonin trong tế bào thần kinh.", "I want to train in fluorescence imaging and cellular electrophysiology, to study zinc and serotonin signalling in neurons."]] },
+  ],
+  // Hoạt động song song, hiện gọn dưới timeline
+  alongside: [
+    ["2022 – 2024", ["Đồng sáng lập Science Lab (Phú Yên): nội dung và hoạt động khoa học thực hành.", "Co-founded Science Lab (Phu Yen): hands-on science content and activities."]],
+    ["2024 – 2026", ["Phó chủ nhiệm, rồi cố vấn học thuật của Fulbright STEM Club.", "Vice President, then Academic Advisor, of Fulbright STEM Club."]],
+    ["2025", ["Stem Cell Innovation Contest: Top 18 ý tưởng poster cá nhân, giải Khuyến khích nhóm.", "Stem Cell Innovation Contest: Top 18 individual poster idea, group Consolation Prize."]],
+    ["2025 – nay", ["Thành viên Journal Club, Innovative Bioscience Group.", "Journal Club member, Innovative Bioscience Group."]],
   ],
 
   posters: [
@@ -352,24 +430,30 @@ const ME = {
     ["Sổ đăng ký Quốc gia bệnh ALS Việt Nam", "The Vietnam National ALS Registry"],
   ],
 
-  // Tác phẩm: mỗi mục là một bộ, gồm nhiều artifact (slides, handout, trang thực hành, video...)
-  teach: [
-    { icon: "🧬", cover: "linear-gradient(135deg,#2f6f5e,#5c9d7f)", who: ["Đi dạy", "Teaching"],
-      title: ["Di truyền học, Giai đoạn 1: Nhiễm sắc thể & Phân bào", "Genetics Stage 1: Chromosomes & Cell Division"],
-      text: ["Bộ bài giảng cho học sinh, đi từ nhiễm sắc thể đến nguyên phân và giảm phân, kèm handout để tự ôn.", "A lesson set for students, from chromosomes to mitosis and meiosis, with a handout for self-review."],
-      items: [
-        { type: "Course", label: ["Trang bài học", "Lesson page"], url: "https://claude.ai/artifact/LNFj4Hj4D81TettW3LT5Fj" },
-        { type: "Slides", label: ["Slides bài giảng (K1–K4)", "Lesson slides (K1–K4)"], url: "https://claude.ai/artifact/TXimM1CPftLzyooBko9JTj" },
-        { type: "Handout", label: ["Handout cho học sinh", "Student handout"], url: "https://claude.ai/artifact/UJ5toMQMZZ8Cn8JZwye7AL" },
+  // Dạy & chia sẻ: kiểu thư mục Drive. Thư mục → chủ đề (units) → tệp (files).
+  // Thêm bài mới: thêm một mục vào "units" của thư mục tương ứng.
+  // type của tệp: Course | Slides | Handout | Practice | Video | Doc
+  folders: [
+    { icon: "🧬", name: ["Be Biology Teacher", "Be Biology Teacher"],
+      text: ["Bài giảng Sinh học mình soạn và dạy cho học sinh. Mỗi thư mục là một chủ đề, mở ra để xem trang bài học, slides và handout.",
+             "Biology lessons I write and teach. Each folder is one topic: open it for the lesson page, slides and handout."],
+      units: [
+        { name: ["Di truyền học · Giai đoạn 1: Nhiễm sắc thể & Phân bào", "Genetics · Stage 1: Chromosomes & Cell Division"],
+          note: ["Buổi K1–K4", "Sessions K1–K4"], date: "11/2026",
+          files: [
+            { type: "Course", name: ["Trang bài học", "Lesson page"], url: "https://claude.ai/artifact/LNFj4Hj4D81TettW3LT5Fj" },
+            { type: "Slides", name: ["Slides bài giảng (K1–K4)", "Lesson slides (K1–K4)"], url: "https://claude.ai/artifact/TXimM1CPftLzyooBko9JTj" },
+            { type: "Handout", name: ["Handout cho học sinh", "Student handout"], url: "https://claude.ai/artifact/UJ5toMQMZZ8Cn8JZwye7AL" },
+          ] },
       ] },
-    { icon: "🔬", cover: "linear-gradient(135deg,#3b4f7a,#6a7fb0)", who: ["Journal Club", "Journal Club"],
-      title: ["Prox1: đọc và trình bày Fig 1 & Fig 7", "Prox1: presenting Fig 1 & Fig 7"],
-      text: ["Phần trình bày của mình ở journal club Innovative Bioscience Group: mổ xẻ dữ liệu, rồi kể lại thành một câu chuyện dễ theo.", "My part at the Innovative Bioscience Group journal club: unpacking the data and retelling it as an easy-to-follow story."],
-      items: [ { type: "Slides", label: ["Slides Journal Club", "Journal club slides"], url: "https://claude.ai/artifact/XAfs79fiTEGauweazQfKii" } ] },
-    { icon: "🥗", cover: "linear-gradient(135deg,#b8673a,#d9965f)", who: ["Cộng đồng", "Community"],
-      title: ["Dinh dưỡng chữa lành cho sức khỏe tinh thần", "Nutrition for mental health"],
-      text: ["Đề xuất dự án và brochure truyền thông về dinh dưỡng và sức khỏe tinh thần, trình bày trong chương trình thực tập TSC.", "A project proposal and brochure on nutrition and mental health, presented in the TSC internship program."],
-      items: [ { type: "Brochure", label: ["Brochure & bài trình bày (sắp đăng)", "Brochure & talk (coming soon)"], url: "" } ] },
+    { icon: "🔬", name: ["Journal Club", "Journal Club"],
+      text: ["Các bài báo mình đọc và trình bày ở Innovative Bioscience Group. Mỗi thư mục là một bài báo.",
+             "Papers I read and present at the Innovative Bioscience Group. Each folder is one paper."],
+      units: [
+        { name: ["Prox1 · Fig 1 & Fig 7", "Prox1 · Fig 1 & Fig 7"],
+          note: ["Innovative Bioscience Group", "Innovative Bioscience Group"], date: "11/2026",
+          files: [ { type: "Slides", name: ["Slides trình bày", "Presentation slides"], url: "https://claude.ai/artifact/XAfs79fiTEGauweazQfKii" } ] },
+      ] },
   ],
   learn: [
     { icon: "🧠", cover: "linear-gradient(135deg,#4b3f72,#8a6fb8)", who: ["Tự học", "Self-study"],
@@ -445,9 +529,12 @@ const UI = {
   scroll: ["cuộn xuống", "scroll"], copied: ["Đã chép link", "Link copied"],
   footer: ["Tự viết bằng HTML, CSS, JS thuần cùng Claude Code", "Hand-written in plain HTML, CSS & JS with Claude Code"],
   next: ["Tiếp theo", "Next"], all: ["Tất cả", "All"],
-  kinds: { edu: ["Học tập", "Education"], lab: ["Phòng lab", "Lab"], research: ["Nghiên cứu", "Research"], lead: ["Cộng đồng", "Community"] },
+  kinds: { edu: ["Học vấn", "Education"], lab: ["Thực tập lab", "Lab internship"], research: ["Nghiên cứu", "Research"], next: ["Sắp tới", "Up next"] },
   interestsTitle: ["Câu hỏi mình theo đuổi", "Questions I chase"], postersTitle: ["Poster tại hội nghị", "Conference posters"],
   studiesTitle: ["Đang tham gia tại BV Quân y 175", "Ongoing at 175 Military Hospital"], soon: ["sắp có", "soon"],
+  goalTitle: ["Mục tiêu dài hạn", "Long-term goal"], alongsideTitle: ["Song song với đó", "Alongside"],
+  prev: ["← Trước", "← Earlier"], nextStep: ["Sau →", "Later →"], nowTag: ["hiện tại", "now"],
+  topics: ["chủ đề", "topics"], files: ["tệp", "files"], addSoon: ["Bài mới sẽ được thêm vào đây.", "New entries will be added here."],
   schoolTitle: ["Ở trường: Python & dữ liệu", "At university: Python & data"],
   buildTitle: ["Tự làm: công cụ với Claude Code", "On my own: tools built with Claude Code"],
   liveTitle: ["Hoạt động gần đây trên GitHub", "Recent activity on GitHub"],
@@ -458,12 +545,12 @@ const UI = {
   privateNote: ["Một số tài liệu được tạo cùng Claude; nếu link chưa mở được, hãy nhắn mình để xin quyền xem.", "Some materials were made with Claude; if a link doesn't open, message me for access."],
 };
 const CHAPTERS = [
-  { id: "about", kicker: ["01 · Khởi đầu", "01 · Beginnings"], title: ["Một chút về mình", "A little about me"] },
-  { id: "journey", kicker: ["02 · Hành trình", "02 · The path"], title: ["Từng bước, từ phòng học đến phòng lab", "Step by step, from classroom to lab"],
-    intro: ["Bấm vào từng mốc để xem chi tiết, hoặc lọc theo loại.", "Tap a milestone for details, or filter by type."] },
+  { id: "about", kicker: ["01 · Khởi đầu", "01 · Beginnings"], title: ["Mình là ai", "Who I am"] },
+  { id: "journey", kicker: ["02 · Hành trình", "02 · The path"], title: ["Từ giảng đường, qua phòng lab, đến bệnh viện", "From lecture hall, through the lab, to the hospital"],
+    intro: ["Bấm vào từng mốc để xem mình đã làm gì ở đó.", "Tap a milestone to see what I did there."] },
   { id: "research", kicker: ["03 · Nghiên cứu", "03 · Research"], title: ["Những gì mình đang tìm hiểu", "What I'm figuring out"] },
   { id: "teach", kicker: ["04 · Dạy & chia sẻ", "04 · Teaching & sharing"], title: ["Học xong thì kể lại", "Learn it, then pass it on"],
-    intro: ["Slides, handout và tài liệu mình làm để dạy học sinh và trình bày cho nhóm.", "Slides, handouts and materials I made to teach students and present to peers."] },
+    intro: ["Hai thư mục, mở ra như Drive: bài giảng Sinh học mình dạy, và các bài báo mình trình bày. Mình sẽ thêm bài mới dần.", "Two folders that open like a drive: the biology lessons I teach and the papers I present. New ones get added over time."] },
   { id: "learn", kicker: ["05 · Tự học", "05 · Self-study"], title: ["Tò mò ngoài giờ", "Curiosity after hours"],
     intro: ["Những chủ đề mình tự học, mỗi bài đều có một trang để thực hành.", "Topics I teach myself; each one comes with a page to practise on."] },
   { id: "code", kicker: ["06 · Học code", "06 · Learning code"], title: ["Từ notebook đến công cụ của riêng mình", "From notebooks to my own tools"],
@@ -481,8 +568,11 @@ const store = { get(k) { try { return localStorage.getItem(k); } catch { return 
                 set(k, v) { try { localStorage.setItem(k, v); } catch {} } };
 let lang = store.get("portfolio-lang") || (navigator.language.startsWith("vi") ? "vi" : "en");
 const t = (x) => Array.isArray(x) ? esc(x[lang === "vi" ? 0 : 1]) : esc(x ?? "");
-const KIND_COLOR = { edu: "#5c7fb8", lab: "#b8673a", research: "var(--accent)", lead: "#8a6fb8" };
-let kindFilter = "all";
+// "1 topic" thay vì "1 topics" ở bản tiếng Anh; tiếng Việt không đổi
+const count = (n, x) => `${n} ${lang === "vi" ? esc(x[0]) : esc(n === 1 ? x[1].replace(/s$/, "") : x[1])}`;
+const KIND_COLOR = { edu: "#5c7fb8", lab: "#b8673a", research: "var(--accent)", next: "#8a6fb8" };
+let jSel = ME.journey.findIndex((j) => j.now);      // mốc đang chọn trên timeline
+let fx = { folder: 0, unit: null };                 // vị trí đang mở trong thư mục bài giảng
 
 function workCard(w) {
   const items = w.items.map((i) => i.url
@@ -525,7 +615,7 @@ function codeChapter() {
   const school = ME.school.map((c) => `
     <details class="course">
       <summary><span class="ci">${c.icon}</span><span class="ct"><b>${t(c.title)}</b><small>${t(c.text)}</small></span>
-        <span class="cm"><span class="badge">${c.items.length} ${t(UI.notebooks)}</span><span class="ago" data-repo="${esc(c.repo)}">${repoMeta(c.repo)}</span></span></summary>
+        <span class="cm"><span class="badge">${count(c.items.length, UI.notebooks)}</span><span class="ago" data-repo="${esc(c.repo)}">${repoMeta(c.repo)}</span></span></summary>
       <ol class="nb">${c.items.map((i) => `<li><a href="${ghUrl(c.repo, i.path)}" target="_blank" rel="noopener">
         <span class="type">.ipynb</span>${t(i.label)}<span class="go">↗</span></a></li>`).join("")}</ol>
       <a class="repo-link" href="${ghUrl(c.repo)}" target="_blank" rel="noopener">${esc(c.repo)} ↗</a>
@@ -574,19 +664,62 @@ function paintGitHub() {
   document.querySelectorAll(".ago[data-repo]").forEach((el) => el.innerHTML = repoMeta(el.dataset.repo));
 }
 
+/* ---- Hành trình: timeline ngang ---- */
+const fmtDate = (d) => esc(d.replace("nay", lang === "vi" ? "nay" : "now"));
+function stepHTML() {
+  const j = ME.journey[jSel], last = ME.journey.length - 1;
+  return `<div class="step-detail" style="--dot:${KIND_COLOR[j.kind]}">
+    <span class="kind">${t(UI.kinds[j.kind])}${j.now ? " · " + t(UI.nowTag) : ""} · ${fmtDate(j.date)}</span>
+    <h4>${t(j.title)}</h4><div class="org">${t(j.org)}</div>
+    <ul>${j.points.map((p) => `<li>${t(p)}</li>`).join("")}</ul>
+    <div class="step-nav"><button data-step="${jSel - 1}" ${jSel === 0 ? "disabled" : ""}>${t(UI.prev)}</button>
+      <button data-step="${jSel + 1}" ${jSel === last ? "disabled" : ""}>${t(UI.nextStep)}</button></div></div>`;
+}
+function selectStep(i) {
+  jSel = i;
+  document.querySelectorAll(".step").forEach((b, k) => b.setAttribute("aria-selected", k === i));
+  $("#stepDetail").innerHTML = stepHTML();
+  const line = $(".hline"), el = line.children[i];       // cuộn ngang để mốc đang chọn nằm trong khung
+  line.scrollTo({ left: el.offsetLeft - line.offsetLeft - (line.clientWidth - el.clientWidth) / 2, behavior: "smooth" });
+}
+
+/* ---- Dạy & chia sẻ: thư mục kiểu Drive ---- */
+const FILE_ICON = { Course: "🌐", Slides: "🖥️", Handout: "📝", Practice: "🧪", Video: "🎬", Doc: "📄" };
+function driveHTML() {
+  const f = ME.folders[fx.folder], u = fx.unit === null ? null : f.units[fx.unit];
+  const side = ME.folders.map((x, i) => `<button class="folder" data-folder="${i}" aria-pressed="${i === fx.folder}">
+      <span class="fi">${x.icon}</span><b>${t(x.name)}</b><small>${count(x.units.length, UI.topics)}</small></button>`).join("");
+  const rows = u
+    ? u.files.map((x) => `<li><a class="row" href="${esc(x.url)}" target="_blank" rel="noopener">
+        <span class="ri">${FILE_ICON[x.type] || "📄"}</span><span class="rn"><b>${t(x.name)}</b></span><span class="rm">${esc(x.type)}</span><span class="rg">↗</span></a></li>`).join("")
+    : f.units.map((x, i) => `<li><button class="row" data-unit="${i}">
+        <span class="ri">📁</span><span class="rn"><b>${t(x.name)}</b><small>${t(x.note)}</small></span>
+        <span class="rm">${count(x.files.length, UI.files)} · ${esc(x.date)}</span><span class="rg">›</span></button></li>`).join("")
+      + `<li><span class="row ghost"><span class="ri">＋</span><span>${t(UI.addSoon)}</span></span></li>`;
+  return `<div class="drive-side">${side}</div>
+    <div class="drive-main">
+      <div class="crumbs">${u ? `<button data-unit="up">${t(f.name)}</button><span>/</span><span>${t(u.name)}</span>` : `<span>${t(f.name)}</span>`}</div>
+      <h4>${u ? t(u.name) : t(f.name)}</h4>
+      <p class="drive-desc">${u ? t(u.note) + " · " + esc(u.date) : t(f.text)}</p>
+      <ul class="rows">${rows}</ul>
+    </div>`;
+}
+
 function chapterBody(id) {
   switch (id) {
-    case "about": return `<div class="about">
-        <div>${ME.about.map((p) => `<p>${t(p)}</p>`).join("")}</div>
-        <ul class="facts">${ME.facts.map(([k, v]) => `<li><small>${t(k)}</small>${t(v)}</li>`).join("")}</ul></div>`;
-    case "journey": return `<div class="legend">
-        <button class="chip" data-kind="all" aria-pressed="${kindFilter === "all"}">${t(UI.all)}</button>
-        ${Object.keys(UI.kinds).map((k) => `<button class="chip" data-kind="${k}" aria-pressed="${kindFilter === k}"><i style="background:${KIND_COLOR[k]}"></i>${t(UI.kinds[k])}</button>`).join("")}
-      </div>
-      <ol class="timeline">${ME.journey.map((j) => `
-        <li data-kind="${j.kind}" style="--dot:${KIND_COLOR[j.kind]}" class="${kindFilter !== "all" && kindFilter !== j.kind ? "hide" : ""}">
-          <details><summary><time>${esc(j.date.replace("nay", lang === "vi" ? "nay" : "present"))}</time><h4>${t(j.title)}</h4><div class="org">${t(j.org)}</div></summary>
-          <ul>${j.points.map((p) => `<li>${t(p)}</li>`).join("")}</ul></details></li>`).join("")}</ol>`;
+    case "about": return `<p class="bio-lead">${t(ME.bioLead)}</p>
+      <div class="about">
+        <ol class="story">${ME.story.map((b) => `<li><h4>${t(b.title)}</h4><p>${t(b.text)}</p></li>`).join("")}</ol>
+        <div class="side">
+          <div class="goal"><small>${t(UI.goalTitle)}</small><p>${t(ME.goal)}</p></div>
+          <ul class="facts">${ME.facts.map(([k, v]) => `<li><small>${t(k)}</small>${t(v)}</li>`).join("")}</ul>
+        </div></div>`;
+    case "journey": return `<div class="hline" role="tablist">${ME.journey.map((j, i) => `
+        <button class="step ${j.now ? "now" : ""} ${j.kind === "next" ? "upnext" : ""}" role="tab" data-step="${i}" aria-selected="${i === jSel}" style="--dot:${KIND_COLOR[j.kind]}">
+          <time>${fmtDate(j.date)}</time><span class="rail"><i></i></span><b>${t(j.title)}</b><small>${t(j.org)}</small></button>`).join("")}</div>
+      <div id="stepDetail" aria-live="polite">${stepHTML()}</div>
+      <h3 class="sub" style="margin-top:40px">${t(UI.alongsideTitle)}</h3>
+      <ul class="alongside">${ME.alongside.map(([d, x]) => `<li><time>${fmtDate(d)}</time><span>${t(x)}</span></li>`).join("")}</ul>`;
     case "research": return `
       <h3 class="sub">${t(UI.interestsTitle)}</h3>
       <div class="cols3">${ME.interests.map((x, i) => `<div class="interest"><div class="n">0${i + 1}</div><p>${t(x)}</p></div>`).join("")}</div>
@@ -595,7 +728,7 @@ function chapterBody(id) {
         ${p.award ? `<br><span class="award">★ ${t(p.award)}</span>` : ""}</div></li>`).join("")}</ol>
       <h3 class="sub">${t(UI.studiesTitle)}</h3>
       <div class="studies">${ME.studies.map((s) => `<div class="study">${t(s)}</div>`).join("")}</div>`;
-    case "teach": return `<div class="works">${ME.teach.map(workCard).join("")}</div><p class="note">${t(UI.privateNote)}</p>`;
+    case "teach": return `<div class="drive" id="drive">${driveHTML()}</div><p class="note">${t(UI.privateNote)}</p>`;
     case "learn": return `<div class="works">${ME.learn.map(workCard).join("")}</div>`;
     case "code": return codeChapter();
     case "skills": return `<div class="skills">${ME.skills.map(([g, list]) =>
@@ -625,13 +758,15 @@ function render() {
   observe();
 }
 
-// Lọc hành trình (gắn một lần, vì nội dung được vẽ lại)
+// Bấm trên timeline và trong thư mục (gắn một lần ở document, vì nội dung được vẽ lại khi đổi ngôn ngữ)
 document.addEventListener("click", (e) => {
-  const chip = e.target.closest(".chip[data-kind]"); if (!chip) return;
-  kindFilter = chip.dataset.kind;
-  document.querySelectorAll(".chip[data-kind]").forEach((c) => c.setAttribute("aria-pressed", c === chip));
-  document.querySelectorAll(".timeline > li").forEach((li) =>
-    li.classList.toggle("hide", kindFilter !== "all" && li.dataset.kind !== kindFilter));
+  const step = e.target.closest("[data-step]");
+  if (step && !step.disabled) return selectStep(+step.dataset.step);
+  const folder = e.target.closest("[data-folder]"), unit = e.target.closest("[data-unit]");
+  if (folder) fx = { folder: +folder.dataset.folder, unit: null };
+  else if (unit) fx.unit = unit.dataset.unit === "up" ? null : +unit.dataset.unit;
+  else return;
+  $("#drive").innerHTML = driveHTML();
 });
 
 // Hiện dần + đánh dấu chương đang đọc

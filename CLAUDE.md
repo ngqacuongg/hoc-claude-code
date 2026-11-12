@@ -41,6 +41,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### `portfolio/`: trang cá nhân (digital CV)
 - Một file `index.html` duy nhất, cùng bảng màu với `todo/`. Chạy bằng `open portfolio/index.html`. Khi push sẽ lên https://ngqacuongg.github.io/hoc-claude-code/portfolio/
 - Nội dung lấy từ CV (`~/Downloads/[NTU Application]/NQACuong_CV.pdf`) và các artifact trên claude.ai. Toàn bộ nằm trong object `ME` ở đầu thẻ `<script>`; mỗi đoạn chữ viết dạng `["tiếng Việt", "English"]`. Thứ tự chương nằm trong `CHAPTERS`.
+- Chương "Mình là ai" (`ME.bioLead`, `ME.story`, `ME.goal`) viết lại từ bản tự thuật `~/Downloads/[NTU Application]/NQACuong_Autobiography_and_Research_Plan.pdf`. Không nêu tên trường hay giáo sư đang nộp hồ sơ lên trang.
+- Chương "Hành trình" là timeline ngang (`ME.journey`), chỉ gồm học vấn, thực tập lab và trợ lý nghiên cứu; mốc có `now: true` được chọn sẵn. Hoạt động ngoại khoá nằm ở `ME.alongside`.
+- Chương "Dạy & chia sẻ" là thư mục kiểu Drive (`ME.folders`): thư mục → `units` (chủ đề/bài báo) → `files`. Thêm bài giảng hay bài journal club mới thì thêm một mục vào `units`. Dự án "Dinh dưỡng chữa lành" (TSC) tạm chưa đưa lên, chờ người dùng quyết định.
 - Ngoại lệ duy nhất về thư viện ngoài: font Lora và Be Vietnam Pro từ Google Fonts, vì font hệ thống kiểu Iowan/Georgia hiện sai dấu chữ ư, ơ.
 - Trang công khai: không đưa số điện thoại, email, GPA hay liên hệ người tham chiếu trong CV lên nếu người dùng chưa đồng ý. Link artifact claude.ai mặc định là riêng tư, người xem chỉ mở được khi người dùng đã bật chia sẻ.
 - Chương "Học code" (`ME.school`, `ME.build`) gọi GitHub API công khai lúc mở trang (`loadGitHub`) để lấy thời gian push của từng repo và 6 commit mới nhất của repo này, nên push xong là trang tự mới. Kết quả lưu tạm 30 phút ở khoá `portfolio-gh` vì API giới hạn 60 lần/giờ cho mỗi người xem. Repo môn học hay dự án mới thì thêm tay vào `ME.school` / `ME.build`.
