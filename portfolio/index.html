@@ -243,7 +243,7 @@
   .items .type { font: 11px var(--mono); color: var(--accent); background: var(--accent-soft); padding: 1px 7px; border-radius: 5px; min-width: 64px; text-align: center; }
   .items .go { margin-left: auto; color: var(--muted); }
   .items span.row { color: var(--muted); }
-  .video { aspect-ratio: 16/9; width: 100%; border: 0; display: block; }
+  .video { aspect-ratio: 16/9; width: 100%; border: 0; display: block; background: #0f1a24; }
   .note { font-size: 13px; color: var(--muted); margin-top: 18px; }
 
   /* học code */
@@ -498,15 +498,30 @@ const ME = {
   teach: [
     { icon: "🧬", cover: "linear-gradient(135deg,#2f6f5e,#5c9d7f)", who: ["Đi dạy", "Teaching"],
       title: ["Be Biology Teacher", "Be Biology Teacher"],
-      text: ["Bài giảng Sinh học mình soạn và dạy cho học sinh. Bắt đầu với Di truyền học, Giai đoạn 1: từ nhiễm sắc thể đến nguyên phân và giảm phân (buổi K1–K4).",
-             "Biology lessons I write and teach. It starts with Genetics, Stage 1: from chromosomes to mitosis and meiosis (sessions K1–K4)."],
+      text: ["Bài giảng Sinh học mình soạn và dạy cho học sinh, song ngữ Anh–Việt. Hiện có trọn chuỗi Di truyền học từ buổi K1 đến K13, mở đầu bằng nhiễm sắc thể, nguyên phân và giảm phân.",
+             "Biology lessons I write and teach, bilingual English–Vietnamese. The full Genetics series now runs from session K1 to K13, starting with chromosomes, mitosis and meiosis."],
+      // Video bài giảng: file mp4 đặt trong portfolio/media, poster là ảnh hiện trước khi bấm phát
+      video: "media/genetics-k1-k4.mp4", videoPoster: "media/genetics-k1-k4-poster.jpg",
       items: [
         { type: "Course", label: ["Di truyền GĐ 1 · Trang bài học", "Genetics Stage 1 · Lesson page"], url: "https://claude.ai/artifact/LNFj4Hj4D81TettW3LT5Fj" },
         { type: "Slides", label: ["Di truyền GĐ 1 · Slides bài giảng", "Genetics Stage 1 · Lesson slides"], url: "https://claude.ai/artifact/TXimM1CPftLzyooBko9JTj" },
         { type: "Handout", label: ["Di truyền GĐ 1 · Handout cho học sinh", "Genetics Stage 1 · Student handout"], url: "https://claude.ai/artifact/UJ5toMQMZZ8Cn8JZwye7AL" },
+        { type: "Slides", label: ["Di truyền K5–K7 · Slides bài giảng", "Genetics K5–K7 · Lesson slides"], url: "https://claude.ai/artifact/9HdRk2D5TeaBk8o4oyfeLY" },
+        { type: "Slides", label: ["Di truyền K8–K10 · Slides bài giảng", "Genetics K8–K10 · Lesson slides"], url: "https://claude.ai/artifact/2Nj3eDnRz5y55JEPf1JXmn" },
+        { type: "Slides", label: ["Di truyền K11–K13 · Slides bài giảng", "Genetics K11–K13 · Lesson slides"], url: "https://claude.ai/artifact/1e2gvwmUHLYRuGXB5EdE5K" },
       ] },
   ],
   learn: [
+    { icon: "🦠", cover: "linear-gradient(135deg,#2f5d6f,#5a96a8)", who: ["Tự học", "Self-study"],
+      title: ["Trục gan/ruột–não: từ viêm đến bộ não", "The liver/gut–brain axis: from inflammation to the brain"],
+      text: ["Tín hiệu viêm từ ruột và gan đi tới não ra sao? Mình học từ miễn dịch bẩm sinh (LPS kích hoạt NF-κB) đến inflammasome NLRP3, mỗi bài có trang thực hành.",
+             "How do inflammatory signals from the gut and liver reach the brain? I'm working from innate immunity (LPS activating NF-κB) to the NLRP3 inflammasome, each lesson with a practice page."],
+      items: [
+        { type: "Lesson", label: ["Bài 1: Miễn dịch bẩm sinh, từ LPS tới NF-κB", "Lesson 1: Innate immunity, from LPS to NF-κB"], url: "https://claude.ai/artifact/QAopkfcpdrVAEqavVu83zi" },
+        { type: "Practice", label: ["Bài 1 · Trang thực hành", "Lesson 1 · Practice page"], url: "https://claude.ai/artifact/PApZ1SzUfNNQTvb6ndqH37" },
+        { type: "Slides", label: ["Bài 2: Inflammasome NLRP3", "Lesson 2: The NLRP3 inflammasome"], url: "https://claude.ai/artifact/6bZNCLacbkeaYy7h49qnhQ" },
+        { type: "Practice", label: ["Bài 2 · Thực hành NLRP3", "Lesson 2 · NLRP3 practice"], url: "https://claude.ai/artifact/PntzafLdz15ahauLS1C2BT" },
+      ] },
     { icon: "🧠", cover: "linear-gradient(135deg,#4b3f72,#8a6fb8)", who: ["Tự học", "Self-study"],
       title: ["Network Spreading: protein lan kiểu prion", "Network Spreading: prion-like protein spread"],
       text: ["Protein bệnh lý lan trong não theo mạng kết nối thế nào? Mình học mô hình Network Diffusion và tự chạy thử trên trang thực hành.", "How do pathological proteins spread along brain networks? I studied the Network Diffusion Model and tried it on a practice page."],
@@ -516,10 +531,12 @@ const ME = {
       ] },
     { icon: "🍷", cover: "linear-gradient(135deg,#7a2e3b,#b5566a)", who: ["Sở thích", "For fun"],
       title: ["Nếm rượu vang có hệ thống", "Systematic wine tasting"],
-      text: ["Một góc ngoài phòng lab: học cách nếm bằng giác quan, và hiểu vì sao não “cảm” được hương vị.", "A corner outside the lab: tasting with the senses, and why the brain perceives flavour."],
+      text: ["Một góc ngoài phòng lab: học cách nếm bằng giác quan, hiểu vì sao não “cảm” được hương vị, rồi lùi về vườn nho xem hương vị bắt đầu từ đâu.", "A corner outside the lab: tasting with the senses, why the brain perceives flavour, then back to the vineyard where flavour begins."],
       items: [
         { type: "Lesson", label: ["Bài 1: Cách nếm có hệ thống", "Lesson 1: How to taste"], url: "https://claude.ai/artifact/SgEqAYy53jf6DcxbxGJrpj" },
         { type: "Practice", label: ["Phòng thực hành nếm rượu", "Tasting practice room"], url: "https://claude.ai/artifact/4XtMktHJ1egkLEcAu43SGd" },
+        { type: "Lesson", label: ["Bài 2: Vườn nho", "Lesson 2: The vineyard"], url: "https://claude.ai/artifact/DdcEciBVCLjm951K1KRvsd" },
+        { type: "Practice", label: ["Bài 2 · Trang thực hành tương tác", "Lesson 2 · Interactive practice"], url: "https://claude.ai/artifact/M5YgDhTPMvruD759pDnaCw" },
       ] },
   ],
 
@@ -632,7 +649,9 @@ function workCard(w) {
     ? `<li><a href="${esc(i.url)}" target="_blank" rel="noopener"><span class="type">${esc(i.type)}</span>${t(i.label)}<span class="go">↗</span></a></li>`
     : `<li><span class="row"><span class="type">${esc(i.type)}</span>${t(i.label)}<span class="go">${t(UI.soon)}</span></span></li>`).join("");
   return `<article class="work">
-    ${w.video ? `<iframe class="video" src="${esc(w.video)}" loading="lazy" allowfullscreen title="${t(w.title)}"></iframe>`
+    ${w.video ? (/\.mp4$/.test(w.video)
+        ? `<video class="video" src="${esc(w.video)}" poster="${esc(w.videoPoster || "")}" controls preload="none" playsinline title="${t(w.title)}"></video>`
+        : `<iframe class="video" src="${esc(w.video)}" loading="lazy" allowfullscreen title="${t(w.title)}"></iframe>`)
               : `<div class="cover" style="--cover:${w.cover}"><span class="big">${w.icon}</span><span class="who">${t(w.who)}</span></div>`}
     <div class="body"><h4>${t(w.title)}</h4><p>${t(w.text)}</p><ul class="items">${items}</ul></div>
   </article>`;
