@@ -540,8 +540,8 @@ const ME = {
   // Phiếu bài tập là bản dịch từ phiếu tiếng Đức của giáo viên, nên chỉ hiện tên, không cho tải.
   tutor: {
     title: ["Gia sư Sinh học lớp 10 · International German School", "Grade 10 Biology tutoring · International German School"],
-    text: ["Bộ tài liệu mình chuẩn bị để kèm một bạn học lớp 10 tại International German School (IGS) môn Sinh học, phần Di truyền. Mình theo đúng 13 stage K trong kế hoạch học của trường, mỗi stage có slides, phiếu bài tập, và ở các stage đầu có thêm cheat sheet và video, đều song ngữ.",
-           "Materials I prepared to tutor a Grade 10 student at the International German School (IGS) in Biology, Genetics unit. They follow the school's 13 K stages: each stage has slides and worksheets, and the early stages also have a cheat sheet and a video, all bilingual."],
+    text: ["Bộ tài liệu mình chuẩn bị để kèm một bạn học lớp 10 tại International German School (IGS) môn Sinh học, phần Di truyền. Mình theo đúng 13 stage K trong kế hoạch học của trường, mỗi stage có đủ slides, cheat sheet, video bài giảng và phiếu bài tập, đều song ngữ.",
+           "Materials I prepared to tutor a Grade 10 student at the International German School (IGS) in Biology, Genetics unit. They follow the school's 13 K stages: every stage has slides, a cheat sheet, a lesson video and worksheets, all bilingual."],
     stages: [
       ["Nhiễm sắc thể, DNA và gen", "Chromosomes, DNA and genes"],
       ["Chu kỳ tế bào và nguyên phân", "The cell cycle and mitosis"],
@@ -557,20 +557,27 @@ const ME = {
       ["Nhóm máu ABO và Rh", "ABO and Rh blood groups"],
       ["Vận dụng di truyền vào ví dụ mới", "Applying genetics to new examples"],
     ],
+    // Slides và cheat sheet là PDF trong portfolio/media (xuất từ PowerPoint/Word), mở được ngay không cần quyền
     slides: [
-      { ks: [1, 4], name: ["Slides bài giảng K1–K4", "Lesson slides K1–K4"], url: "https://claude.ai/artifact/TXimM1CPftLzyooBko9JTj" },
-      { ks: [1, 4], name: ["Trang bài học K1–K4", "Lesson page K1–K4"], url: "https://claude.ai/artifact/LNFj4Hj4D81TettW3LT5Fj" },
-      { ks: [5, 7], name: ["Slides bài giảng K5–K7", "Lesson slides K5–K7"], url: "https://claude.ai/artifact/9HdRk2D5TeaBk8o4oyfeLY" },
-      { ks: [8, 10], name: ["Slides bài giảng K8–K10", "Lesson slides K8–K10"], url: "https://claude.ai/artifact/2Nj3eDnRz5y55JEPf1JXmn" },
-      { ks: [11, 13], name: ["Slides bài giảng K11–K13", "Lesson slides K11–K13"], url: "https://claude.ai/artifact/1e2gvwmUHLYRuGXB5EdE5K" },
+      { ks: [1, 4], name: ["Slides bài giảng K1–K4", "Lesson slides K1–K4"], url: "media/genetics-slides-k1-k4.pdf" },
+      { ks: [1, 4], name: ["Trang bài học tương tác K1–K4", "Interactive lesson page K1–K4"], url: "https://claude.ai/artifact/LNFj4Hj4D81TettW3LT5Fj" },
+      { ks: [5, 7], name: ["Slides bài giảng K5–K7", "Lesson slides K5–K7"], url: "media/genetics-slides-k5-k7.pdf" },
+      { ks: [8, 10], name: ["Slides bài giảng K8–K10", "Lesson slides K8–K10"], url: "media/genetics-slides-k8-k10.pdf" },
+      { ks: [11, 13], name: ["Slides bài giảng K11–K13", "Lesson slides K11–K13"], url: "media/genetics-slides-k11-k13.pdf" },
     ],
     cheats: [
       { ks: [1, 4], name: ["Cheat sheet K1–K4 · Anh–Việt", "Cheat sheet K1–K4 · EN–VI"], url: "media/genetics-cheatsheet-k1-k4-en-vi.pdf" },
       { ks: [1, 4], name: ["Cheat sheet K1–K4 · Anh–Đức", "Cheat sheet K1–K4 · EN–DE"], url: "media/genetics-cheatsheet-k1-k4-en-de.pdf" },
       { ks: [1, 4], name: ["Handout ôn tập K1–K4", "Review handout K1–K4"], url: "https://claude.ai/artifact/UJ5toMQMZZ8Cn8JZwye7AL" },
+      { ks: [5, 7], name: ["Cheat sheet K5–K7 · Anh–Đức", "Cheat sheet K5–K7 · EN–DE"], url: "media/genetics-cheatsheet-k5-k7-en-de.pdf" },
+      { ks: [8, 10], name: ["Cheat sheet K8–K10 · Anh–Đức", "Cheat sheet K8–K10 · EN–DE"], url: "media/genetics-cheatsheet-k8-k10-en-de.pdf" },
+      { ks: [11, 13], name: ["Cheat sheet K11–K13 · Anh–Đức", "Cheat sheet K11–K13 · EN–DE"], url: "media/genetics-cheatsheet-k11-k13-en-de.pdf" },
     ],
     videos: [
       { ks: [1, 4], name: ["Chromosomes and Cell Division · 4 phút", "Chromosomes and Cell Division · 4 min"], src: "media/genetics-k1-k4.mp4", poster: "media/genetics-k1-k4-poster.jpg" },
+      { ks: [5, 7], name: ["Boy or girl? Purple or white? · 4 phút", "Boy or girl? Purple or white? · 4 min"], src: "media/genetics-k5-k7.mp4", poster: "media/genetics-k5-k7-poster.jpg" },
+      { ks: [8, 10], name: ["Where did white go? · 4 phút", "Where did white go? · 4 min"], src: "media/genetics-k8-k10.mp4", poster: "media/genetics-k8-k10-poster.jpg" },
+      { ks: [11, 13], name: ["Genetics in families · 4 phút", "Genetics in families · 4 min"], src: "media/genetics-k11-k13.mp4", poster: "media/genetics-k11-k13-poster.jpg" },
     ],
     worksheets: [
       "From the nucleus to the chromosome, DNA and gene",
