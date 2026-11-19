@@ -41,6 +41,8 @@
   #chapterNow { font: 13px var(--mono); color: var(--muted); }
   .icon-btn { font: 600 13px var(--mono); color: var(--muted); background: none; border: 1px solid var(--line);
               border-radius: 8px; min-width: 36px; height: 34px; padding: 0 8px; cursor: pointer; }
+  .nav-cv { padding: 7px 12px; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; background: transparent; }
+  @media (max-width: 560px) { .nav-cv { display: none; } }
   .nav-cta { padding: 7px 14px; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; margin-left: 4px; }
   @media (max-width: 420px) { .nav-cta { display: none; } }
   .icon-btn:hover { color: var(--text); border-color: var(--accent); }
@@ -344,6 +346,7 @@
              border: 1px solid var(--line); border-radius: 10px; padding: 6px 10px; cursor: pointer; }
   .tk-file:hover { border-color: var(--accent); color: var(--accent); }
   .tk-file em { font: normal 11px var(--mono); color: var(--muted); }
+  .tk-visual { border-color: var(--accent); background: var(--accent-soft); font-weight: 500; }
   .tk-none { font-size: 13px; color: var(--muted); padding-top: 6px; }
   .tk-ab { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; width: 100%; }
   .tk-ab li { font-size: 14px; display: grid; grid-template-columns: 48px 1fr; gap: 8px; }
@@ -398,6 +401,7 @@
     <span id="chapterNow"></span>
     <button class="icon-btn" id="langBtn" aria-label="Language"></button>
     <button class="icon-btn" id="themeBtn" aria-label="Theme">◐</button>
+    <a class="btn nav-cv" href="cv/" data-t="navCV"></a>
     <a class="btn primary nav-cta" href="#contact" data-t="navContact"></a>
   </div>
 </nav>
@@ -583,8 +587,8 @@ const ME = {
   // Phiếu bài tập là bản dịch từ phiếu tiếng Đức của giáo viên, nên chỉ hiện tên, không cho tải.
   tutor: {
     title: ["Gia sư Sinh học lớp 10 · International German School", "Grade 10 Biology tutoring · International German School"],
-    text: ["Bộ tài liệu mình chuẩn bị để kèm một bạn học lớp 10 tại International German School (IGS) môn Sinh học, phần Di truyền. Mình theo đúng 13 stage K trong kế hoạch học của trường, mỗi stage có đủ slides, cheat sheet, video bài giảng và phiếu bài tập, đều song ngữ.",
-           "Materials I prepared to tutor a Grade 10 student at the International German School (IGS) in Biology, Genetics unit. They follow the school's 13 K stages: every stage has slides, a cheat sheet, a lesson video and worksheets, all bilingual."],
+    text: ["Bộ tài liệu mình chuẩn bị để kèm một bạn học lớp 10 tại International German School (IGS) môn Sinh học, phần Di truyền. Mình theo đúng 13 stage K trong kế hoạch học của trường, mỗi stage có một visual tương tác để tự bấm thử, kèm slides, cheat sheet, video bài giảng và phiếu bài tập, đều song ngữ.",
+           "Materials I prepared to tutor a Grade 10 student at the International German School (IGS) in Biology, Genetics unit. They follow the school's 13 K stages: every stage has an interactive visual to try out, plus slides, a cheat sheet, a lesson video and worksheets, all bilingual."],
     stages: [
       ["Nhiễm sắc thể, DNA và gen", "Chromosomes, DNA and genes"],
       ["Chu kỳ tế bào và nguyên phân", "The cell cycle and mitosis"],
@@ -600,10 +604,15 @@ const ME = {
       ["Nhóm máu ABO và Rh", "ABO and Rh blood groups"],
       ["Vận dụng di truyền vào ví dụ mới", "Applying genetics to new examples"],
     ],
+    // Visual tương tác: bản sao của artifact bài học, đặt trong portfolio/lessons; mỗi K mở thẳng phần #kN
+    lessons: [{ ks: [1, 4], url: "lessons/genetics-k1-k4.html" }, { ks: [5, 13], url: "lessons/genetics-k5-k13.html" }],
+    tools: ["Zoom from cell to gene · karyogram", "Mitosis, stage by stage", "Meiosis, stage by stage · flip a pair", "Compare table · crossing-over",
+            "Fertilisation simulator · X-linked cross", "Allele switcher · environment", "Cross builder", "Grow offspring of Aa × Aa",
+            "Dihybrid cross builder", "Dominant, intermediate or codominant", "Pedigree detective", "Blood group calculator · parent puzzle",
+            "Mystery plant · sample size"],
     // Slides và cheat sheet là PDF trong portfolio/media (xuất từ PowerPoint/Word), mở được ngay không cần quyền
     slides: [
       { ks: [1, 4], name: ["Slides bài giảng K1–K4", "Lesson slides K1–K4"], url: "media/genetics-slides-k1-k4.pdf" },
-      { ks: [1, 4], name: ["Trang bài học tương tác K1–K4", "Interactive lesson page K1–K4"], url: "https://claude.ai/artifact/LNFj4Hj4D81TettW3LT5Fj" },
       { ks: [5, 7], name: ["Slides bài giảng K5–K7", "Lesson slides K5–K7"], url: "media/genetics-slides-k5-k7.pdf" },
       { ks: [8, 10], name: ["Slides bài giảng K8–K10", "Lesson slides K8–K10"], url: "media/genetics-slides-k8-k10.pdf" },
       { ks: [11, 13], name: ["Slides bài giảng K11–K13", "Lesson slides K11–K13"], url: "media/genetics-slides-k11-k13.pdf" },
@@ -751,7 +760,7 @@ const UI = {
   status: ME.status, hello: ME.hello, lead: ME.lead,
   mega: [["Phòng lab", "Giường bệnh", "Bộ não"], ["Bench", "Bedside", "Brain"]],
   roles: ["Trợ lý nghiên cứu · Sinh học & Tâm lý học · Gia sư Sinh học", "Research assistant · Biology & Psychology · Biology tutor"],
-  toPath: ["Hành trình", "The path"], navContact: ["Liên hệ", "Contact"],
+  toPath: ["Hành trình", "The path"], navContact: ["Liên hệ", "Contact"], navCV: ["Xem CV", "View CV"], cvPage: ["Xem CV", "View CV"], cvPdf: ["Tải CV (PDF)", "Download CV (PDF)"],
   rolesTitle: ["Một hành trình, ba vai trò", "One path, three roles"], storyTitle: ["Câu chuyện của mình", "My story"],
   start: ["Bắt đầu câu chuyện ↓", "Start the story ↓"], share: ["Chia sẻ trang này", "Share this page"],
   scroll: ["cuộn xuống", "scroll"], copied: ["Đã chép link", "Link copied"],
@@ -773,6 +782,7 @@ const UI = {
   liveFail: ["Chưa lấy được dữ liệu từ GitHub, xem trực tiếp tại hồ sơ.", "Couldn't reach GitHub right now; see the profile directly."],
   repos: ["repo công khai", "public repos"], lastPush: ["lần push gần nhất", "last push"], updated: ["cập nhật", "updated"],
   here: ["bạn đang ở đây", "you are here"], open: ["Mở bản chạy", "Open live"], source: ["Mã nguồn", "Source"], notebooks: ["bài", "notebooks"], profile: ["Xem hồ sơ GitHub", "View GitHub profile"],
+  kVisual: ["Tương tác", "Interactive"], visualN: ["visual tương tác", "interactive visuals"], openVisual: ["Mở visual", "Open visual"],
   kSlides: ["Slides", "Slides"], kCheat: ["Cheat sheet", "Cheat sheets"], kVideo: ["Video", "Video"], kSheets: ["Phiếu bài tập", "Worksheets"],
   none: ["chưa có", "not yet"], stages: ["stage K", "K stages"], decks: ["bộ slides", "slide decks"], cheatN: ["cheat sheet", "cheat sheets"],
   videoN: ["video", "video"], sheetN: ["phiếu bài tập", "worksheets"], openAll: ["Mở tất cả", "Expand all"], closeAll: ["Thu gọn", "Collapse"],
@@ -785,7 +795,7 @@ const CHAPTERS = [
     intro: ["Bấm vào từng mốc để xem mình đã làm gì ở đó.", "Tap a milestone to see what I did there."] },
   { id: "research", kicker: ["03 · Nghiên cứu", "03 · Research"], title: ["Những gì mình đang tìm hiểu", "What I'm figuring out"] },
   { id: "teach", kicker: ["04 · Dạy & chia sẻ", "04 · Teaching & sharing"], title: ["Học xong thì kể lại", "Learn it, then pass it on"],
-    intro: ["Tài liệu mình chuẩn bị để dạy kèm Sinh học, xếp theo từng stage K: slides, cheat sheet, video, rồi phiếu bài tập.", "Materials I prepare for biology tutoring, ordered by K stage: slides, cheat sheets, video, then worksheets."] },
+    intro: ["Tài liệu mình chuẩn bị để dạy kèm Sinh học, xếp theo từng stage K: visual tương tác, slides, cheat sheet, video, rồi phiếu bài tập.", "Materials I prepare for biology tutoring, ordered by K stage: interactive visual, slides, cheat sheets, video, then worksheets."] },
   { id: "learn", kicker: ["05 · Tự học", "05 · Self-study"], title: ["Tò mò ngoài giờ", "Curiosity after hours"],
     intro: ["Những chủ đề mình tự học, mỗi bài đều có một trang để thực hành.", "Topics I teach myself; each one comes with a page to practise on."] },
   { id: "code", kicker: ["06 · Học code", "06 · Learning code"], title: ["Từ notebook đến công cụ của riêng mình", "From notebooks to my own tools"],
@@ -975,7 +985,7 @@ function tutorHTML() {
   const T = ME.tutor, n = T.stages.length;
   const link = (x, icon) => `<a class="tk-file" href="${esc(x.url)}" target="_blank" rel="noopener"><span>${icon}</span>${t(x.name)}<em>${x.ks[0] === x.ks[1] ? "K" + x.ks[0] : `K${x.ks[0]}–K${x.ks[1]}`}</em></a>`;
   const row = (label, items) => `<div class="tk-row"><h5>${t(label)}</h5><div>${items || `<span class="tk-none">${t(UI.none)}</span>`}</div></div>`;
-  const stats = [[n, UI.stages], [T.slides.filter((x) => /slides/i.test(x.name[1])).length, UI.decks], [T.cheats.filter((x) => /Cheat/.test(x.name[1])).length, UI.cheatN],
+  const stats = [[n, UI.stages], [T.tools.length, UI.visualN], [T.slides.filter((x) => /slides/i.test(x.name[1])).length, UI.decks], [T.cheats.filter((x) => /Cheat/.test(x.name[1])).length, UI.cheatN],
                  [T.videos.length, UI.videoN], [T.worksheets.length, UI.sheetN]];
   return `<article class="tutor">
     <div class="tutor-head"><span class="pc-tag static">IGS · Grade 10</span><h4>${t(T.title)}</h4><p>${t(T.text)}</p>
@@ -985,8 +995,9 @@ function tutorHTML() {
       const k = i + 1, ab = [3 * k - 2, 3 * k - 1, 3 * k];
       const vids = T.videos.filter((v) => inK(v, k));
       return `<li><details ${k === 1 ? "open" : ""}><summary><span class="tk-k">K${k}</span><span class="tk-topic">${t(st)}</span>
-          <span class="tk-dots" aria-hidden="true">${[T.slides, T.cheats, T.videos].map((g) => `<i class="${g.some((x) => inK(x, k)) ? "on" : ""}"></i>`).join("")}<i class="on"></i></span></summary>
+          <span class="tk-dots" aria-hidden="true">${[T.lessons, T.slides, T.cheats, T.videos].map((g) => `<i class="${g.some((x) => inK(x, k)) ? "on" : ""}"></i>`).join("")}<i class="on"></i></span></summary>
         <div class="tk-body">
+          ${row(UI.kVisual, T.lessons.filter((x) => inK(x, k)).map((x) => `<a class="tk-file tk-visual" href="${esc(x.url)}#k${k}" target="_blank" rel="noopener"><span>✨</span>${t(UI.openVisual)} K${k} · ${esc(T.tools[k - 1])}<em>↗</em></a>`).join(""))}
           ${row(UI.kSlides, T.slides.filter((x) => inK(x, k)).map((x) => link(x, "🖥️")).join(""))}
           ${row(UI.kCheat, T.cheats.filter((x) => inK(x, k)).map((x) => link(x, "📝")).join(""))}
           ${row(UI.kVideo, vids.map((v) => `<button class="tk-file" data-video="${esc(v.src)}" data-poster="${esc(v.poster)}"><span>🎬</span>${t(v.name)}<em>K${v.ks[0]}–K${v.ks[1]}</em></button>`).join(""))}
@@ -1043,7 +1054,8 @@ function chapterBody(id) {
     case "skills": return `<div class="skills">${ME.skills.map(([g, list]) =>
         `<div class="skill-group"><h4>${t(g)}</h4><div class="tags">${list.map((s) => `<span class="tag">${esc(s)}</span>`).join("")}</div></div>`).join("")}</div>`;
     case "contact": return `<div class="cta">${ME.links.map((l) =>
-        `<a class="btn ${l.primary ? "primary" : ""}" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)} ↗</a>`).join("")}</div>
+        `<a class="btn ${l.primary ? "primary" : ""}" href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)} ↗</a>`).join("")}
+        <a class="btn" href="cv/">${t(UI.cvPage)}</a><a class="btn" href="cv/NguyenQuocAnhCuong_CV.pdf" download>${t(UI.cvPdf)} ↓</a></div>
       <ul class="emails">${ME.emails.map((m) => `<li><small>Email · ${t(m.label)}</small><a href="mailto:${esc(m.address)}">${esc(m.address)}</a></li>`).join("")}</ul>`;
   }
 }

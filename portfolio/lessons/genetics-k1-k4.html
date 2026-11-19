@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Genetics Stage 1: Chromosomes and Cell Division</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;1,400&family=Bricolage+Grotesque:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* layout: one scrolling lesson, four numbered stations (K1-K4), each = idea, figure, check */
+  --bg:#f4f6f9; --surface:#ffffff; --ink:#18212e; --muted:#5a6678; --line:#d6dce5;
+  --accent:#1f6f6b; --accent-soft:#dcefed; --pat:#3878b4; --mat:#c0577f;
+  --good:#1d7a46; --bad:#b3372f; --warn-soft:#fdf1d6;
+  --display:"Bricolage Grotesque","Be Vietnam Pro",system-ui,sans-serif;
+  --body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11161d; --surface:#1a212b; --ink:#e8edf3; --muted:#9aa6b6; --line:#2f3a48;
+    --accent:#63c2bb; --accent-soft:#1c3a3a; --pat:#6aa5dc; --mat:#e083a6;
+    --good:#5fcf8e; --bad:#f08379; --warn-soft:#3a3018; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#11161d; --surface:#1a212b; --ink:#e8edf3; --muted:#9aa6b6; --line:#2f3a48;
+  --accent:#63c2bb; --accent-soft:#1c3a3a; --pat:#6aa5dc; --mat:#e083a6;
+  --good:#5fcf8e; --bad:#f08379; --warn-soft:#3a3018; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6}
+.wrap{max-width:920px;margin:0 auto;padding:0 20px 80px}
+header.top{padding:36px 0 18px}
+h1{font-family:var(--display);font-size:34px;line-height:1.15;margin:0 0 6px;text-wrap:balance}
+h2{font-family:var(--display);font-size:25px;line-height:1.2;margin:0;text-wrap:balance}
+h3{font-size:16px;font-weight:600;margin:0 0 8px}
+p{margin:0}
+.sub{color:var(--muted)}
+nav.tabs{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+nav.tabs a{color:var(--ink);text-decoration:none;font-weight:500;font-size:14px;padding:5px 12px;border:1px solid var(--line);border-radius:999px;background:var(--surface)}
+nav.tabs a:hover,nav.tabs a:focus-visible{border-color:var(--accent);color:var(--accent);outline:none}
+nav.tabs label{margin-left:auto;font-size:14px;color:var(--muted);display:flex;gap:6px;align-items:center;cursor:pointer}
+section{margin-top:44px;display:flex;flex-direction:column;gap:18px}
+.khead{display:flex;gap:14px;align-items:flex-start}
+.knum{font-family:var(--display);font-weight:700;font-size:20px;background:var(--accent);color:var(--bg);border-radius:10px;padding:6px 12px;line-height:1.2;white-space:nowrap}
+.de{display:inline-block;font-size:12.5px;color:var(--muted);border:1px dashed var(--line);border-radius:6px;padding:0 6px;margin-left:2px;white-space:nowrap}
+.bi{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.bi .vi{color:var(--muted);font-style:italic}
+.bi p + p{margin-top:8px}
+@media (max-width:640px){.bi{grid-template-columns:1fr;gap:8px}h1{font-size:27px}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px}
+.fig{display:flex;flex-direction:column;gap:10px}
+.figbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.figbar .name{font-weight:600;flex:1;min-width:150px}
+svg{width:100%;height:auto;display:block;color:var(--muted)}
+svg text{fill:var(--ink);font-family:var(--body);font-size:13px}
+svg text.sm{fill:var(--muted);font-size:12px}
+button{font:inherit;font-size:14px;font-weight:500;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer}
+button:hover{border-color:var(--accent)}
+button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button.on{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.cap{min-height:66px}
+.cap .vi{color:var(--muted);font-style:italic}
+.predict{background:var(--warn-soft);border-radius:10px;padding:10px 14px;font-size:15px}
+.readout{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.pill{background:var(--accent-soft);border-radius:8px;padding:4px 10px;font-size:14px;font-variant-numeric:tabular-nums}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13.5px;color:var(--muted)}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px}
+.flow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:14.5px}
+.flow .box{border:1px solid var(--line);border-radius:10px;padding:8px 12px;background:var(--bg);text-align:center}
+.flow .box b{display:block;font-variant-numeric:tabular-nums}
+.flow .arr{color:var(--muted);font-size:13px;text-align:center}
+details{border-top:1px solid var(--line);padding:10px 0}
+details:last-child{border-bottom:1px solid var(--line)}
+summary{cursor:pointer;font-weight:500}
+summary .lv{font-size:12px;font-weight:600;color:var(--accent);border:1px solid var(--accent);border-radius:6px;padding:0 6px;margin-right:6px}
+details .ans{margin-top:8px;padding-left:14px;border-left:3px solid var(--accent)}
+details .ans .vi{color:var(--muted);font-style:italic;margin-top:4px}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:var(--bg);font-weight:600}
+td .vi,th .vi{display:block;color:var(--muted);font-style:italic;font-size:13px}
+.tutor{display:none;background:var(--accent-soft);border-radius:12px;padding:14px 16px;font-size:14.5px}
+.tutor h3{color:var(--accent)}
+.tutor ul{margin:0;padding-left:18px}
+body.show-tutor .tutor{display:block}
+.q{border-top:1px solid var(--line);padding:14px 0;display:flex;flex-direction:column;gap:8px}
+.q .vi{color:var(--muted);font-style:italic;font-size:14.5px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media (max-width:560px){.opts{grid-template-columns:1fr}}
+.opts button{text-align:left}
+.opts button.right{border-color:var(--good);color:var(--good);font-weight:600}
+.opts button.wrong{border-color:var(--bad);color:var(--bad)}
+.fb{font-size:14.5px;min-height:22px}
+.score{font-family:var(--display);font-size:22px;font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+section{scroll-margin-top:64px}.back{display:inline-block;margin-top:18px;font-size:14px;color:var(--accent);text-decoration:none}.back:hover{text-decoration:underline}
+</style>
+<script>/* Theo chế độ sáng/tối đã chọn trên portfolio (cùng origin nên dùng chung localStorage) */try{var t=localStorage.getItem("portfolio-theme")||"dark";if(t!=="auto")document.documentElement.setAttribute("data-theme",t)}catch(e){document.documentElement.setAttribute("data-theme","dark")}</script>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+  <a class="back" href="../#teach">← Portfolio · Nguyễn Quốc Anh Cường</a>
+  <h1>Genetics Stage 1: Chromosomes and Cell Division</h1>
+  <p class="sub">Grade 10 · Lernplan Genetik I, K1 to K4 · English and Vietnamese, with the German words from the worksheets in dashed tags</p>
+</header>
+<nav class="tabs" aria-label="Sections">
+  <a href="#k1">K1 Chromosomes</a><a href="#k2">K2 Mitosis</a><a href="#k3">K3 Meiosis</a><a href="#k4">K4 Compare</a><a href="#quiz">Quiz</a><a href="#exam">Exam practice</a><a href="#words">Glossary</a>
+  <label for="tutorToggle"><input type="checkbox" id="tutorToggle"> Tutor notes</label>
+</nav>
+
+<div class="tutor" style="margin-top:20px">
+  <h3>Kế hoạch 90 phút (ghi chú cho gia sư)</h3>
+  <ul>
+    <li>K1: 15 phút · K2: 20 phút · K3: 25 phút · K4: 15 phút · Quiz: 15 phút.</li>
+    <li>Mỗi trạm theo một nhịp: hỏi câu "Predict" trước, cho bạn ấy tự bấm hình, rồi mới đọc lý thuyết.</li>
+    <li>Câu "Check" ghi Level 1 và Level 2 đúng theo yêu cầu bắt buộc của Lernplan. Phần "Extra" là Vertiefung, chỉ làm nếu còn thời gian.</li>
+    <li>Bài trên lớp viết bằng tiếng Đức: sau mỗi câu trả lời, cho bạn ấy nói lại một câu có dùng từ tiếng Đức trong thẻ nét đứt.</li>
+  </ul>
+</div>
+
+<!-- ================= K1 ================= -->
+<section id="k1">
+  <div class="khead"><span class="knum">K1</span><div><h2>Chromosomes carry the genetic information</h2><p class="sub">Nhiễm sắc thể mang thông tin di truyền <span class="de">Chromosomen als Träger der Erbinformation</span></p></div></div>
+  <div class="bi">
+    <div><p>Almost every cell in your body has a <b>nucleus</b> <span class="de">Zellkern</span>. Inside it is your <b>genetic information</b> <span class="de">Erbinformation</span>, stored as DNA.</p><p>The DNA is packed into <b>chromosomes</b>. A <b>gene</b> is one section of the DNA on a chromosome. Chromosomes are the packages that get copied and handed on, so they are how information passes from cell to cell and from parents to children.</p></div>
+    <div class="vi"><p>Gần như mọi tế bào trong cơ thể đều có nhân. Trong nhân chứa thông tin di truyền, lưu dưới dạng DNA.</p><p>DNA được đóng gói thành nhiễm sắc thể (NST). Gen là một đoạn DNA trên NST. NST là những "gói hàng" được sao chép và truyền đi, nên thông tin đi từ tế bào này sang tế bào khác, và từ bố mẹ sang con, là nhờ chúng.</p></div>
+  </div>
+
+  <div class="card fig">
+    <div class="figbar"><span class="name">Zoom in: from cell to gene</span><span id="zoomBtns" class="figbar"></span></div>
+    <svg id="zoomSvg" viewBox="0 0 680 250" role="img" aria-label="Zoom from cell to nucleus to chromosome to DNA"></svg>
+    <div class="cap" id="zoomCap"></div>
+  </div>
+
+  <div class="predict"><b>Predict first:</b> a human body cell has 46 chromosomes. How many pairs is that, and how many of the pairs decide the sex? <span class="sub">Đoán trước: 46 NST là bao nhiêu cặp, và bao nhiêu cặp quyết định giới tính?</span></div>
+
+  <div class="card fig">
+    <div class="figbar"><span class="name">Human karyogram <span class="de">Karyogramm</span></span><button id="kXX" class="on">Female XX</button><button id="kXY">Male XY</button></div>
+    <svg id="karyoSvg" viewBox="0 0 680 240" role="img" aria-label="Human karyogram with 23 pairs of chromosomes"></svg>
+    <div class="readout"><span class="pill" id="kRead"></span><span class="legend"><span><span class="dot" style="background:var(--muted)"></span>autosomes (pairs 1 to 22) · NST thường</span><span><span class="dot" style="background:var(--accent)"></span>sex chromosomes (pair 23) · NST giới tính</span></span></div>
+    <div class="bi"><p>A karyogram is a sorted picture of all the chromosomes of one cell, arranged in pairs by size. The two chromosomes of a pair are <b>homologous</b>: same size, same genes, one from the mother and one from the father.</p><p class="vi">Karyogram (bộ NST đồ) là hình xếp tất cả NST của một tế bào thành từng cặp theo kích thước. Hai NST trong một cặp là tương đồng: cùng kích thước, cùng các gen, một chiếc từ mẹ và một chiếc từ bố.</p></div>
+  </div>
+
+  <div class="card">
+    <h3>Check yourself</h3>
+    <details><summary><span class="lv">Level 1</span>Put in order from largest to smallest: gene, cell, chromosome, nucleus. Say what each one does.</summary><div class="ans"><p>Cell → nucleus → chromosome → gene. The cell is the living unit; the nucleus stores the genetic information; a chromosome is one packed DNA molecule; a gene is a section of DNA with the information for one product, for example a protein.</p><p class="vi">Tế bào → nhân → NST → gen. Tế bào là đơn vị sống; nhân lưu thông tin di truyền; NST là một phân tử DNA được đóng gói; gen là một đoạn DNA mang thông tin cho một sản phẩm, ví dụ một protein.</p></div></details>
+    <details><summary><span class="lv">Level 2</span>Explain why chromosomes are important for passing on genetic information.</summary><div class="ans"><p>Chromosomes carry the genes. Before a cell divides, each chromosome is copied, and the copies are shared out exactly, so every new cell gets the full information. In reproduction, each parent passes on one chromosome of every pair, so the child receives genes from both.</p><p class="vi">NST mang các gen. Trước khi tế bào phân chia, mỗi NST được sao chép và các bản sao được chia chính xác, nên tế bào mới nào cũng nhận đủ thông tin. Khi sinh sản, bố và mẹ mỗi người truyền một chiếc của mỗi cặp, nên con nhận gen từ cả hai.</p></div></details>
+    <details><summary><span class="lv">Extra</span>What is the difference between autosomes and gonosomes? What does the karyogram of a boy show?</summary><div class="ans"><p>Autosomes <span class="de">Autosomen</span> are pairs 1 to 22 and are the same in both sexes. Gonosomes <span class="de">Gonosomen</span> are the sex chromosomes, pair 23. A boy's karyogram shows 44 autosomes plus one X and one smaller Y.</p><p class="vi">NST thường là các cặp 1 đến 22, giống nhau ở hai giới. NST giới tính là cặp 23. Karyogram của bé trai có 44 NST thường, một X và một Y nhỏ hơn.</p></div></details>
+  </div>
+  <div class="tutor"><h3>Ghi chú K1</h3><ul><li>Hiểu lầm hay gặp: "NST luôn có hình chữ X". Thực ra chỉ có hình X sau khi đã nhân đôi; bình thường mỗi NST là một sợi.</li><li>Hiểu lầm: "gen = NST". Một NST chứa hàng trăm đến hàng nghìn gen.</li><li>Câu hỏi bất ngờ có thể gặp: "Vì sao là 46?" Không có lý do đặc biệt; mỗi loài có một con số riêng (ruồi giấm 8, tinh tinh 48).</li></ul></div>
+</section>
+
+<!-- ================= K2 ================= -->
+<section id="k2">
+  <div class="khead"><span class="knum">K2</span><div><h2>Mitosis makes identical body cells</h2><p class="sub">Nguyên phân tạo ra các tế bào sinh dưỡng giống hệt nhau <span class="de">Mitose</span></p></div></div>
+  <div class="bi">
+    <div><p>You started as one cell. To grow and to repair wounds, <b>body cells</b> <span class="de">Körperzellen</span> must make more body cells. Mitosis is the division of the nucleus that does this.</p><p>The rule: <b>copy first, then share</b>. Every chromosome is copied before mitosis. In mitosis the two copies are pulled apart, one to each new cell.</p></div>
+    <div class="vi"><p>Bạn bắt đầu từ một tế bào. Để lớn lên và làm lành vết thương, tế bào sinh dưỡng phải tạo ra thêm tế bào sinh dưỡng. Nguyên phân là quá trình chia nhân làm việc này.</p><p>Quy tắc: sao chép trước, chia sau. Mọi NST được nhân đôi trước nguyên phân. Trong nguyên phân, hai bản sao bị kéo tách ra, mỗi bản về một tế bào mới.</p></div>
+  </div>
+  <div class="predict"><b>Predict first:</b> this model cell has 4 chromosomes. How many will each of the two new cells have: 2, 4 or 8? <span class="sub">Đoán trước: tế bào mẫu có 4 NST. Mỗi tế bào con sẽ có 2, 4 hay 8?</span></div>
+  <div class="card fig">
+    <div class="figbar"><span class="name" id="mitName"></span><button id="mitPrev" aria-label="Previous stage">Back</button><button id="mitNext">Next stage</button></div>
+    <svg id="mitSvg" viewBox="0 0 680 250" role="img" aria-label="Mitosis stage drawing"></svg>
+    <div class="cap" id="mitCap"></div>
+    <div class="legend"><span><span class="dot" style="background:var(--pat)"></span>from father · từ bố</span><span><span class="dot" style="background:var(--mat)"></span>from mother · từ mẹ</span><span>long and short = two different chromosome pairs · dài và ngắn = hai cặp NST khác nhau</span></div>
+  </div>
+  <div class="card">
+    <h3>Check yourself</h3>
+    <details><summary><span class="lv">Level 1</span>Put the stages of mitosis in the right order and say what happens to the chromosomes in each.</summary><div class="ans"><p>Prophase: chromosomes coil up and become visible. Metaphase: they line up in the middle of the cell. Anaphase: the two chromatids of each chromosome are pulled to opposite ends. Telophase: a new nucleus forms at each end. Then the cell itself divides.</p><p class="vi">Kì đầu: NST co xoắn, nhìn thấy được. Kì giữa: xếp thành hàng ở giữa tế bào. Kì sau: hai chromatid của mỗi NST bị kéo về hai cực. Kì cuối: nhân mới hình thành ở mỗi cực. Sau đó tế bào chia đôi.</p></div></details>
+    <details><summary><span class="lv">Level 2</span>Explain why the two cells are genetically identical after mitosis.</summary><div class="ans"><p>Before mitosis the DNA is copied, so each chromosome consists of two identical chromatids. In anaphase the two chromatids separate, and one goes to each end. So both new cells receive one copy of every chromosome: the same number and the same information as the original cell.</p><p class="vi">Trước nguyên phân, DNA được sao chép, nên mỗi NST gồm hai chromatid giống hệt nhau. Ở kì sau, hai chromatid tách ra, mỗi chiếc về một cực. Vì vậy cả hai tế bào con nhận một bản của mọi NST: cùng số lượng và cùng thông tin như tế bào ban đầu.</p></div></details>
+  </div>
+  <div class="tutor"><h3>Ghi chú K2</h3><ul><li>Mẹo nhớ thứ tự: PMAT (Prophase, Metaphase, Anaphase, Telophase). M = Middle, A = Apart.</li><li>Hiểu lầm: "DNA nhân đôi trong nguyên phân". Sao chép xảy ra ở kì trung gian, trước nguyên phân.</li><li>Điểm mấu chốt của Level 2: phải nhắc cả hai ý "sao chép" và "chia đều". Thiếu một ý là mất điểm.</li><li>Lernplan không yêu cầu G1, S, G2 hay điểm kiểm soát. Không cần dạy sâu hơn.</li></ul></div>
+</section>
+
+<!-- ================= K3 ================= -->
+<section id="k3">
+  <div class="khead"><span class="knum">K3</span><div><h2>Meiosis makes gametes with half the chromosomes</h2><p class="sub">Giảm phân tạo giao tử với một nửa số NST <span class="de">Meiose</span></p></div></div>
+  <div class="bi">
+    <div><p>A body cell is <b>diploid</b> (2n): it has two sets of chromosomes, 46 in humans. An egg or sperm cell, a <b>gamete</b> <span class="de">Keimzelle</span>, is <b>haploid</b> (n): one set, 23.</p><p>Why halve? At fertilisation, egg and sperm join. If gametes had 46, the child would have 92, and the number would double every generation. Meiosis halves the number so that fertilisation restores it.</p></div>
+    <div class="vi"><p>Tế bào sinh dưỡng là lưỡng bội (2n): có hai bộ NST, ở người là 46. Trứng hoặc tinh trùng, tức giao tử, là đơn bội (n): một bộ, 23.</p><p>Vì sao phải giảm một nửa? Khi thụ tinh, trứng và tinh trùng kết hợp. Nếu giao tử có 46 thì con sẽ có 92, và con số tăng gấp đôi qua mỗi thế hệ. Giảm phân chia đôi số NST để thụ tinh khôi phục lại.</p></div>
+  </div>
+  <div class="card">
+    <div class="flow">
+      <div class="box">body cell<b>2n = 46</b></div><div class="arr">meiosis<br>giảm phân →</div>
+      <div class="box">egg<b>n = 23</b></div><div class="arr">+</div><div class="box">sperm<b>n = 23</b></div>
+      <div class="arr">fertilisation<br>thụ tinh →</div><div class="box">zygote<b>2n = 46</b></div><div class="arr">mitosis<br>nguyên phân →</div><div class="box">new person<b>2n = 46</b></div>
+    </div>
+  </div>
+  <div class="predict"><b>Predict first:</b> the model cell has 2 pairs (4 chromosomes). After the first division, will each cell have 4 or 2? And what separates first: the pairs, or the chromatids? <span class="sub">Đoán trước: sau lần chia thứ nhất, mỗi tế bào có 4 hay 2 NST? Cái gì tách trước: các cặp, hay các chromatid?</span></div>
+  <div class="card fig">
+    <div class="figbar"><span class="name" id="meiName"></span><button id="meiPrev" aria-label="Previous stage">Back</button><button id="meiNext">Next stage</button></div>
+    <svg id="meiSvg" viewBox="0 0 680 250" role="img" aria-label="Meiosis stage drawing"></svg>
+    <div class="cap" id="meiCap"></div>
+    <div class="readout"><button id="meiFlip">Flip the short pair · Đảo cặp ngắn</button><span class="pill" id="meiSet"></span></div>
+    <div class="legend"><span><span class="dot" style="background:var(--pat)"></span>from father · từ bố</span><span><span class="dot" style="background:var(--mat)"></span>from mother · từ mẹ</span></div>
+  </div>
+  <div class="card">
+    <h3>Check yourself</h3>
+    <details><summary><span class="lv">Level 1</span>Sort these into "diploid" and "haploid", and into "body cell" and "gamete": skin cell, sperm cell, egg cell, muscle cell, fertilised egg.</summary><div class="ans"><p>Diploid body cells: skin cell, muscle cell. Haploid gametes: sperm cell, egg cell. The fertilised egg (zygote) is diploid again; it is the first cell of the new body.</p><p class="vi">Tế bào sinh dưỡng lưỡng bội: tế bào da, tế bào cơ. Giao tử đơn bội: tinh trùng, trứng. Trứng đã thụ tinh (hợp tử) lại là lưỡng bội; đó là tế bào đầu tiên của cơ thể mới.</p></div></details>
+    <details><summary><span class="lv">Level 2</span>Describe the steps of meiosis and explain how the chromosome number is halved.</summary><div class="ans"><p>The DNA is copied once, then the cell divides twice. In meiosis I the homologous chromosomes pair up and are then separated, one of each pair to each cell. This halves the number: the cells are now haploid. In meiosis II the two chromatids of each chromosome separate, as in mitosis. The result is four haploid cells.</p><p class="vi">DNA được sao chép một lần, rồi tế bào chia hai lần. Ở giảm phân I, các NST tương đồng bắt cặp rồi bị tách ra, mỗi chiếc của một cặp về một tế bào. Bước này làm số NST giảm một nửa: tế bào đã là đơn bội. Ở giảm phân II, hai chromatid của mỗi NST tách nhau, giống nguyên phân. Kết quả là bốn tế bào đơn bội.</p></div></details>
+    <details><summary><span class="lv">Extra</span>Compare how sperm cells and egg cells are formed.</summary><div class="ans"><p>In males, one starting cell gives four small sperm cells, and this continues from puberty onward. In females, the cytoplasm divides unequally: one starting cell gives one large egg cell plus small polar bodies that break down. The egg keeps the cytoplasm as a food store.</p><p class="vi">Ở nam, một tế bào ban đầu cho bốn tinh trùng nhỏ, và quá trình diễn ra liên tục từ tuổi dậy thì. Ở nữ, tế bào chất chia không đều: một tế bào ban đầu cho một trứng lớn cùng các thể cực nhỏ rồi tiêu biến. Trứng giữ lại tế bào chất làm nguồn dự trữ.</p></div></details>
+  </div>
+  <div class="tutor"><h3>Ghi chú K3</h3><ul><li>Câu chốt để bạn ấy nhớ: "Giảm phân I tách các cặp, giảm phân II tách các chromatid."</li><li>Hiểu lầm lớn nhất: "sau giảm phân I vẫn là 2n vì mỗi NST còn hai chromatid". Đếm NST theo tâm động: mỗi tế bào chỉ còn một chiếc của mỗi cặp, nên đã là n.</li><li>Nút "Flip the short pair" là cầu nối sang K4: cho bạn ấy bấm, rồi so bốn giao tử ở bước cuối với lần trước.</li><li>Lernplan không yêu cầu tên từng kì của giảm phân I và II. Hiểu hai lần chia là đủ.</li></ul></div>
+</section>
+
+<!-- ================= K4 ================= -->
+<section id="k4">
+  <div class="khead"><span class="knum">K4</span><div><h2>Mitosis or meiosis? Compare and explain variety</h2><p class="sub">Nguyên phân hay giảm phân? So sánh và giải thích sự đa dạng <span class="de">Mitose und Meiose vergleichen</span></p></div></div>
+  <div class="predict"><b>Predict first:</b> fill in each empty cell in your head, then press Show. <span class="sub">Tự điền trong đầu từng ô, rồi mới bấm Show.</span></div>
+  <div class="card">
+    <div class="figbar" style="margin-bottom:10px"><span class="name">Comparison table · Bảng so sánh</span><button id="revAll">Show all</button><button id="hideAll">Hide all</button></div>
+    <div class="tablewrap"><table id="cmp">
+      <thead><tr><th></th><th>Mitosis<span class="vi">Nguyên phân</span></th><th>Meiosis<span class="vi">Giảm phân</span></th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+  </div>
+  <div class="bi">
+    <div><p><b>Why are brothers and sisters different?</b> Meiosis shuffles the chromosomes. This new mixing is called <b>recombination</b> <span class="de">Neukombination</span>.</p><p>1. In meiosis I each pair lines up by chance, so each gamete gets a random mix of the mother's and father's chromosomes. With 23 pairs there are 2<sup>23</sup>, about 8.4 million, possible gametes per person.</p><p>2. At fertilisation, any sperm can meet any egg.</p></div>
+    <div class="vi"><p>Vì sao anh chị em ruột khác nhau? Giảm phân xáo trộn các NST. Sự trộn mới này gọi là tái tổ hợp.</p><p>1. Ở giảm phân I, mỗi cặp xếp hàng ngẫu nhiên, nên mỗi giao tử nhận một tổ hợp ngẫu nhiên các NST của mẹ và của bố. Với 23 cặp, mỗi người có thể tạo 2<sup>23</sup>, khoảng 8,4 triệu, loại giao tử.</p><p>2. Khi thụ tinh, bất kì tinh trùng nào cũng có thể gặp bất kì trứng nào.</p></div>
+  </div>
+  <div class="card fig">
+    <div class="figbar"><span class="name">Extra: crossing-over · Trao đổi chéo</span><button id="coBtn">Cross over</button></div>
+    <svg id="coSvg" viewBox="0 0 680 210" role="img" aria-label="Crossing-over between homologous chromosomes"></svg>
+    <div class="bi"><p>While the homologous chromosomes are paired in meiosis I, two chromatids can break at the same place and swap pieces. Afterwards a chromatid carries a mix of the mother's and father's genes, which gives even more variety.</p><p class="vi">Khi các NST tương đồng đang bắt cặp ở giảm phân I, hai chromatid có thể đứt ở cùng một vị trí và đổi đoạn cho nhau. Sau đó một chromatid mang hỗn hợp gen của mẹ và của bố, làm tăng thêm sự đa dạng.</p></div>
+  </div>
+  <div class="card">
+    <h3>Check yourself</h3>
+    <details><summary><span class="lv">Level 2</span>Explain why meiosis contributes to genetic variety.</summary><div class="ans"><p>In meiosis I the homologous pairs are separated at random, so the mother's and father's chromosomes are mixed in new combinations in every gamete. Crossing-over can also swap pieces between homologous chromosomes. So gametes are genetically different from each other, and random fertilisation combines them again.</p><p class="vi">Ở giảm phân I, các cặp tương đồng được tách ngẫu nhiên, nên NST của mẹ và của bố được trộn thành tổ hợp mới trong mỗi giao tử. Trao đổi chéo còn đổi đoạn giữa các NST tương đồng. Vì vậy các giao tử khác nhau về di truyền, và thụ tinh ngẫu nhiên lại kết hợp chúng thêm lần nữa.</p></div></details>
+    <details><summary><span class="lv">Level 2</span>A plant has 2n = 14. How many chromosomes are in a leaf cell after mitosis, and in a pollen cell after meiosis?</summary><div class="ans"><p>Leaf cell: 14, because mitosis keeps the number. Pollen cell: 7, because meiosis halves it.</p><p class="vi">Tế bào lá: 14, vì nguyên phân giữ nguyên số NST. Hạt phấn: 7, vì giảm phân giảm một nửa.</p></div></details>
+  </div>
+  <div class="tutor"><h3>Ghi chú K4</h3><ul><li>Level 1 của K4 chính là bảng so sánh: cho bạn ấy che bảng và tự kể lại bốn dòng đầu (tế bào ban đầu, số lần chia, số tế bào con, số NST).</li><li>Trao đổi chéo là Vertiefung. Chỉ cần hiểu ý "đổi đoạn", không cần tên chiasma.</li><li>Nối sang K5 và K6: "các phiên bản khác nhau trên NST của bố và mẹ" chính là alen, khái niệm mở đầu AB 16.</li></ul></div>
+</section>
+
+<!-- ================= QUIZ ================= -->
+<section id="quiz">
+  <div class="khead"><span class="knum">Quiz</span><div><h2>Ten quick questions</h2><p class="sub">Mười câu hỏi nhanh · <span class="score" id="score">0 / 10</span></p></div></div>
+  <div class="card" id="quizBox"></div>
+</section>
+
+<!-- ================= EXAM ================= -->
+<section id="exam">
+  <div class="khead"><span class="knum">Exam</span><div><h2>Written practice in the style of the class test</h2><p class="sub">Luyện viết theo kiểu bài kiểm tra trên lớp</p></div></div>
+  <div class="card">
+    <h3>Task words on the German worksheets · Từ lệnh trong phiếu bài tập</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>German</th><th>English</th><th>Tiếng Việt</th><th>What the answer needs</th></tr></thead>
+      <tbody>
+        <tr><td>Ordne zu</td><td>Match, assign</td><td>Xếp, ghép</td><td>The right pairing; no reason needed</td></tr>
+        <tr><td>Definiere</td><td>Define</td><td>Định nghĩa</td><td>One full sentence with the key features</td></tr>
+        <tr><td>Beschreibe</td><td>Describe</td><td>Mô tả</td><td>What happens, step by step</td></tr>
+        <tr><td>Erkläre</td><td>Explain</td><td>Giải thích</td><td>What happens and why ("because…")</td></tr>
+        <tr><td>Vergleiche</td><td>Compare</td><td>So sánh</td><td>Similarities and differences, both sides</td></tr>
+        <tr><td>Begründe</td><td>Justify</td><td>Lập luận</td><td>A reason for your decision</td></tr>
+      </tbody></table></div>
+  </div>
+  <div class="card">
+    <details><summary><span class="lv">4 marks</span>Describe what a karyogram shows and name two things you can read from it.</summary><div class="ans"><p>A karyogram shows all chromosomes of one cell, sorted in homologous pairs by size (1). You can read the total number, 46 in humans (1), the sex from pair 23, XX or XY (1), and whether a chromosome is missing or extra (1).</p><p class="vi">Karyogram cho thấy tất cả NST của một tế bào, xếp thành cặp tương đồng theo kích thước (1). Có thể đọc được tổng số NST, ở người là 46 (1), giới tính từ cặp 23, XX hoặc XY (1), và có thừa hay thiếu NST nào không (1).</p></div></details>
+    <details><summary><span class="lv">4 marks</span>Explain why mitosis is important for growth.</summary><div class="ans"><p>Growth needs more cells (1). Mitosis produces two cells from one (1). Because the chromosomes are copied and then shared equally (1), every new cell has the complete, identical genetic information and can do its job (1).</p><p class="vi">Lớn lên cần thêm tế bào (1). Nguyên phân tạo hai tế bào từ một (1). Vì NST được sao chép rồi chia đều (1), mỗi tế bào mới có đầy đủ thông tin di truyền giống hệt và hoạt động được (1).</p></div></details>
+    <details><summary><span class="lv">6 marks</span>Compare mitosis and meiosis: starting cell, number of divisions, daughter cells, chromosome number.</summary><div class="ans"><p>Both start from one diploid cell whose DNA has been copied (1). Mitosis has one division, meiosis has two (1). Mitosis gives two cells, meiosis gives four (1). After mitosis the cells are diploid, after meiosis haploid (1). Mitosis cells are genetically identical, meiosis cells are different (1). Mitosis makes body cells for growth and repair, meiosis makes gametes (1).</p><p class="vi">Cả hai đều bắt đầu từ một tế bào lưỡng bội đã nhân đôi DNA (1). Nguyên phân chia một lần, giảm phân chia hai lần (1). Nguyên phân cho hai tế bào, giảm phân cho bốn (1). Sau nguyên phân tế bào là lưỡng bội, sau giảm phân là đơn bội (1). Tế bào từ nguyên phân giống hệt nhau, từ giảm phân thì khác nhau (1). Nguyên phân tạo tế bào sinh dưỡng để lớn lên và sửa chữa, giảm phân tạo giao tử (1).</p></div></details>
+    <details><summary><span class="lv">3 marks</span>Explain why gametes must be haploid.</summary><div class="ans"><p>At fertilisation two gametes fuse (1). Two haploid sets together give one diploid set, 23 + 23 = 46 (1). So the chromosome number stays the same from generation to generation instead of doubling (1).</p><p class="vi">Khi thụ tinh, hai giao tử hợp nhất (1). Hai bộ đơn bội gộp lại thành một bộ lưỡng bội, 23 + 23 = 46 (1). Nhờ vậy số NST giữ nguyên qua các thế hệ thay vì tăng gấp đôi (1).</p></div></details>
+    <p class="sub" style="margin-top:12px;font-size:14px">Mark schemes here are written for practice by the tutor's assistant; they are not the school's official scheme.</p>
+  </div>
+</section>
+
+<!-- ================= GLOSSARY ================= -->
+<section id="words">
+  <div class="khead"><span class="knum">Words</span><div><h2>Glossary for K1 to K4</h2><p class="sub">Bảng thuật ngữ ba thứ tiếng</p></div></div>
+  <div class="card tablewrap"><table>
+    <thead><tr><th>English</th><th>Tiếng Việt</th><th>Deutsch</th><th>In one line</th></tr></thead>
+    <tbody>
+      <tr><td>nucleus</td><td>nhân tế bào</td><td>Zellkern</td><td>Part of the cell that holds the DNA</td></tr>
+      <tr><td>genetic information</td><td>thông tin di truyền</td><td>Erbinformation</td><td>The instructions stored in DNA</td></tr>
+      <tr><td>chromosome</td><td>nhiễm sắc thể</td><td>Chromosom</td><td>One packed DNA molecule</td></tr>
+      <tr><td>chromatid</td><td>chromatid (nhiễm sắc tử)</td><td>Chromatid</td><td>One of the two identical halves of a copied chromosome</td></tr>
+      <tr><td>homologous chromosomes</td><td>NST tương đồng</td><td>homologe Chromosomen</td><td>A matching pair, one from each parent</td></tr>
+      <tr><td>karyogram</td><td>bộ NST đồ</td><td>Karyogramm</td><td>Sorted picture of all chromosomes</td></tr>
+      <tr><td>autosome / sex chromosome</td><td>NST thường / NST giới tính</td><td>Autosom / Gonosom</td><td>Pairs 1 to 22 / pair 23</td></tr>
+      <tr><td>body cell</td><td>tế bào sinh dưỡng</td><td>Körperzelle</td><td>Any cell that is not a gamete; diploid</td></tr>
+      <tr><td>gamete (egg, sperm)</td><td>giao tử (trứng, tinh trùng)</td><td>Keimzelle (Eizelle, Samenzelle)</td><td>Sex cell; haploid</td></tr>
+      <tr><td>diploid / haploid</td><td>lưỡng bội / đơn bội</td><td>diploid / haploid</td><td>Two sets (2n) / one set (n)</td></tr>
+      <tr><td>mitosis</td><td>nguyên phân</td><td>Mitose</td><td>One division, two identical cells</td></tr>
+      <tr><td>meiosis</td><td>giảm phân</td><td>Meiose</td><td>Two divisions, four different haploid cells</td></tr>
+      <tr><td>fertilisation</td><td>thụ tinh</td><td>Befruchtung</td><td>Egg and sperm fuse to a zygote</td></tr>
+      <tr><td>recombination</td><td>tái tổ hợp</td><td>Neukombination</td><td>New mixing of the parents' chromosomes</td></tr>
+      <tr><td>genetic variety</td><td>đa dạng di truyền</td><td>genetische Vielfalt</td><td>Differences in genetic information between individuals</td></tr>
+      <tr><td>daughter cell</td><td>tế bào con</td><td>Tochterzelle</td><td>A cell produced by division</td></tr>
+    </tbody></table></div>
+</section>
+</div>
+
+<script>
+(function(){
+var $=function(id){return document.getElementById(id)};
+function L(x1,y1,x2,y2,c,w,o){return '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" style="stroke:'+c+'" stroke-width="'+w+'" stroke-linecap="round" opacity="'+(o||1)+'"/>'}
+var P='var(--pat)',M='var(--mat)',G='currentColor';
+function X(x,y,h,c){return L(x-5,y-h,x+5,y+h,c,5)+L(x+5,y-h,x-5,y+h,c,5)}
+function I(x,y,h,c,t){return L(x-t,y-h,x+t,y+h,c,5)}
+function cell(cx,cy,rx,ry){return '<ellipse cx="'+cx+'" cy="'+cy+'" rx="'+rx+'" ry="'+ry+'" fill="none" stroke="currentColor" stroke-width="1.5"/>'}
+function nuc(cx,cy,r,d){return '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="currentColor" stroke-width="1" '+(d?'stroke-dasharray="4 4"':'')+'/>'}
+function squig(cx,cy,c){return '<path d="M'+(cx-26)+' '+cy+' q13 -12 26 0 t26 0" fill="none" style="stroke:'+c+'" stroke-width="2"/>'}
+function chromatin(cx,cy){return squig(cx,cy-24,P)+squig(cx,cy-8,M)+squig(cx,cy+8,P)+squig(cx,cy+24,M)}
+function T(x,y,s,cls,a){return '<text x="'+x+'" y="'+y+'" '+(cls?'class="'+cls+'" ':'')+(a?'text-anchor="'+a+'"':'')+'>'+s+'</text>'}
+function cap(el,en,vi){el.innerHTML='<p>'+en+'</p><p class="vi">'+vi+'</p>'}
+var LG=13,SH=8;
+
+/* ---------- K1 zoom ---------- */
+var Z=[
+ {b:'Cell',en:'A cell. The darker circle is the nucleus, the control centre that stores the genetic information.',vi:'Một tế bào. Vòng tròn đậm là nhân, trung tâm điều khiển lưu thông tin di truyền.'},
+ {b:'Nucleus',en:'Inside the nucleus the DNA lies as long, thin threads. A human nucleus holds 46 of them: 46 chromosomes.',vi:'Trong nhân, DNA nằm dưới dạng những sợi dài và mảnh. Nhân tế bào người chứa 46 sợi như vậy: 46 NST.'},
+ {b:'Chromosome',en:'Before a cell divides, each chromosome is copied and coils up tightly. Now it looks like an X: two identical chromatids joined at the centromere.',vi:'Trước khi tế bào phân chia, mỗi NST được sao chép và co xoắn chặt. Lúc này nó có hình chữ X: hai chromatid giống hệt nhau dính ở tâm động.'},
+ {b:'DNA and gene',en:'Uncoiled, a chromosome is one very long DNA molecule. A gene is one section of it, with the information for one product such as a protein.',vi:'Khi duỗi ra, một NST là một phân tử DNA rất dài. Gen là một đoạn của nó, mang thông tin cho một sản phẩm như protein.'}];
+var zi=0;
+function drawZoom(){
+ var h='';
+ if(zi==0){h=cell(340,125,210,100)+'<circle cx="290" cy="125" r="46" style="fill:var(--accent-soft);stroke:var(--accent)" stroke-width="1.5"/>'+
+  '<ellipse cx="420" cy="90" rx="22" ry="10" fill="none" stroke="currentColor"/><ellipse cx="440" cy="160" rx="22" ry="10" fill="none" stroke="currentColor"/><circle cx="380" cy="185" r="6" fill="none" stroke="currentColor"/>'+
+  T(290,129,'nucleus','',"middle")+T(290,190,'nhân · Zellkern','sm',"middle");}
+ if(zi==1){h='<circle cx="340" cy="125" r="108" style="fill:var(--accent-soft);stroke:var(--accent)" stroke-width="1.5"/>';
+  for(var k=0;k<12;k++){var a=k*0.52,r=30+(k%3)*24;h+=squig(340+Math.cos(a)*r,125+Math.sin(a)*r*0.8,k%2?P:M);}
+  h+=T(470,60,'thin DNA threads','')+T(470,78,'sợi DNA mảnh','sm');}
+ if(zi==2){h=L(300,40,380,210,P,16)+L(380,40,300,210,P,16)+'<circle cx="340" cy="125" r="11" style="fill:var(--surface);stroke:var(--pat)" stroke-width="3"/>'+
+  L(396,60,440,60,G,1)+T(446,64,'chromatid','')+L(354,125,440,125,G,1)+T(446,129,'centromere · tâm động','')+
+  T(446,190,'two identical copies','sm')+T(446,206,'hai bản sao giống hệt','sm');}
+ if(zi==3){var a='',b='',r='';for(var x=60;x<=620;x+=4){var y=Math.sin((x-60)/28)*26;a+=(x==60?'M':'L')+x+' '+(125+y)+' ';b+=(x==60?'M':'L')+x+' '+(125-y)+' ';if((x-60)%16==0)r+=L(x,125+y,x,125-y,G,1,0.6);}
+  h='<rect x="250" y="80" width="180" height="90" rx="8" style="fill:var(--accent-soft)"/>'+r+'<path d="'+a+'" fill="none" style="stroke:var(--pat)" stroke-width="3"/><path d="'+b+'" fill="none" style="stroke:var(--pat)" stroke-width="3"/>'+
+  T(340,68,'one gene · một gen','',"middle")+T(340,198,'a section of the DNA · một đoạn DNA','sm',"middle");}
+ $('zoomSvg').innerHTML=h;cap($('zoomCap'),Z[zi].en,Z[zi].vi);
+ Array.prototype.forEach.call($('zoomBtns').children,function(b,i){b.className=i==zi?'on':''});
+}
+Z.forEach(function(z,i){var b=document.createElement('button');b.textContent=(i+1)+'. '+z.b;b.onclick=function(){zi=i;drawZoom()};$('zoomBtns').appendChild(b)});
+drawZoom();
+
+/* ---------- K1 karyogram ---------- */
+var male=false;
+function bar(x,base,h,c){return '<rect x="'+x+'" y="'+(base-h)+'" width="8" height="'+h+'" rx="4" style="fill:'+c+'"/>'}
+function drawK(){
+ var h='';
+ for(var i=1;i<=23;i++){
+  var row=i<=12?0:1,col=row?i-13:i-1,x=28+col*54+(row?27:0),base=row?205:98,ht=Math.round(74-(i-1)*2.3),c=i==23?'var(--accent)':'var(--muted)';
+  if(i==23){h+=bar(x,base,46,c)+bar(x+12,base,male?20:46,c)+T(x+10,base+17,male?'XY':'XX','',"middle");}
+  else{h+=bar(x,base,ht,c)+bar(x+12,base,ht,c)+T(x+10,base+17,i,'sm',"middle");}
+ }
+ $('karyoSvg').innerHTML=h;
+ $('kRead').textContent='46 chromosomes = 44 autosomes + '+(male?'XY':'XX')+' = 23 pairs';
+ $('kXX').className=male?'':'on';$('kXY').className=male?'on':'';
+}
+$('kXX').onclick=function(){male=false;drawK()};$('kXY').onclick=function(){male=true;drawK()};drawK();
+
+/* ---------- shared chromosomes ---------- */
+var CH=[{h:LG,c:P},{h:LG,c:M},{h:SH,c:P},{h:SH,c:M}];
+function spindle(xs,ys){var s='';ys.forEach(function(y){s+=L(125,125,xs[0],y,G,0.8,0.7)+L(555,125,xs[1],y,G,0.8,0.7)});return s}
+
+/* ---------- K2 mitosis ---------- */
+var MIT=[
+ {n:'Interphase · Kì trung gian',en:'The cell works and grows. Before division every chromosome is copied. Count: 4 chromosomes.',vi:'Tế bào hoạt động và lớn lên. Trước khi chia, mọi NST được sao chép. Đếm: 4 NST.'},
+ {n:'Prophase · Kì đầu',en:'The copied chromosomes coil up and become visible as X shapes. Each X is two identical chromatids. Still 4 chromosomes.',vi:'Các NST đã nhân đôi co xoắn, hiện ra thành hình chữ X. Mỗi chữ X là hai chromatid giống hệt nhau. Vẫn là 4 NST.'},
+ {n:'Metaphase · Kì giữa',en:'The nuclear membrane is gone. Spindle fibres line up all 4 chromosomes in the middle, one below the other.',vi:'Màng nhân biến mất. Thoi phân bào xếp cả 4 NST thành một hàng ở giữa tế bào.'},
+ {n:'Anaphase · Kì sau',en:'The two chromatids of each chromosome are pulled apart to opposite ends. Each end receives one copy of every chromosome.',vi:'Hai chromatid của mỗi NST bị kéo tách về hai cực. Mỗi cực nhận một bản của mọi NST.'},
+ {n:'Telophase · Kì cuối',en:'A new nuclear membrane forms around each group. The chromosomes uncoil. The cell starts to pinch in.',vi:'Màng nhân mới hình thành quanh mỗi nhóm NST. Các NST duỗi xoắn. Tế bào bắt đầu thắt lại.'},
+ {n:'Two daughter cells · Hai tế bào con',en:'Two cells, each with 4 chromosomes and the same information as the original cell. Answer to the prediction: 4.',vi:'Hai tế bào, mỗi tế bào có 4 NST và cùng thông tin như tế bào ban đầu. Đáp án phần đoán: 4.'}];
+var mi=0,YS=[62,104,146,188];
+function drawMit(){
+ var h='';
+ if(mi==0)h=cell(340,125,220,105)+nuc(340,125,62)+chromatin(340,125);
+ if(mi==1){h=cell(340,125,220,105)+nuc(340,125,66,1);[[312,100],[368,104],[318,152],[364,150]].forEach(function(p,k){h+=X(p[0],p[1],CH[k].h,CH[k].c)})}
+ if(mi==2){h=cell(340,125,220,105)+spindle([334,346],YS)+L(340,24,340,226,G,0.7,0.5);YS.forEach(function(y,k){h+=X(340,y,CH[k].h,CH[k].c)});h+=T(348,38,'middle of the cell · giữa tế bào','sm')}
+ if(mi==3){h=cell(340,125,220,105)+spindle([240,440],YS);YS.forEach(function(y,k){h+=I(245,y,CH[k].h,CH[k].c,5)+I(435,y,CH[k].h,CH[k].c,-5)})}
+ if(mi==4){h=cell(340,125,220,105)+nuc(215,125,52)+nuc(465,125,52)+L(340,20,340,46,G,1.5)+L(340,204,340,230,G,1.5);[[-18,-18],[16,-16],[-14,18],[18,16]].forEach(function(p,k){h+=I(215+p[0],125+p[1],CH[k].h,CH[k].c,4)+I(465+p[0],125+p[1],CH[k].h,CH[k].c,-4)})}
+ if(mi==5)h=cell(220,125,112,105)+cell(460,125,112,105)+nuc(220,125,52)+nuc(460,125,52)+chromatin(220,125)+chromatin(460,125);
+ $('mitSvg').innerHTML=h;$('mitName').textContent=(mi+1)+' / 6 · '+MIT[mi].n;cap($('mitCap'),MIT[mi].en,MIT[mi].vi);
+}
+$('mitNext').onclick=function(){mi=(mi+1)%6;drawMit()};$('mitPrev').onclick=function(){mi=(mi+5)%6;drawMit()};drawMit();
+
+/* ---------- K3 meiosis ---------- */
+var MEI=[
+ {n:'Before meiosis · Trước giảm phân',s:'2n · 4 chromosomes',en:'A diploid cell: 2 pairs, 4 chromosomes. The DNA is copied once.',vi:'Một tế bào lưỡng bội: 2 cặp, 4 NST. DNA được sao chép một lần.'},
+ {n:'Meiosis I: pairing · Bắt cặp',s:'2n · 4 chromosomes',en:'The homologous chromosomes find each other and lie side by side: long with long, short with short. This never happens in mitosis.',vi:'Các NST tương đồng tìm nhau và nằm cạnh nhau: dài với dài, ngắn với ngắn. Điều này không xảy ra ở nguyên phân.'},
+ {n:'Meiosis I: pairs in the middle · Các cặp ở giữa',s:'2n · 4 chromosomes',en:'The pairs line up in the middle. Which side the father\'s or mother\'s chromosome faces is chance. Press "Flip the short pair" to see the other possibility.',vi:'Các cặp xếp ở giữa tế bào. NST của bố hay của mẹ quay về phía nào là ngẫu nhiên. Bấm "Đảo cặp ngắn" để xem khả năng còn lại.'},
+ {n:'Meiosis I: pairs separate · Các cặp tách ra',s:'2n → n',en:'Whole chromosomes move apart, one of each pair to each end. The chromatids stay together. This is the step that halves the number.',vi:'Từng NST nguyên vẹn đi về hai cực, mỗi cực một chiếc của mỗi cặp. Các chromatid vẫn dính nhau. Đây là bước làm số NST giảm một nửa.'},
+ {n:'After meiosis I · Sau giảm phân I',s:'n · 2 chromosomes per cell',en:'Two cells. Each has only one chromosome of each pair, so each is already haploid, although every chromosome still has two chromatids.',vi:'Hai tế bào. Mỗi tế bào chỉ còn một chiếc của mỗi cặp, nên đã là đơn bội, dù mỗi NST vẫn còn hai chromatid.'},
+ {n:'Meiosis II: line up · Xếp hàng',s:'n · 2 chromosomes per cell',en:'No new copying. In both cells the chromosomes line up in the middle, as in mitosis.',vi:'Không sao chép thêm. Ở cả hai tế bào, các NST xếp hàng ở giữa, giống nguyên phân.'},
+ {n:'Meiosis II: chromatids separate · Chromatid tách ra',s:'n',en:'Now the chromatids are pulled apart, as in mitosis.',vi:'Lúc này các chromatid bị kéo tách ra, giống nguyên phân.'},
+ {n:'Four gametes · Bốn giao tử',s:'n · 2 chromosomes per cell',en:'Four haploid cells, each with one long and one short chromosome. Look at the colours: the cells are not all the same. Flip the short pair and compare.',vi:'Bốn tế bào đơn bội, mỗi tế bào có một NST dài và một NST ngắn. Nhìn màu: các tế bào không giống hệt nhau. Đảo cặp ngắn rồi so sánh.'}];
+var me=0,fl=false;
+function drawMei(){
+ var h='',sL=fl?M:P,sR=fl?P:M;
+ if(me==0)h=cell(340,125,220,105)+nuc(340,125,62)+chromatin(340,125);
+ if(me==1)h=cell(340,125,220,105)+nuc(340,125,66,1)+X(327,98,LG,P)+X(353,98,LG,M)+X(327,155,SH,sL)+X(353,155,SH,sR);
+ if(me==2)h=cell(340,125,220,105)+L(340,24,340,226,G,0.7,0.5)+L(125,125,318,92,G,0.8,0.7)+L(555,125,362,92,G,0.8,0.7)+L(125,125,318,160,G,0.8,0.7)+L(555,125,362,160,G,0.8,0.7)+X(324,92,LG,P)+X(356,92,LG,M)+X(324,160,SH,sL)+X(356,160,SH,sR);
+ if(me==3)h=cell(340,125,220,105)+L(125,125,232,92,G,0.8,0.7)+L(555,125,448,92,G,0.8,0.7)+L(125,125,232,160,G,0.8,0.7)+L(555,125,448,160,G,0.8,0.7)+X(240,92,LG,P)+X(440,92,LG,M)+X(240,160,SH,sL)+X(440,160,SH,sR);
+ if(me==4)h=cell(220,125,112,105)+cell(460,125,112,105)+X(205,105,LG,P)+X(238,150,SH,sL)+X(445,105,LG,M)+X(478,150,SH,sR);
+ if(me==5)h=cell(220,125,112,105)+cell(460,125,112,105)+L(220,30,220,220,G,0.7,0.5)+L(460,30,460,220,G,0.7,0.5)+X(220,95,LG,P)+X(220,155,SH,sL)+X(460,95,LG,M)+X(460,155,SH,sR);
+ if(me==6)h=cell(220,125,112,105)+cell(460,125,112,105)+I(175,95,LG,P,5)+I(265,95,LG,P,-5)+I(175,155,SH,sL,5)+I(265,155,SH,sL,-5)+I(415,95,LG,M,5)+I(505,95,LG,M,-5)+I(415,155,SH,sR,5)+I(505,155,SH,sR,-5);
+ if(me==7){[[95,P,sL],[258,P,sL],[422,M,sR],[585,M,sR]].forEach(function(g){h+=cell(g[0],118,72,62)+nuc(g[0],118,38)+I(g[0]-12,118,LG,g[1],3)+I(g[0]+14,118,SH,g[2],3)});
+  h+=T(176,215,fl?'father long + mother short':'father long + father short','sm',"middle")+T(504,215,fl?'mother long + father short':'mother long + mother short','sm',"middle");}
+ $('meiSvg').innerHTML=h;$('meiName').textContent=(me+1)+' / 8 · '+MEI[me].n;cap($('meiCap'),MEI[me].en,MEI[me].vi);$('meiSet').textContent=MEI[me].s;
+ $('meiFlip').className=fl?'on':'';
+}
+$('meiNext').onclick=function(){me=(me+1)%8;drawMei()};$('meiPrev').onclick=function(){me=(me+7)%8;drawMei()};$('meiFlip').onclick=function(){fl=!fl;drawMei()};drawMei();
+
+/* ---------- K4 table ---------- */
+var ROWS=[
+ ['Starting cell','Tế bào ban đầu','one diploid cell (2n)','một tế bào lưỡng bội','one diploid cell (2n)','một tế bào lưỡng bội'],
+ ['Number of divisions','Số lần phân chia','1','một','2','hai'],
+ ['Daughter cells','Số tế bào con','2','hai','4','bốn'],
+ ['Chromosome number','Số NST','stays the same: 2n (46)','giữ nguyên: 2n','halved: n (23)','giảm một nửa: n'],
+ ['Genetic information','Thông tin di truyền','identical','giống hệt nhau','different','khác nhau'],
+ ['Homologous chromosomes pair up?','NST tương đồng có bắt cặp?','no','không','yes, in meiosis I','có, ở giảm phân I'],
+ ['Where in humans','Xảy ra ở đâu','all growing tissues','mọi mô đang lớn','ovaries and testes','buồng trứng và tinh hoàn'],
+ ['Purpose','Vai trò','growth and repair','lớn lên và sửa chữa','making gametes','tạo giao tử']];
+var tb=document.querySelector('#cmp tbody');
+ROWS.forEach(function(r){var tr=document.createElement('tr');
+ tr.innerHTML='<th>'+r[0]+'<span class="vi">'+r[1]+'</span></th>'+[2,4].map(function(k){return '<td><button class="rv">Show</button><span hidden>'+r[k]+'<span class="vi">'+r[k+1]+'</span></span></td>'}).join('');tb.appendChild(tr)});
+function setCell(td,show){td.children[0].hidden=show;td.children[1].hidden=!show}
+tb.addEventListener('click',function(e){if(e.target.className=='rv')setCell(e.target.parentNode,true)});
+$('revAll').onclick=function(){Array.prototype.forEach.call(tb.querySelectorAll('td'),function(td){setCell(td,true)})};
+$('hideAll').onclick=function(){Array.prototype.forEach.call(tb.querySelectorAll('td'),function(td){setCell(td,false)})};
+
+/* ---------- K4 crossing-over ---------- */
+var co=false;
+function drawCo(){
+ var h='',xs=[290,308,372,390],top=30,mid=115,bot=185;
+ function seg(x,y1,y2,c){return L(x,y1,x,y2,c,9)}
+ h+=seg(xs[0],top,bot,P)+seg(xs[3],top,bot,M);
+ if(!co){h+=seg(xs[1],top,bot,P)+seg(xs[2],top,bot,M)}
+ else{h+=seg(xs[1],top,mid,P)+seg(xs[2],top,mid,M)+L(xs[1],mid,xs[2],mid+26,P,9)+L(xs[2],mid,xs[1],mid+26,M,9)+seg(xs[2],mid+26,bot,P)+seg(xs[1],mid+26,bot,M)}
+ h+=T(250,110,'from father','',"end")+T(250,128,'từ bố','sm',"end")+T(430,110,'from mother','')+T(430,128,'từ mẹ','sm');
+ h+=T(340,205,co?'inner chromatids have swapped a piece · hai chromatid ở giữa đã đổi đoạn':'homologous pair, each chromosome with two chromatids · cặp tương đồng, mỗi NST hai chromatid','sm',"middle");
+ $('coSvg').innerHTML=h;$('coBtn').textContent=co?'Undo':'Cross over';$('coBtn').className=co?'on':'';
+}
+$('coBtn').onclick=function(){co=!co;drawCo()};drawCo();
+
+/* ---------- Quiz ---------- */
+var QZ=[
+ ['Where is most of the genetic information of a human cell?','Phần lớn thông tin di truyền của tế bào người nằm ở đâu?',['In the nucleus','In the cell membrane','In the cytoplasm','Outside the cell'],0,'The DNA is in the nucleus, packed into chromosomes.'],
+ ['How many chromosomes does a human body cell have?','Tế bào sinh dưỡng của người có bao nhiêu NST?',['23','44','46','92'],2,'46 = 23 pairs.'],
+ ['Which sex chromosomes does a boy have?','Bé trai có cặp NST giới tính nào?',['XX','XY','YY','Only Y'],1,'XY. Girls have XX.'],
+ ['In which stage of mitosis are the chromatids pulled apart?','Ở kì nào của nguyên phân các chromatid bị kéo tách ra?',['Prophase','Metaphase','Anaphase','Telophase'],2,'Anaphase: A for apart.'],
+ ['What is the result of mitosis?','Kết quả của nguyên phân là gì?',['2 identical diploid cells','4 identical diploid cells','2 different haploid cells','4 different haploid cells'],0,'Copy first, then share equally.'],
+ ['How many chromosomes are in a human egg cell?','Trứng của người có bao nhiêu NST?',['46','23','22','2'],1,'Gametes are haploid: one set of 23.'],
+ ['When are the homologous chromosomes separated?','Các NST tương đồng tách nhau khi nào?',['In mitosis','In meiosis I','In meiosis II','At fertilisation'],1,'Meiosis I separates the pairs; meiosis II separates the chromatids.'],
+ ['What is the result of meiosis?','Kết quả của giảm phân là gì?',['2 identical diploid cells','2 different diploid cells','4 identical haploid cells','4 different haploid cells'],3,'Two divisions, four haploid cells, all genetically different.'],
+ ['Which process creates new combinations of chromosomes?','Quá trình nào tạo ra tổ hợp NST mới?',['Mitosis','Meiosis','Growth','Wound healing'],1,'Recombination happens in meiosis.'],
+ ['A fruit fly has 2n = 8. How many chromosomes are in its sperm cells?','Ruồi giấm có 2n = 8. Tinh trùng của nó có bao nhiêu NST?',['16','8','4','2'],2,'Meiosis halves the number: 8 → 4.']];
+var sc=0,box=$('quizBox');
+QZ.forEach(function(q,qi){
+ var d=document.createElement('div');d.className='q';
+ d.innerHTML='<div><b>'+(qi+1)+'. '+q[0]+'</b><div class="vi">'+q[1]+'</div></div><div class="opts">'+q[2].map(function(o,oi){return '<button data-o="'+oi+'">'+o+'</button>'}).join('')+'</div><div class="fb" aria-live="polite"></div>';
+ var done=false;
+ d.querySelector('.opts').addEventListener('click',function(e){
+  var b=e.target;if(b.tagName!='BUTTON'||done)return;done=true;
+  var ok=+b.dataset.o===q[3];if(ok)sc++;
+  b.className=ok?'right':'wrong';d.querySelectorAll('.opts button')[q[3]].className='right';
+  d.querySelector('.fb').textContent=(ok?'Correct. ':'Not quite. ')+q[4];
+  $('score').textContent=sc+' / 10';
+ });
+ box.appendChild(d);
+});
+
+/* ---------- tutor toggle ---------- */
+$('tutorToggle').onchange=function(){document.body.classList.toggle('show-tutor',this.checked)};
+})();
+</script>
+<script>/* Mở từ portfolio bằng link #kN: cuộn tới đúng K sau khi các hình đã vẽ xong */addEventListener("load",function(){var h=location.hash&&document.querySelector(location.hash);if(h)setTimeout(function(){h.scrollIntoView({behavior:"auto",block:"start"})},60)});</script>
+</body>
+</html>
