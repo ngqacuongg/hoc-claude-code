@@ -620,7 +620,6 @@ const ME = {
     cheats: [
       { ks: [1, 4], name: ["Cheat sheet K1–K4 · Anh–Việt", "Cheat sheet K1–K4 · EN–VI"], url: "media/genetics-cheatsheet-k1-k4-en-vi.pdf" },
       { ks: [1, 4], name: ["Cheat sheet K1–K4 · Anh–Đức", "Cheat sheet K1–K4 · EN–DE"], url: "media/genetics-cheatsheet-k1-k4-en-de.pdf" },
-      { ks: [1, 4], name: ["Handout ôn tập K1–K4", "Review handout K1–K4"], url: "https://claude.ai/artifact/UJ5toMQMZZ8Cn8JZwye7AL" },
       { ks: [5, 7], name: ["Cheat sheet K5–K7 · Anh–Việt", "Cheat sheet K5–K7 · EN–VI"], url: "media/genetics-cheatsheet-k5-k7-en-vi.pdf" },
       { ks: [5, 7], name: ["Cheat sheet K5–K7 · Anh–Đức", "Cheat sheet K5–K7 · EN–DE"], url: "media/genetics-cheatsheet-k5-k7-en-de.pdf" },
       { ks: [8, 10], name: ["Cheat sheet K8–K10 · Anh–Việt", "Cheat sheet K8–K10 · EN–VI"], url: "media/genetics-cheatsheet-k8-k10-en-vi.pdf" },
@@ -1004,7 +1003,7 @@ function tutorHTML() {
           ${row(UI.kSheets, `<ul class="tk-ab">${ab.map((a) => `<li><b>AB${a}</b>${esc(T.worksheets[a - 1])}</li>`).join("")}</ul>`)}
         </div></details></li>`;
     }).join("")}</ol>
-    <p class="note">${t(UI.sheetNote)} ${t(UI.privateNote)}</p>
+    <p class="note">${t(UI.sheetNote)}</p>
   </article>`;
 }
 
@@ -1049,7 +1048,7 @@ function chapterBody(id) {
       <h3 class="sub">${t(UI.studiesTitle)}</h3>
       <div class="studies">${ME.studies.map((s) => `<div class="study">${t(s)}</div>`).join("")}</div>`;
     case "teach": return tutorHTML();
-    case "learn": return `<div class="works">${ME.learn.map(workCard).join("")}</div>`;
+    case "learn": return `<div class="works">${ME.learn.map(workCard).join("")}</div><p class="note">${t(UI.privateNote)}</p>`;
     case "code": return codeChapter();
     case "skills": return `<div class="skills">${ME.skills.map(([g, list]) =>
         `<div class="skill-group"><h4>${t(g)}</h4><div class="tags">${list.map((s) => `<span class="tag">${esc(s)}</span>`).join("")}</div></div>`).join("")}</div>`;
