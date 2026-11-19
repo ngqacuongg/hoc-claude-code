@@ -300,7 +300,46 @@
   .commits time { font: 12px var(--mono); color: var(--muted); white-space: nowrap; }
   @media (max-width: 560px) { .commits a { grid-template-columns: 60px 1fr; } .commits time { grid-column: 2; } }
 
-  .works.one { grid-template-columns: minmax(0, 560px); }
+  /* gia sư theo stage K */
+  .tutor { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 22px; }
+  .tutor-head h4 { margin: 10px 0 6px; font: 400 26px/1.25 var(--serif); }
+  .tutor-head p { margin: 0; color: var(--muted); max-width: 760px; }
+  .pc-tag.static { position: static; display: inline-block; background: var(--accent); color: var(--bg); }
+  .tutor-stats { list-style: none; margin: 18px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .tutor-stats li { background: var(--accent-soft); border-radius: 10px; padding: 8px 14px; font-size: 13px; color: var(--muted); }
+  .tutor-stats b { display: block; font: 400 24px/1.1 var(--serif); color: var(--text); }
+  .linkish { font: inherit; color: var(--accent); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; }
+  .tk-tools { text-align: right; margin: 18px 0 6px; font-size: 13px; }
+  .tk-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+  .tk-list > li { border-bottom: 1px solid var(--line); }
+  .tk-list summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: 52px 1fr auto; gap: 12px; align-items: center; padding: 12px 4px; }
+  .tk-list summary::-webkit-details-marker { display: none; }
+  .tk-list summary:hover .tk-topic { color: var(--accent); }
+  .tk-k { font: 600 14px var(--mono); color: var(--accent); background: var(--accent-soft); border-radius: 8px; text-align: center; padding: 4px 0; }
+  .tk-topic { font-weight: 500; }
+  .tk-dots { display: flex; gap: 5px; }
+  .tk-dots i { width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid var(--line); }
+  .tk-dots i.on { background: var(--accent); border-color: var(--accent); }
+  .tk-body { padding: 2px 4px 16px 64px; display: grid; gap: 10px; }
+  .tk-row { display: grid; grid-template-columns: 110px 1fr; gap: 10px; align-items: start; }
+  .tk-row h5 { margin: 6px 0 0; font: 12px var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+  .tk-row > div { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tk-file { display: inline-flex; align-items: center; gap: 8px; font: 14px var(--sans); color: var(--text); text-decoration: none; background: var(--bg);
+             border: 1px solid var(--line); border-radius: 10px; padding: 6px 10px; cursor: pointer; }
+  .tk-file:hover { border-color: var(--accent); color: var(--accent); }
+  .tk-file em { font: normal 11px var(--mono); color: var(--muted); }
+  .tk-none { font-size: 13px; color: var(--muted); padding-top: 6px; }
+  .tk-ab { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; width: 100%; }
+  .tk-ab li { font-size: 14px; display: grid; grid-template-columns: 48px 1fr; gap: 8px; }
+  .tk-ab b { font: 600 12px var(--mono); color: var(--muted); padding-top: 2px; }
+  @media (max-width: 640px) {
+    .tk-list summary { grid-template-columns: 44px 1fr; } .tk-dots { display: none; }
+    .tk-body { padding-left: 4px; } .tk-row { grid-template-columns: 1fr; gap: 4px; }
+  }
+  #vidDlg { width: min(960px, 96vw); padding: 0; border: 0; border-radius: 12px; background: #000; overflow: visible; }
+  #vidDlg::backdrop { background: rgba(0,0,0,.75); }
+  #vidDlg video { display: block; width: 100%; aspect-ratio: 16 / 9; border-radius: 12px; }
+  .vid-close { position: absolute; top: -44px; right: 0; background: var(--card); }
   .emails { list-style: none; margin: 28px auto 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
   .emails li { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 10px 16px; text-align: left; }
   .emails small { display: block; font: 12px var(--mono); color: var(--muted); }
@@ -365,6 +404,7 @@
 <main id="chapters"></main>
 
 <footer data-t="footer"></footer>
+<dialog id="vidDlg"><video id="vidPlayer" controls playsinline preload="none"></video><button class="icon-btn vid-close" data-vclose aria-label="Close">✕</button></dialog>
 <dialog id="bookDlg"><div id="bookBox"></div></dialog>
 <dialog id="lb"><img id="lbImg" alt=""></dialog>
 <div class="toast" id="toast"></div>
@@ -494,23 +534,86 @@ const ME = {
     ["Sổ đăng ký Quốc gia bệnh ALS Việt Nam", "The Vietnam National ALS Registry"],
   ],
 
-  // Dạy & chia sẻ: thẻ có ảnh bìa. Thêm bài giảng mới: thêm dòng vào "items".
-  teach: [
-    { icon: "🧬", cover: "linear-gradient(135deg,#2f6f5e,#5c9d7f)", who: ["Đi dạy", "Teaching"],
-      title: ["Be Biology Teacher", "Be Biology Teacher"],
-      text: ["Bài giảng Sinh học mình soạn và dạy cho học sinh, song ngữ Anh–Việt. Hiện có trọn chuỗi Di truyền học từ buổi K1 đến K13, mở đầu bằng nhiễm sắc thể, nguyên phân và giảm phân.",
-             "Biology lessons I write and teach, bilingual English–Vietnamese. The full Genetics series now runs from session K1 to K13, starting with chromosomes, mitosis and meiosis."],
-      // Video bài giảng: file mp4 đặt trong portfolio/media, poster là ảnh hiện trước khi bấm phát
-      video: "media/genetics-k1-k4.mp4", videoPoster: "media/genetics-k1-k4-poster.jpg",
-      items: [
-        { type: "Course", label: ["Di truyền GĐ 1 · Trang bài học", "Genetics Stage 1 · Lesson page"], url: "https://claude.ai/artifact/LNFj4Hj4D81TettW3LT5Fj" },
-        { type: "Slides", label: ["Di truyền GĐ 1 · Slides bài giảng", "Genetics Stage 1 · Lesson slides"], url: "https://claude.ai/artifact/TXimM1CPftLzyooBko9JTj" },
-        { type: "Handout", label: ["Di truyền GĐ 1 · Handout cho học sinh", "Genetics Stage 1 · Student handout"], url: "https://claude.ai/artifact/UJ5toMQMZZ8Cn8JZwye7AL" },
-        { type: "Slides", label: ["Di truyền K5–K7 · Slides bài giảng", "Genetics K5–K7 · Lesson slides"], url: "https://claude.ai/artifact/9HdRk2D5TeaBk8o4oyfeLY" },
-        { type: "Slides", label: ["Di truyền K8–K10 · Slides bài giảng", "Genetics K8–K10 · Lesson slides"], url: "https://claude.ai/artifact/2Nj3eDnRz5y55JEPf1JXmn" },
-        { type: "Slides", label: ["Di truyền K11–K13 · Slides bài giảng", "Genetics K11–K13 · Lesson slides"], url: "https://claude.ai/artifact/1e2gvwmUHLYRuGXB5EdE5K" },
-      ] },
-  ],
+  // Dạy & chia sẻ: tài liệu gia sư Sinh học lớp 10 (International German School).
+  // 13 stage K theo Lernplan của trường; mỗi stage có 3 phiếu bài tập (K1 = AB1–3 … K13 = AB37–39).
+  // Tài liệu dùng chung cho nhiều stage ghi khoảng ks: [từ, đến].
+  // Phiếu bài tập là bản dịch từ phiếu tiếng Đức của giáo viên, nên chỉ hiện tên, không cho tải.
+  tutor: {
+    title: ["Gia sư Sinh học lớp 10 · International German School", "Grade 10 Biology tutoring · International German School"],
+    text: ["Bộ tài liệu mình chuẩn bị để kèm một bạn học lớp 10 tại International German School (IGS) môn Sinh học, phần Di truyền. Mình theo đúng 13 stage K trong kế hoạch học của trường, mỗi stage có slides, phiếu bài tập, và ở các stage đầu có thêm cheat sheet và video, đều song ngữ.",
+           "Materials I prepared to tutor a Grade 10 student at the International German School (IGS) in Biology, Genetics unit. They follow the school's 13 K stages: each stage has slides and worksheets, and the early stages also have a cheat sheet and a video, all bilingual."],
+    stages: [
+      ["Nhiễm sắc thể, DNA và gen", "Chromosomes, DNA and genes"],
+      ["Chu kỳ tế bào và nguyên phân", "The cell cycle and mitosis"],
+      ["Giảm phân và giao tử", "Meiosis and gametes"],
+      ["So sánh nguyên phân, giảm phân; biến dị", "Mitosis vs meiosis; genetic variety"],
+      ["Xác định giới tính và di truyền liên kết X", "Sex determination and X-linked inheritance"],
+      ["Gen, alen, kiểu gen, kiểu hình", "Gene, allele, genotype, phenotype"],
+      ["Mendel và thế hệ F₁ đồng tính", "Mendel and the uniform F₁"],
+      ["Quy luật phân li", "The law of segregation"],
+      ["Quy luật phân li độc lập", "The law of independent assortment"],
+      ["Trội không hoàn toàn và đồng trội", "Incomplete dominance and codominance"],
+      ["Phân tích phả hệ", "Pedigree analysis"],
+      ["Nhóm máu ABO và Rh", "ABO and Rh blood groups"],
+      ["Vận dụng di truyền vào ví dụ mới", "Applying genetics to new examples"],
+    ],
+    slides: [
+      { ks: [1, 4], name: ["Slides bài giảng K1–K4", "Lesson slides K1–K4"], url: "https://claude.ai/artifact/TXimM1CPftLzyooBko9JTj" },
+      { ks: [1, 4], name: ["Trang bài học K1–K4", "Lesson page K1–K4"], url: "https://claude.ai/artifact/LNFj4Hj4D81TettW3LT5Fj" },
+      { ks: [5, 7], name: ["Slides bài giảng K5–K7", "Lesson slides K5–K7"], url: "https://claude.ai/artifact/9HdRk2D5TeaBk8o4oyfeLY" },
+      { ks: [8, 10], name: ["Slides bài giảng K8–K10", "Lesson slides K8–K10"], url: "https://claude.ai/artifact/2Nj3eDnRz5y55JEPf1JXmn" },
+      { ks: [11, 13], name: ["Slides bài giảng K11–K13", "Lesson slides K11–K13"], url: "https://claude.ai/artifact/1e2gvwmUHLYRuGXB5EdE5K" },
+    ],
+    cheats: [
+      { ks: [1, 4], name: ["Cheat sheet K1–K4 · Anh–Việt", "Cheat sheet K1–K4 · EN–VI"], url: "media/genetics-cheatsheet-k1-k4-en-vi.pdf" },
+      { ks: [1, 4], name: ["Cheat sheet K1–K4 · Anh–Đức", "Cheat sheet K1–K4 · EN–DE"], url: "media/genetics-cheatsheet-k1-k4-en-de.pdf" },
+      { ks: [1, 4], name: ["Handout ôn tập K1–K4", "Review handout K1–K4"], url: "https://claude.ai/artifact/UJ5toMQMZZ8Cn8JZwye7AL" },
+    ],
+    videos: [
+      { ks: [1, 4], name: ["Chromosomes and Cell Division · 4 phút", "Chromosomes and Cell Division · 4 min"], src: "media/genetics-k1-k4.mp4", poster: "media/genetics-k1-k4-poster.jpg" },
+    ],
+    worksheets: [
+      "From the nucleus to the chromosome, DNA and gene",
+      "Packaging DNA, copying it, and passing it on safely",
+      "Telling autosomes and sex chromosomes apart",
+      "The cell cycle, mitosis, and why they matter for growth and renewal",
+      "Prophase, metaphase, anaphase, telophase and cytokinesis",
+      "DNA replication, chromatid separation and keeping the chromosome set",
+      "Meiosis, homologous chromosomes and chromosome sets",
+      "Meiosis I, meiosis II and halving the chromosome set",
+      "Oogenesis and spermatogenesis — two ways of making gametes",
+      "Comparing mitosis and meiosis",
+      "Why does meiosis create genetic variety?",
+      "Explaining crossing-over",
+      "Explaining sex determination in humans",
+      "Possible chromosome combinations and probabilities",
+      "Investigating an X-linked recessive example",
+      "Gene, allele, genotype and phenotype",
+      "From parents to offspring — a dominant–recessive cross",
+      "Same genotype, different phenotypes — environment and the reaction norm",
+      "Mendel's peas and the first filial generation",
+      "Why the F₁ is uniform — a cross diagram for homozygous parents",
+      "From plant crosses to testable rules — Mendel's method",
+      "Why do traits reappear? — the law of segregation",
+      "Two levels of analysis — genotype and phenotype ratios",
+      "From one offspring to several — product and sum rule",
+      "New combinations of traits — the law of independent assortment",
+      "Applying Mendel's laws to a new example",
+      "Evaluating two loci at once — the dihybrid cross",
+      "The expression of heterozygotes — incomplete dominance",
+      "From genotype to a testable prediction — intermediate crosses",
+      "Two expressions at once — codominance and the ABO blood groups",
+      "From crosses to family relationships — reading a pedigree",
+      "Translating phenotypes into possible genotypes — autosomal pedigrees",
+      "From gene product to disease — cystic fibrosis and haemophilia A",
+      "Why people have different blood groups — ABO genotypes and codominance",
+      "From genotypes to probabilities — ABO cross diagrams",
+      "ABO and RhD describe different traits — the Rhesus factor",
+      "Applying inheritance to new examples — terms and cross diagrams",
+      "Deducing unknown genotypes — test crosses and two loci",
+      "Comparing data with predictions and judging the scope of a model",
+    ],
+  },
   learn: [
     { icon: "🦠", cover: "linear-gradient(135deg,#2f5d6f,#5a96a8)", who: ["Tự học", "Self-study"],
       title: ["Trục gan/ruột–não: từ viêm đến bộ não", "The liver/gut–brain axis: from inflammation to the brain"],
@@ -613,6 +716,10 @@ const UI = {
   liveFail: ["Chưa lấy được dữ liệu từ GitHub, xem trực tiếp tại hồ sơ.", "Couldn't reach GitHub right now; see the profile directly."],
   repos: ["repo công khai", "public repos"], lastPush: ["lần push gần nhất", "last push"], updated: ["cập nhật", "updated"],
   here: ["bạn đang ở đây", "you are here"], open: ["Mở bản chạy", "Open live"], source: ["Mã nguồn", "Source"], notebooks: ["bài", "notebooks"], profile: ["Xem hồ sơ GitHub", "View GitHub profile"],
+  kSlides: ["Slides", "Slides"], kCheat: ["Cheat sheet", "Cheat sheets"], kVideo: ["Video", "Video"], kSheets: ["Phiếu bài tập", "Worksheets"],
+  none: ["chưa có", "not yet"], stages: ["stage K", "K stages"], decks: ["bộ slides", "slide decks"], cheatN: ["cheat sheet", "cheat sheets"],
+  videoN: ["video", "video"], sheetN: ["phiếu bài tập", "worksheets"], openAll: ["Mở tất cả", "Expand all"], closeAll: ["Thu gọn", "Collapse"],
+  sheetNote: ["Phiếu bài tập là bản mình dịch từ phiếu của giáo viên ở trường, nên ở đây chỉ ghi tên.", "Worksheets are my translations of the school teacher's sheets, so only their titles are listed here."],
   privateNote: ["Một số tài liệu được tạo cùng Claude; nếu link chưa mở được, hãy nhắn mình để xin quyền xem.", "Some materials were made with Claude; if a link doesn't open, message me for access."],
 };
 const CHAPTERS = [
@@ -621,7 +728,7 @@ const CHAPTERS = [
     intro: ["Bấm vào từng mốc để xem mình đã làm gì ở đó.", "Tap a milestone to see what I did there."] },
   { id: "research", kicker: ["03 · Nghiên cứu", "03 · Research"], title: ["Những gì mình đang tìm hiểu", "What I'm figuring out"] },
   { id: "teach", kicker: ["04 · Dạy & chia sẻ", "04 · Teaching & sharing"], title: ["Học xong thì kể lại", "Learn it, then pass it on"],
-    intro: ["Slides, handout và trang bài học mình soạn để dạy Sinh học. Mình sẽ thêm bài mới dần.", "Slides, handouts and lesson pages I write to teach biology. New lessons get added over time."] },
+    intro: ["Tài liệu mình chuẩn bị để dạy kèm Sinh học, xếp theo từng stage K: slides, cheat sheet, video, rồi phiếu bài tập.", "Materials I prepare for biology tutoring, ordered by K stage: slides, cheat sheets, video, then worksheets."] },
   { id: "learn", kicker: ["05 · Tự học", "05 · Self-study"], title: ["Tò mò ngoài giờ", "Curiosity after hours"],
     intro: ["Những chủ đề mình tự học, mỗi bài đều có một trang để thực hành.", "Topics I teach myself; each one comes with a page to practise on."] },
   { id: "code", kicker: ["06 · Học code", "06 · Learning code"], title: ["Từ notebook đến công cụ của riêng mình", "From notebooks to my own tools"],
@@ -805,6 +912,34 @@ function flipBook(dir) {
   document.querySelector('[data-flip="1"]').disabled = bookAt === leaves + 1;
 }
 
+/* ---- Dạy & chia sẻ: tài liệu gia sư theo stage K ---- */
+const inK = (x, k) => k >= x.ks[0] && k <= x.ks[1];
+function tutorHTML() {
+  const T = ME.tutor, n = T.stages.length;
+  const link = (x, icon) => `<a class="tk-file" href="${esc(x.url)}" target="_blank" rel="noopener"><span>${icon}</span>${t(x.name)}<em>${x.ks[0] === x.ks[1] ? "K" + x.ks[0] : `K${x.ks[0]}–K${x.ks[1]}`}</em></a>`;
+  const row = (label, items) => `<div class="tk-row"><h5>${t(label)}</h5><div>${items || `<span class="tk-none">${t(UI.none)}</span>`}</div></div>`;
+  const stats = [[n, UI.stages], [T.slides.filter((x) => /slides/i.test(x.name[1])).length, UI.decks], [T.cheats.filter((x) => /Cheat/.test(x.name[1])).length, UI.cheatN],
+                 [T.videos.length, UI.videoN], [T.worksheets.length, UI.sheetN]];
+  return `<article class="tutor">
+    <div class="tutor-head"><span class="pc-tag static">IGS · Grade 10</span><h4>${t(T.title)}</h4><p>${t(T.text)}</p>
+      <ul class="tutor-stats">${stats.map(([v, l]) => `<li><b>${v}</b>${t(l)}</li>`).join("")}</ul></div>
+    <div class="tk-tools"><button class="linkish" data-kall>${t(UI.openAll)}</button></div>
+    <ol class="tk-list">${T.stages.map((st, i) => {
+      const k = i + 1, ab = [3 * k - 2, 3 * k - 1, 3 * k];
+      const vids = T.videos.filter((v) => inK(v, k));
+      return `<li><details ${k === 1 ? "open" : ""}><summary><span class="tk-k">K${k}</span><span class="tk-topic">${t(st)}</span>
+          <span class="tk-dots" aria-hidden="true">${[T.slides, T.cheats, T.videos].map((g) => `<i class="${g.some((x) => inK(x, k)) ? "on" : ""}"></i>`).join("")}<i class="on"></i></span></summary>
+        <div class="tk-body">
+          ${row(UI.kSlides, T.slides.filter((x) => inK(x, k)).map((x) => link(x, "🖥️")).join(""))}
+          ${row(UI.kCheat, T.cheats.filter((x) => inK(x, k)).map((x) => link(x, "📝")).join(""))}
+          ${row(UI.kVideo, vids.map((v) => `<button class="tk-file" data-video="${esc(v.src)}" data-poster="${esc(v.poster)}"><span>🎬</span>${t(v.name)}<em>K${v.ks[0]}–K${v.ks[1]}</em></button>`).join(""))}
+          ${row(UI.kSheets, `<ul class="tk-ab">${ab.map((a) => `<li><b>AB${a}</b>${esc(T.worksheets[a - 1])}</li>`).join("")}</ul>`)}
+        </div></details></li>`;
+    }).join("")}</ol>
+    <p class="note">${t(UI.sheetNote)} ${t(UI.privateNote)}</p>
+  </article>`;
+}
+
 /* ---- Dự án & poster: cùng một kiểu thẻ ---- */
 function projectCard(x) {
   const pic = x.thumb ? `<img src="${esc(x.thumb)}" alt="${t(x.title)}" loading="lazy">` : `<span class="noimg">${t(UI.noImage)}</span>`;
@@ -840,7 +975,7 @@ function chapterBody(id) {
       <div class="gallery">${[{ ...ME.nutrition, book: true, tag: "Brochure" }, ...ME.posters.map((p) => ({ ...p, tag: "Poster" }))].map(projectCard).join("")}</div>
       <h3 class="sub">${t(UI.studiesTitle)}</h3>
       <div class="studies">${ME.studies.map((s) => `<div class="study">${t(s)}</div>`).join("")}</div>`;
-    case "teach": return `<div class="works one">${ME.teach.map(workCard).join("")}</div><p class="note">${t(UI.privateNote)}</p>`;
+    case "teach": return tutorHTML();
     case "learn": return `<div class="works">${ME.learn.map(workCard).join("")}</div>`;
     case "code": return codeChapter();
     case "skills": return `<div class="skills">${ME.skills.map(([g, list]) =>
@@ -881,10 +1016,17 @@ document.addEventListener("click", (e) => {
   if (leaf) return flipBook(bookAt === $("#book").children.length || !leaf.classList.contains("flipped") ? 1 : -1);   // ở trang cuối, bấm tiếp sẽ trải cả tờ
   if (e.target.closest("[data-book]")) return openBook();
   if (e.target.closest("[data-close]") || e.target === $("#bookDlg")) return $("#bookDlg").close();
+  const vid = e.target.closest("[data-video]");
+  if (vid) { const v = $("#vidPlayer"); v.src = vid.dataset.video; v.poster = vid.dataset.poster; $("#vidDlg").showModal(); v.play().catch(() => {}); return; }
+  const kall = e.target.closest("[data-kall]");
+  if (kall) { const list = [...document.querySelectorAll(".tk-list details")], open = !list.every((d) => d.open);
+    list.forEach((d) => (d.open = open)); kall.textContent = t(open ? UI.closeAll : UI.openAll); return; }
   const zoom = e.target.closest("[data-zoom]");
   if (zoom) { const img = zoom.querySelector("img"); $("#lbImg").src = zoom.dataset.zoom; $("#lbImg").alt = img ? img.alt : ""; $("#lbImg").classList.toggle("wide", !!zoom.dataset.wide); $("#lb").showModal(); }
 });
-$("#lb").addEventListener("click", () => $("#lb").close());   // bấm bất kỳ đâu để đóng
+$("#lb").addEventListener("click", () => $("#lb").close());
+$("#vidDlg").addEventListener("click", (e) => { if (e.target.id === "vidDlg" || e.target.closest("[data-vclose]")) $("#vidDlg").close(); });
+$("#vidDlg").addEventListener("close", () => $("#vidPlayer").pause());   // đóng cửa sổ thì dừng video   // bấm bất kỳ đâu để đóng
 
 // Hiện dần + đánh dấu chương đang đọc
 let revealObs, chapObs;
