@@ -10,7 +10,7 @@
 <!-- Font có đủ dấu tiếng Việt; Iowan/Georgia trên máy hiện sai dấu chữ ư, ơ -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;800;900&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #f6f5f1; --card: #ffffff; --text: #1f1f1c; --muted: #6f6d66;
@@ -19,19 +19,14 @@
     --sans: "Be Vietnam Pro", -apple-system, "Segoe UI", Roboto, sans-serif;
     --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   }
+  :root { --dot: rgba(0,0,0,.07); }
   :root[data-theme="dark"] {
-    --bg: #141412; --card: #1e1d1a; --text: #ecebe6; --muted: #9a988f;
-    --line: #302f2a; --accent: #6fbfa6; --accent-soft: #22332d; --warm: #e0976a; --warm-soft: #3a2a20;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #141412; --card: #1e1d1a; --text: #ecebe6; --muted: #9a988f;
-      --line: #302f2a; --accent: #6fbfa6; --accent-soft: #22332d; --warm: #e0976a; --warm-soft: #3a2a20;
-    }
+    --bg: #0b0c0d; --card: #141617; --text: #eef0ec; --muted: #8e938e;
+    --line: #23272a; --accent: #6fcfae; --accent-soft: #15302a; --warm: #e8a070; --warm-soft: #33241b; --dot: rgba(255,255,255,.055);
   }
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; scroll-padding-top: 64px; }
-  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.65 var(--sans); -webkit-font-smoothing: antialiased; }
+  body { margin: 0; background: var(--bg) radial-gradient(var(--dot) 1px, transparent 1px) 0 0 / 22px 22px; color: var(--text); font: 16px/1.65 var(--sans); -webkit-font-smoothing: antialiased; }
   a { color: inherit; }
   .wrap { max-width: 960px; margin: 0 auto; padding: 0 20px; }
   em { font-style: italic; color: var(--accent); }
@@ -46,6 +41,8 @@
   #chapterNow { font: 13px var(--mono); color: var(--muted); }
   .icon-btn { font: 600 13px var(--mono); color: var(--muted); background: none; border: 1px solid var(--line);
               border-radius: 8px; min-width: 36px; height: 34px; padding: 0 8px; cursor: pointer; }
+  .nav-cta { padding: 7px 14px; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; margin-left: 4px; }
+  @media (max-width: 420px) { .nav-cta { display: none; } }
   .icon-btn:hover { color: var(--text); border-color: var(--accent); }
   @media (max-width: 560px) { #chapterNow { display: none; } }
 
@@ -72,8 +69,14 @@
   .pill i { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
   @keyframes pulse { 50% { opacity: .3; } }
   h1 { font: 400 clamp(42px, 8vw, 88px)/1 var(--serif); letter-spacing: -.025em; margin: 22px 0 0; }
+  .hero-kicker { margin: 26px 0 0; font: 600 13px var(--mono); letter-spacing: .18em; text-transform: uppercase; color: var(--accent); }
+  .mega { font: 900 clamp(44px, 10.5vw, 112px)/1.06 var(--sans);   /* đủ chỗ cho dấu tiếng Việt trên chữ in hoa */ letter-spacing: -.035em; text-transform: uppercase; margin: 16px 0 0; }
+  .mega span { display: block; }
+  .mega .hl { color: var(--accent); }
+  .roles { margin: 22px 0 0; font: 500 13px var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .btn.ghost { background: transparent; }
   h1 small { display: block; font: 400 clamp(16px, 2vw, 20px) var(--mono); color: var(--muted); letter-spacing: 0; margin-bottom: 14px; }
-  .lead { font: 400 clamp(19px, 2.4vw, 24px)/1.45 var(--serif); max-width: 640px; margin: 24px 0 0; }
+  .lead { font: 400 clamp(18px, 2.2vw, 22px)/1.5 var(--serif); max-width: 640px; margin: 18px 0 0; color: var(--muted); }
   .interests { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 26px; }
   .interests span { font-size: 14px; background: var(--card); border: 1px solid var(--line); border-radius: 99px; padding: 5px 14px; }
   .cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
@@ -87,8 +90,8 @@
 
   /* chương */
   section { padding: 84px 0; border-bottom: 1px solid var(--line); }
-  .kicker { font: 13px var(--mono); color: var(--accent); letter-spacing: .05em; text-transform: uppercase; }
-  h2 { font: 400 clamp(30px, 4.5vw, 44px)/1.1 var(--serif); margin: 8px 0 12px; letter-spacing: -.015em; }
+  .kicker { font: 600 12px var(--mono); color: var(--accent); letter-spacing: .18em; text-transform: uppercase; }
+  h2 { font: 800 clamp(30px, 4.6vw, 48px)/1.08 var(--sans); margin: 10px 0 12px; letter-spacing: -.025em; }
   .intro { color: var(--muted); font-size: 17px; max-width: 620px; margin: 0 0 36px; }
   .next { display: inline-flex; gap: 10px; align-items: baseline; margin-top: 44px; text-decoration: none;
           color: var(--muted); font: 14px var(--mono); }
@@ -96,6 +99,19 @@
   .next:hover b { color: var(--accent); }
 
   /* tiểu sử */
+  .highlights { list-style: none; margin: 0 0 44px; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+  .highlights li { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; font-size: 13px; color: var(--muted); line-height: 1.35; }
+  .highlights b { display: block; font: 900 34px/1 var(--sans); color: var(--text); margin-bottom: 6px; letter-spacing: -.02em; }
+  @media (max-width: 860px) { .highlights { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 480px) { .highlights { grid-template-columns: repeat(2, 1fr); } }
+  .roles-title { margin-top: 8px; }
+  .roles-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 48px; }
+  @media (max-width: 860px) { .roles-grid { grid-template-columns: 1fr; } }
+  .role { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; transition: border-color .25s, transform .25s; }
+  .role:hover { border-color: var(--accent); transform: translateY(-3px); }
+  .role-n { font: 600 12px var(--mono); color: var(--accent); letter-spacing: .14em; }
+  .role h4 { margin: 8px 0 8px; font: 800 20px/1.2 var(--sans); text-transform: uppercase; letter-spacing: -.01em; }
+  .role p { margin: 0 0 16px; color: var(--muted); font-size: 15px; flex: 1; }
   .bio-lead { font: 400 clamp(20px, 2.6vw, 26px)/1.45 var(--serif); max-width: 760px; margin: 0 0 40px; }
   .about { display: grid; grid-template-columns: 1.5fr 1fr; gap: 44px; }
   .story { list-style: none; margin: 0; padding: 0; counter-reset: s; }
@@ -382,6 +398,7 @@
     <span id="chapterNow"></span>
     <button class="icon-btn" id="langBtn" aria-label="Language"></button>
     <button class="icon-btn" id="themeBtn" aria-label="Theme">◐</button>
+    <a class="btn primary nav-cta" href="#contact" data-t="navContact"></a>
   </div>
 </nav>
 <div id="rail"></div>
@@ -390,12 +407,15 @@
   <canvas id="net" aria-hidden="true"></canvas>
   <div class="wrap">
     <span class="pill"><i></i><span data-t="status"></span></span>
-    <h1><small data-t="hello"></small><span id="name"></span></h1>
+    <p class="hero-kicker">PORTFOLIO 2026 · <span id="name"></span></p>
+    <h1 class="mega" id="mega"></h1>
+    <p class="roles" data-t="roles"></p>
     <p class="lead" data-t="lead"></p>
     <div class="interests" id="interests"></div>
     <div class="cta">
       <a class="btn primary" href="#about" data-t="start"></a>
-      <button class="btn" id="shareBtn" data-t="share"></button>
+      <a class="btn" href="#journey" data-t="toPath"></a>
+      <button class="btn ghost" id="shareBtn" data-t="share"></button>
     </div>
   </div>
   <div class="scroll-hint" data-t="scroll"></div>
@@ -429,6 +449,29 @@ const ME = {
   ],
   bioLead: ["Mình học sinh học và tâm lý học, hiện làm nghiên cứu lâm sàng về thần kinh. Mình muốn hiểu điều gì trục trặc trong não từ rất sớm, trước khi tế bào thần kinh mất đi, để có những cách giúp người bệnh nhẹ nhàng hơn.",
             "I'm a biology and psychology graduate working in clinical neuroscience research. I want to understand what goes wrong in the brain early, before neurons are lost, so that people can be helped in gentler ways."],
+  // Ô số liệu nổi bật ở chương "Mình là ai"
+  highlights: [
+    ["5", ["poster khoa học", "scientific posters"]],
+    ["3", ["giải thưởng poster", "poster awards"]],
+    ["4", ["nơi thực tập & nghiên cứu", "labs & research sites"]],
+    ["2", ["chuyên ngành: Sinh học & Tâm lý", "majors: Biology & Psychology"]],
+    ["39", ["phiếu bài tập Di truyền đã soạn", "genetics worksheets prepared"]],
+  ],
+  // Ba vai trò: mỗi thẻ có các nhãn kỹ năng
+  roles: [
+    { title: ["Nhà nghiên cứu", "The researcher"],
+      text: ["Làm trợ lý nghiên cứu lâm sàng ở hai bệnh viện, quản lý dữ liệu đột quỵ và ALS, và trình bày 5 poster về vi khuẩn kháng thuốc và tế bào gốc.",
+             "Clinical research assistant at two hospitals, managing stroke and ALS data, with 5 posters on drug-resistant bacteria and stem cells."],
+      tags: ["Clinical data", "MALDI-TOF", "PCR", "Sanger sequencing", "Cell culture"] },
+    { title: ["Người dạy", "The teacher"],
+      text: ["Soạn trọn bộ tài liệu Di truyền song ngữ cho học sinh lớp 10, và đọc rồi trình bày bài báo ở journal club.",
+             "Wrote a full bilingual genetics course for a Grade 10 student, and read and present papers at journal club."],
+      tags: ["EN · VI · DE", "Slides", "Lesson videos", "Journal club"] },
+    { title: ["Người làm công cụ", "The builder"],
+      text: ["Học lập trình bằng cách tự làm công cụ: phân tích dữ liệu bằng Python và R, và dựng web cùng Claude Code, kể cả trang này.",
+             "Learning to code by building tools: data analysis in Python and R, and web apps with Claude Code, this site included."],
+      tags: ["Python", "R", "Machine learning", "Claude Code"] },
+  ],
   story: [
     { title: ["Ba ước mơ thời nhỏ", "Three childhood dreams"],
       text: ["Hồi nhỏ mình muốn làm bác sĩ để chữa lành, nhà ngoại giao để bảo vệ người yếu thế, và nhà trị liệu tâm lý để mang lại sự bình an. Giờ mình thấy khoa học là con đường gom cả ba ước mơ ấy lại.",
@@ -569,8 +612,11 @@ const ME = {
       { ks: [1, 4], name: ["Cheat sheet K1–K4 · Anh–Việt", "Cheat sheet K1–K4 · EN–VI"], url: "media/genetics-cheatsheet-k1-k4-en-vi.pdf" },
       { ks: [1, 4], name: ["Cheat sheet K1–K4 · Anh–Đức", "Cheat sheet K1–K4 · EN–DE"], url: "media/genetics-cheatsheet-k1-k4-en-de.pdf" },
       { ks: [1, 4], name: ["Handout ôn tập K1–K4", "Review handout K1–K4"], url: "https://claude.ai/artifact/UJ5toMQMZZ8Cn8JZwye7AL" },
+      { ks: [5, 7], name: ["Cheat sheet K5–K7 · Anh–Việt", "Cheat sheet K5–K7 · EN–VI"], url: "media/genetics-cheatsheet-k5-k7-en-vi.pdf" },
       { ks: [5, 7], name: ["Cheat sheet K5–K7 · Anh–Đức", "Cheat sheet K5–K7 · EN–DE"], url: "media/genetics-cheatsheet-k5-k7-en-de.pdf" },
+      { ks: [8, 10], name: ["Cheat sheet K8–K10 · Anh–Việt", "Cheat sheet K8–K10 · EN–VI"], url: "media/genetics-cheatsheet-k8-k10-en-vi.pdf" },
       { ks: [8, 10], name: ["Cheat sheet K8–K10 · Anh–Đức", "Cheat sheet K8–K10 · EN–DE"], url: "media/genetics-cheatsheet-k8-k10-en-de.pdf" },
+      { ks: [11, 13], name: ["Cheat sheet K11–K13 · Anh–Việt", "Cheat sheet K11–K13 · EN–VI"], url: "media/genetics-cheatsheet-k11-k13-en-vi.pdf" },
       { ks: [11, 13], name: ["Cheat sheet K11–K13 · Anh–Đức", "Cheat sheet K11–K13 · EN–DE"], url: "media/genetics-cheatsheet-k11-k13-en-de.pdf" },
     ],
     videos: [
@@ -703,6 +749,10 @@ const ME = {
 /* Chữ cố định của giao diện */
 const UI = {
   status: ME.status, hello: ME.hello, lead: ME.lead,
+  mega: [["Phòng lab", "Giường bệnh", "Bộ não"], ["Bench", "Bedside", "Brain"]],
+  roles: ["Trợ lý nghiên cứu · Sinh học & Tâm lý học · Gia sư Sinh học", "Research assistant · Biology & Psychology · Biology tutor"],
+  toPath: ["Hành trình", "The path"], navContact: ["Liên hệ", "Contact"],
+  rolesTitle: ["Một hành trình, ba vai trò", "One path, three roles"], storyTitle: ["Câu chuyện của mình", "My story"],
   start: ["Bắt đầu câu chuyện ↓", "Start the story ↓"], share: ["Chia sẻ trang này", "Share this page"],
   scroll: ["cuộn xuống", "scroll"], copied: ["Đã chép link", "Link copied"],
   footer: ["Tự viết bằng HTML, CSS, JS thuần cùng Claude Code", "Hand-written in plain HTML, CSS & JS with Claude Code"],
@@ -963,6 +1013,11 @@ function projectCard(x) {
 function chapterBody(id) {
   switch (id) {
     case "about": return `<p class="bio-lead">${t(ME.bioLead)}</p>
+      <ul class="highlights">${ME.highlights.map(([n, l]) => `<li><b>${esc(n)}</b>${t(l)}</li>`).join("")}</ul>
+      <h3 class="sub roles-title">${t(UI.rolesTitle)}</h3>
+      <div class="roles-grid">${ME.roles.map((r, i) => `<article class="role"><span class="role-n">0${i + 1}</span><h4>${t(r.title)}</h4><p>${t(r.text)}</p>
+        <div class="tags">${r.tags.map((x) => `<span class="tag">${esc(x)}</span>`).join("")}</div></article>`).join("")}</div>
+      <h3 class="sub roles-title">${t(UI.storyTitle)}</h3>
       <div class="about">
         <ol class="story">${ME.story.map((b) => `<li><h4>${t(b.title)}</h4><p>${t(b.text)}</p></li>`).join("")}</ol>
         <div class="side">
@@ -997,6 +1052,7 @@ function render() {
   document.documentElement.lang = lang;
   document.title = t(ME.name);
   $("#name").textContent = ME.name[lang === "vi" ? 0 : 1];
+  $("#mega").innerHTML = UI.mega[lang === "vi" ? 0 : 1].map((w, i) => `<span class="${i === 1 ? "hl" : ""}">${esc(w)}</span>`).join("");
   document.querySelectorAll("[data-t]").forEach((el) => el.innerHTML = t(UI[el.dataset.t]));
   $("#interests").innerHTML = ME.interests.map((x) => `<span>${t(x)}</span>`).join("");
   $("#langBtn").textContent = lang === "vi" ? "EN" : "VI";
@@ -1055,7 +1111,7 @@ function observe() {
 // Ngôn ngữ, giao diện, chia sẻ
 $("#langBtn").onclick = () => { lang = lang === "vi" ? "en" : "vi"; store.set("portfolio-lang", lang); render();
   document.querySelectorAll(".reveal").forEach((el) => el.classList.add("in")); };
-let theme = store.get("portfolio-theme") || "auto";
+let theme = store.get("portfolio-theme") || "dark";   // mặc định nền tối
 const applyTheme = () => theme === "auto" ? document.documentElement.removeAttribute("data-theme")
                                           : document.documentElement.setAttribute("data-theme", theme);
 applyTheme();
